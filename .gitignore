@@ -1,0 +1,11 @@
+.DS_Store
+*.keystore
+node_modules
+/example/dist
+/example/output
+/example/cordova/config.xml
+/example/cordova/www
+/example/cordova/platforms
+/example/cordova/plugins
+/example/cordova/private
+

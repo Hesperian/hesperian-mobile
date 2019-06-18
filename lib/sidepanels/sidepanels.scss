@@ -1,0 +1,19 @@
+@import 'theme.scss';
+
+#app .settings-header {
+  font-weight: bold;
+  .item-inner {
+    margin-left: 0px;
+    padding-right: 2px;
+  }
+  i.icon {
+    color: $navbar-background;
+  }
+}
+
+#app #language-choices {
+  .current-locale {
+    font-weight: bold !important;
+    pointer-events: none !important;
+  }
+}
