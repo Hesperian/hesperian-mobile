@@ -9,6 +9,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "hesperian-handlebars-cmd": "./bin/hesperian-handlebars-cmd"
+  },
   "author": "",
-  "license": "SEE LICENSE IN LICENSE.md"
+  "license": "SEE LICENSE IN LICENSE.md",
+  "dependencies": {
+    "framework7": "^3.6.X",
+    "framework7-icons": "^0.9.X",
+    "material-icons": "^0.2.X",
+    "sortablejs": "^1.7.X"
+  },
+  "devDependencies": {
+    "handlebars": "^4.1.2"
+  }
 }
