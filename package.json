@@ -7,20 +7,22 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --single-quote --write \"lib/**/*.js\""
   },
   "bin": {
     "hesperian-handlebars-cmd": "./bin/hesperian-handlebars-cmd"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.md",
-  "dependencies": {
+  "peerDependencies": {
     "framework7": "^3.6.X",
     "framework7-icons": "^0.9.X",
     "material-icons": "^0.2.X",
     "sortablejs": "^1.7.X"
   },
   "devDependencies": {
-    "handlebars": "^4.1.2"
+    "handlebars": "^4.1.2",
+    "prettier": "^1.18.2"
   }
 }
