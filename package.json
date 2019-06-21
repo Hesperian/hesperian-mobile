@@ -15,7 +15,7 @@
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.md",
-  "peerDependencies": {
+  "dependencies": {
     "framework7": "^3.6.X",
     "framework7-icons": "^0.9.X",
     "material-icons": "^0.2.X",
