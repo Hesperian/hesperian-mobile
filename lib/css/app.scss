@@ -1,0 +1,197 @@
+@import 'theme.scss';
+@import './navbar.scss';
+@import './buttons.scss';
+
+html.md body,
+html.ios body {
+  font-family: Helvetica, Helvetica Neue, Arial, sans-serif;
+}
+
+$breakpoint-small-large: 390px;
+
+// width < breakpoint
+@media all and (min-width: $breakpoint-small-large) {
+  .media-small-width-only {
+    display: none;
+  }
+}
+
+// width >= breakpoint
+@media not all and (min-width: $breakpoint-small-large) {
+  .media-large-width-only {
+    display: none;
+  }
+}
+
+
+
+.debug {
+  visibility: hidden;
+  border: 1px solid gray;
+  border-radius: 2px;
+  margin-left: 3px;
+  padding-right: 3px;
+}
+
+html {
+  font-size: $font-size-base;
+}
+
+body {
+  font-size: $font-size-normal;
+  /* Target for global font increase */
+}
+
+/* Utility classes */
+
+.content-block-title {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+
+/* over-ride framework7 font-size to % */
+
+.list-block,
+.content-block {
+  font-size: $font-size-normal;
+}
+
+.button {
+  font-size: $font-size-normal;
+}
+
+#app .list {
+  font-size: inherit; // skip f7 size change
+}
+
+// workaround for https://github.com/framework7io/framework7/issues/2397
+html.device-ios .item-link.active-state {
+  pointer-events: none;
+}
+
+#app .links-list a {
+  height: inherit;
+}
+
+#app .list .item-title {
+  white-space: normal;
+}
+
+.statusbar-overlay {
+  background: #000000;
+}
+
+.panel {
+  background: $panel-background;
+}
+
+.panel .panel-icon {
+  height: 30px;
+}
+
+.panel-title {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.panel .list-block {
+  margin-top: 10px;
+}
+
+.panel a.close-panel {
+  float: right;
+}
+
+/* Darker text for content-block */
+
+.content-block {
+  color: $content-block-text-color;
+}
+
+.space-around {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+img.center {
+  display: block;
+  margin: 0 auto;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+img.center {
+  display: block;
+  margin: 0 auto;
+}
+
+#app {
+  .toggle-icon:after {
+    background-color: $toggle-no-primary;
+  }
+
+  .toggle input[type="checkbox"]:checked+.toggle-icon:after {
+    background-color: $toggle-yes-primary;
+  }
+
+  .toggle-icon {
+    background-color: $toggle-no-secondary;
+  }
+
+  .toggle input[type="checkbox"]:checked+.toggle-icon {
+    background-color: $toggle-yes-secondary;
+  }
+}
+
+$howto-padding: 8px;
+
+#app {
+  .howto {
+    border: 1px solid black;
+    margin-top: 20px;
+
+    .howto-title {
+      font-weight: bold;
+      font-size: 125%;
+      padding: $howto-padding;
+    }
+
+    .howto-section {
+      border-top: 1px solid black;
+
+      &>* {
+        padding: $howto-padding;
+      }
+
+      .howto-section-title {
+        background-color: lightgray;
+      }
+
+      .howto-section-content {
+        padding-top: 0px;
+      }
+    }
+  }
+}
+
+html.device-android {
+  .back-button {
+    display: none;
+  }
+}
