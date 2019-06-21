@@ -109,6 +109,42 @@ html.device-ios .item-link.active-state {
   color: $content-block-text-color;
 }
 
+/* Current page sub-heading */
+
+.page-header {
+  border-color: $heading-border-color;
+  border-width: 1px 0px 1px 0px;
+  border-style: solid;
+  margin: 20px -11px 22px -11px;
+  color: $heading-text-color;
+  background-color: $heading-background-color;
+  padding: 0px 0px 0px 12px;
+  min-height: 60px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  text-align: center;
+}
+
+.header-title-value {
+  display: none;
+}
+
+.page-header .header-title {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-grow: 12;
+  font-weight: bold;
+  font-size: 150%;
+  padding: 6px 6px 6px 6px;
+  line-height: 28px;
+}
+
+.page-header+.list-block {
+  margin-top: 15px;
+}
+
 .space-around {
   display: flex;
   align-items: flex-end;
