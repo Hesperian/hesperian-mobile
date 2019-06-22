@@ -145,6 +145,46 @@ html.device-ios .item-link.active-state {
   margin-top: 15px;
 }
 
+
+#app .mc-toolbar {
+  background-color: $navbar-background;
+}
+
+#app .page {
+  background-color: $page-background;
+}
+
+.page-content {
+  padding-right: 11px;
+  padding-left: 11px;
+}
+
+
+/* Custom list styles */
+
+#app {
+  ul.bullet-list {
+    list-style-type: disc;
+    padding-left: 17px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+
+    &>li {
+      margin-bottom: 6px;
+    }
+  }
+
+  .list {
+
+    .item-inner:after,
+    ul:after {
+      background-color: $list-divider-color;
+    }
+  }
+}
+
+/* Utility classes */
+
 .space-around {
   display: flex;
   align-items: flex-end;
