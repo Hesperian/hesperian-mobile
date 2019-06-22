@@ -133,6 +133,13 @@ img.favorite-icon {
   }
 }
 
+@supports (padding: env(safe-area-inset-top)) {
+  .favorites-sheet {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+}
+
+
 html.with-statusbar .favorites-sheet {
   height: calc(100% - 20px);
 }
