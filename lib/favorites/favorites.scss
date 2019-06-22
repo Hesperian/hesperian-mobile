@@ -151,3 +151,47 @@ html.device-android.with-statusbar .favorites-sheet {
 .favorites-empty .introduction {
   display: inherit;
 }
+
+// Radio Buttons
+#app label.item-checkbox input[type="checkbox"]:checked~.icon-checkbox,
+#app label.item-checkbox input[type="checkbox"]:checked~* .icon-checkbox,
+#app checkbox input[type="checkbox"]:checked~i {
+  background-color: $toggle-yes-primary;
+  border-color: $toggle-yes-primary;
+}
+
+#app label.item-radio input[type="radio"]:checked ~ .icon-radio:after,
+#app label.item-radio input[type="radio"]:checked ~ * .icon-radio:after,
+#app .radio input[type="radio"]:checked ~ .icon-radio:after {
+  background-color: $toggle-yes-primary;
+}
+
+#app label.item-radio input[type="radio"]:checked ~ .icon-radio,
+#app label.item-radio input[type="radio"]:checked ~ * .icon-radio,
+#app .radio input[type="radio"]:checked ~ .icon-radio {
+  border-color: $toggle-yes-primary;
+}
+
+
+// toolbar
+#app {
+  .app-toolbar {
+    background-color: $subnavbar-background;
+
+    .material-icons {
+      font-size: 28px;
+    }
+
+    a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .favorites-sheet {
+    .toolbar {
+      background-color: $subnavbar-background;
+    }
+  }
+}
