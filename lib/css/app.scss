@@ -7,6 +7,16 @@ html.ios body {
   font-family: Helvetica, Helvetica Neue, Arial, sans-serif;
 }
 
+.statusbar-overlay {
+  background: #000000;
+}
+
+html.device-android {
+  .back-button {
+    display: none;
+  }
+}
+
 $breakpoint-small-large: 390px;
 
 // width < breakpoint
@@ -21,6 +31,19 @@ $breakpoint-small-large: 390px;
   .media-large-width-only {
     display: none;
   }
+}
+
+#app .content-list {
+  font-weight: bold;
+  color: $inline-link-text-color;
+}
+
+/* Take control over framework7 list styles */
+
+.list-block .item-text {
+  white-space: normal;
+  height: inherit;
+  -webkit-line-clamp: inherit;
 }
 
 
@@ -49,6 +72,22 @@ body {
   margin-top: 10px;
 }
 
+.subheading {
+  font-weight: bold;
+  background-color: $subheading-background-color;
+  margin: 0px -11px 0px -11px;
+  padding: 5px 5px 5px 11px;
+}
+
+.image-padding.float-right {
+  padding-left: 10px;
+}
+
+.image-padding.float-left {
+  padding-right: 10px;
+}
+
+
 
 /* over-ride framework7 font-size to % */
 
@@ -69,6 +108,15 @@ body {
 html.device-ios .item-link.active-state {
   pointer-events: none;
 }
+
+
+/* default link color */
+
+.md a,
+.ios a {
+  color: $inline-link-text-color;
+}
+
 
 #app .links-list a {
   height: inherit;
@@ -158,6 +206,21 @@ html.device-ios .item-link.active-state {
   padding-right: 11px;
   padding-left: 11px;
 }
+
+
+.introduction {
+  display: none;
+
+  .icon.f7-icons {
+    font-size: 100%;
+  }
+
+  .favorite-icon {
+    height: 20px;
+    width: 20px;
+  }
+}
+
 
 
 /* Custom list styles */
@@ -266,8 +329,33 @@ $howto-padding: 8px;
   }
 }
 
-html.device-android {
-  .back-button {
-    display: none;
+/* Shim to ensure floats do not create very narrow text widths next to the float */
+%float-block-item {
+  content: "";
+  width: 8em;
+  display: block;
+  overflow: hidden;
+}
+
+.float-block,
+.accordion-item-content>.block {
+  &>p:before {
+    @extend %float-block-item;
+  }
+
+  &>ul:before {
+    @extend %float-block-item;
   }
 }
+
+/* instruction lists */
+.instruction-list {
+  td:first-child {
+    width: 50%;
+
+    img {
+      width: 100%;
+    }
+  }
+}
+
