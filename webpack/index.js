@@ -4,10 +4,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const getPageInfo = require('./webpack.preprocess');
+
 
 
 function createConfig(spec) {
-  const preProcess = spec.preProcess;
   const appConfig = spec.appConfig;
   const rootDir = spec.rootDir;
 
@@ -35,7 +36,7 @@ function createConfig(spec) {
     plugins: [
       new webpack.DefinePlugin({
         __VERSION__: JSON.stringify(appConfig.version),
-        __PREPROCESS__: JSON.stringify(preProcess.getPageInfo())
+        __PREPROCESS__: JSON.stringify(getPageInfo())
       }),
       new HtmlWebpackPlugin({
         title: appConfig.description,
