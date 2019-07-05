@@ -57,7 +57,7 @@ function createConfig(spec) {
               presets: [
                 ['@babel/preset-env',
                   {
-                    debug: true,
+                    debug: false,
                     "useBuiltIns": "entry",
                     "corejs": {
                       "version": 3,
