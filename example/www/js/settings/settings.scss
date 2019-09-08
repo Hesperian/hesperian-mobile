@@ -1,0 +1,13 @@
+@import '../../css/theme.scss';
+
+
+.page[data-id="J5-settings"] {
+  .methods-toggle-list {
+    ul {
+      padding-left: 0px;
+      .item-title {
+        font-weight: bold;
+      }
+    }
+  }
+}

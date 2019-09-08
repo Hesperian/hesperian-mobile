@@ -1,0 +1,55 @@
+/*
+ *  theme.scss
+ *  theme variables
+ */
+
+// Layout constants
+
+$page-navigaton-height: 56px + 48px;
+
+// Colors
+
+$navbar-background: #fd298f;
+$subnavbar-background: #ff7606;
+$navbar-textcolor: white;
+$page-background: #fafafa;
+$panel-background: #fafafa;
+$heading-background-color: $page-background;
+$heading-border-color: $navbar-background;
+$heading-text-color: black;
+$content-block-text-color: #36363b;
+$inline-link-text-color: #138f9b;
+$accordion-item-content-color: $inline-link-text-color;
+$link-border-color: $inline-link-text-color;
+$button-link-background-color: white;
+$button-link-text-color: $link-border-color;
+$list-divider-color: rgba(0, 0, 0, 0.25);
+
+
+$favorite-icon-color: #ffed10;
+$favorite-icon-outline-color: $heading-border-color;
+$favorite-list-background-color: white;
+$tile-background: white;
+$tile-border-style: solid; 
+$tile-border-color: #ff7606;
+$tile-border-width: thin;
+$tile-image-background:  transparent;
+$tile-text-color: $inline-link-text-color;
+
+$font-size-base: 16px;
+$font-size-normal: 100%;
+$font-size-medium: 121%;
+$font-size-large: 171%;
+
+$toggle-yes-primary: #00B202;
+$toggle-yes-secondary: #D4F9D4;
+$toggle-no-primary: #ECECEC;
+$toggle-no-secondary: #D3D3D3;
+
+$tool-internal-header-background-color: #d5562b;
+$tool-internal-header-color: white;
+$tool-internal-header-contrast-color: black;
+
+$subheading-background-color: lightgray;
+
+

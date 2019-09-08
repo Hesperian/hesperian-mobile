@@ -1,0 +1,19 @@
+{
+    "id": "org.hesperian.hello",
+    "version": "0.0.1",
+    "name": "HelloWorld",
+    "description": "Test application",
+    "author": {
+        "email": "hesperianit@hesperian.org",
+        "href": "http://hesperian.org",
+        "name": "Hesperian IT"
+    },
+    "localizations": [
+        {
+            "code": "en"
+        },
+        {
+            "code": "es"
+        }
+    ]
+}
