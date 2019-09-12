@@ -12,7 +12,12 @@ CORDOVA_CONFIG=$(BUILDDIR)/config.xml
 
 BUILDDIR=cordova
 
-.PHONY: build clean webpack watch cordova
+.PHONY: build clean webpack watch cordova help
+
+help:
+	@echo "Common make targets:"
+	@echo "\tmake watch\t webpack watch build in the dist directory"
+	@echo "\tmake build\t full cordova release build created in cordova/output"
 
 build: webpack $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
