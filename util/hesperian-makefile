@@ -2,6 +2,8 @@
 #
 
 NODE_BIN=./node_modules/.bin
+BUILDDIR=cordova
+
 WEBPACK=$(NODE_BIN)/webpack
 BABELNODE=$(NODE_BIN)/babel-node
 HTMLPDF=$(NODE_BIN)/html-pdf
@@ -10,18 +12,19 @@ MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
 CORDOVA_CONFIG=$(BUILDDIR)/config.xml
 
 
-BUILDDIR=cordova
-
-.PHONY: build clean webpack watch cordova help
+.PHONY: build clean webpack watch dist help
 
 help:
 	@echo "Common make targets:"
 	@echo "\tmake watch\t webpack watch build in the dist directory"
 	@echo "\tmake build\t full cordova release build created in cordova/output"
 
-build: webpack $(CORDOVA_CONFIG)
+
+dist: webpack $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
+
+build: dist
 	@(cd ${BUILDDIR}; cordova build --device --release -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
 	mkdir -p output
 	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa output

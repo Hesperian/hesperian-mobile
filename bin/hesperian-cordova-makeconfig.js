@@ -28,7 +28,9 @@ const data =
     </author>
     <content src="index.html" />
 
-    <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
+    <platform name="android">
+        <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
+    </platform>
     <plugin name="cordova-plugin-statusbar" source="npm" spec="2.4.2" />
 
     <plugin name="cordova-plugin-firebase-analytics" spec="2.0.0" />
