@@ -18,7 +18,8 @@ Hesperian Mobile applications are html/javascript applications pagacked as mobil
     * [Sass](https://sass-lang.com/)
 
 
-### Mobile Application
+### Mobile Native Application
+
  * [Cordova](https://cordova.apache.org/)
    * [cordova-plugin-firebase-analytics](https://github.com/chemerisuk/cordova-plugin-firebase-analytics)
    * [cordova-plugin-inappbrowser](https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/)
@@ -29,10 +30,35 @@ Hesperian Mobile applications are html/javascript applications pagacked as mobil
 * Android 4.4 (SDK 19) and greater
 * iOS 9.0 and greater
 
+# Install
+
+## Cordova
+
+https://cordova.apache.org/docs/en/latest/guide/cli/index.html
+
+* npm install -g cordova
+* sudo gem install cocoapods
+* pod setup
+* brew update
+* brew upgrade node
+* brew install gradle
+* brew install rvm
+
+export PATH=/Users/$USER/Library/Android/sdk/tools:$PATH
+export PATH=/Users/$USER/Library/Android/sdk/tools/bin:$PATH
+export PATH=/Users/$USER/Library/Android/sdk/platform-tools:$PATH
+
+## Addition Information
+
+* [HOWTO_CREATE_NEW_APP.md](docs/HOWTO_CREATE_NEW_APP.md)
+* [HOWTO_DO_A_RELEASE.md](docs/HOWTO_DO_A_RELEASE.md)
+* [HOWTO_UPDATE_IOS_SIGNING_KEY.md](docs/HOWTO_UPDATE_IOS_SIGNING_KEY.md)
+
+
 # TODO
 
 * Fully automate Cordova multi-language device resources
 * Framework7 v4 (needs css custom properties support)
-* Default / over-ridable theme.scss
-* Migrate more of the common Cordova functionality into the library.
-  * webpack.config base class
+* Default / overrideable theme.scss
+* android-packageName - automate setting this if needed (replacing '-' with '_' from id)
+
