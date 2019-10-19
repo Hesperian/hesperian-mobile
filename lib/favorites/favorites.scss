@@ -24,6 +24,10 @@
   justify-content: flex-end;
 }
 
+.checkbox-favorites:focus {
+  outline: 0;
+}
+
 .page[data-page="toc"] .checkbox-favorites {
   display: flex;
 }
