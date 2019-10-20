@@ -25,6 +25,14 @@ Hesperian Mobile applications are html/javascript applications pagacked as mobil
    * [cordova-plugin-inappbrowser](https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/)
    * [cordova-plugin-statusbar](https://github.com/apache/cordova-plugin-statusbar)
 
+
+#### Cordova Issues
+
+UIWebView is depricated in iOS. Ongoing plans to fix in cordova.
+
+* https://github.com/apache/cordova-discuss/pull/110
+* https://github.com/apache/cordova-ios/issues/661
+
 ## Mobile Device Support
 
 * Android 4.4 (SDK 19) and greater
@@ -61,4 +69,5 @@ export PATH=/Users/$USER/Library/Android/sdk/platform-tools:$PATH
 * Framework7 v4 (needs css custom properties support)
 * Default / overrideable theme.scss
 * android-packageName - automate setting this if needed (replacing '-' with '_' from id)
+* Fully script language support (create cordova language resources for app name)
 
