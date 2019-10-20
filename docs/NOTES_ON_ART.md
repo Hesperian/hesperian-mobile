@@ -7,4 +7,8 @@ Various scripting snippets for manipulating images. Yeah, I know, it sounded lik
 
 ## Creating App Icons
 
-See [makeicons.js](../util/makeicons.js)
+See [makeicons.js](../util/makeicons.js) to create most ios icons from a source png
+
+Still to do for that
+* create ios splashes
+* create android icons and splashes

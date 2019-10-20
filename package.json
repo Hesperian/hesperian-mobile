@@ -1,6 +1,6 @@
 {
   "name": "hesperian-mobile",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Hesperian Mobile Application Library",
   "main": "index.js",
   "directories": {
@@ -17,7 +17,7 @@
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.md",
-  "dependencies": {
+  "peerDependencies": {
     "framework7": "^3.6.X",
     "framework7-icons": "^0.9.X",
     "material-icons": "^0.2.X",
