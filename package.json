@@ -12,7 +12,6 @@
     "format": "prettier --single-quote --write \"lib/**/*.js\""
   },
   "bin": {
-    "hesperian-handlebars-cmd": "./bin/hesperian-handlebars-cmd",
     "hesperian-cordova-makeconfig": "./bin/hesperian-cordova-makeconfig.js"
   },
   "author": "",
