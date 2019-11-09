@@ -69,10 +69,28 @@ export PATH=/Users/$USER/Library/Android/sdk/platform-tools:$PATH
 # TODO
 
 * Fully automate Cordova multi-language device resources
-* Framework7 v4 (needs css custom properties support)
 * Default / overrideable theme.scss
 * android-packageName - automate setting this if needed (replacing '-' with '_' from id)
 * Fully script language support (create cordova language resources for app name)
+
+# To Watch
+
+## Update Framework7 Library
+
+[Framework7 v5](https://blog.framework7.io/framework7-v5-679176716faa). We are on v3, and v4 and v5 require css custom properties support, which is not native for our targets, so we would need a polyfill.
+
+### Advantages
+
+Potential Advantages:
+* Calendar now has intl support - should support local settings for date names, though it will still be gregorian.
+
+### Disadvantages
+
+This would I think mean Mobile device support:
+* Android 5.0 (SDK 21) and greater
+* iOS 9.2 and greater
+
+##
 
 # hesperian-mobile build
 
