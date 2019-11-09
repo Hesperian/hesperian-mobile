@@ -23,8 +23,8 @@
     "sortablejs": "^1.7.X"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
+    "@babel/core": "^7.7.0",
+    "@babel/preset-env": "^7.7.0",
     "babel-loader": "^8.0.6",
     "cheerio": "^1.0.0-rc.3",
     "copy-webpack-plugin": "^4.5.2",
