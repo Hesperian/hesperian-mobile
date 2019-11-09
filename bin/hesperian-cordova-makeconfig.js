@@ -28,9 +28,7 @@ const data =
     </author>
     <content src="index.html" />
 
-    <platform name="android">
-        <plugin name="cordova-plugin-inappbrowser" spec="3.1.0" />
-    </platform>
+    <plugin name="cordova-plugin-inappbrowser" spec="3.1.0" />
     <plugin name="cordova-plugin-statusbar" source="npm" spec="2.4.3" />
 
     <plugin name="cordova-plugin-firebase-analytics" spec="4.0.0" />
@@ -43,7 +41,6 @@ const data =
     <platform name="ios">
         <resource-file src="private/GoogleService-Info.plist" />
     </platform>
-
 
     <access origin="*" />
     <allow-intent href="http://*/*" />
