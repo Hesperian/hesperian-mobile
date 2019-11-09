@@ -74,3 +74,13 @@ export PATH=/Users/$USER/Library/Android/sdk/platform-tools:$PATH
 * android-packageName - automate setting this if needed (replacing '-' with '_' from id)
 * Fully script language support (create cordova language resources for app name)
 
+# hesperian-mobile build
+
+Currently manual:
+
+* Update the version in [package.json](package.json). Use semantic versioning `x.y.z`
+* Create a new [release](https://github.com/hesperianit/hesperian-mobile/releases) tag `vx.y.z`
+
+Consumers should specify package dependency by git tag:
+
+`"hesperian-mobile": "git://github.com/hesperianit/hesperian-mobile.git#vx.y.x"`
