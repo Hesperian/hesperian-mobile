@@ -47,9 +47,11 @@ install:
 	npm link hesperian-mobile
 	
 cordova-install: $(CORDOVA_CONFIG) webpack
-	(cd ${BUILDDIR}; npm install)
+	(cd ${BUILDDIR}; npm ci)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
+	rm -rf ${BUILDDIR}/platforms
+	rm -rf ${BUILDDIR}/plugins
 	(cd ${BUILDDIR}; cordova prepare)
 
 

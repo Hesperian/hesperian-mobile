@@ -29,11 +29,11 @@ const data =
     <content src="index.html" />
 
     <platform name="android">
-        <plugin name="cordova-plugin-inappbrowser" spec="3.0.0" />
+        <plugin name="cordova-plugin-inappbrowser" spec="3.1.0" />
     </platform>
-    <plugin name="cordova-plugin-statusbar" source="npm" spec="2.4.2" />
+    <plugin name="cordova-plugin-statusbar" source="npm" spec="2.4.3" />
 
-    <plugin name="cordova-plugin-firebase-analytics" spec="2.0.0" />
+    <plugin name="cordova-plugin-firebase-analytics" spec="4.0.0" />
     <platform name="android">
         <resource-file src="private/google-services.json" target="app/google-services.json" />
             <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
