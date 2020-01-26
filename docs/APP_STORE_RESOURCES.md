@@ -18,9 +18,41 @@ At least 3
 #### How To Make
 
 https://help.apple.com/app-store-connect/#/devd274dd925
+cordova emulate ios --list
+
+Apple-TV-1080p, tvOS 13.0
+	Apple-TV-4K-4K, tvOS 13.0
+	Apple-TV-4K-1080p, tvOS 13.0
+	Apple-Watch-Series-4-40mm, watchOS 6.0
+	Apple-Watch-Series-4-44mm, watchOS 6.0
+	iPhone-5, 10.2
+	iPhone-5, 10.2
+	iPhone-5s, 10.2
+	iPhone-6-Plus, 10.2
+	iPhone-6, 10.2
+	iPhone-6s, 10.2
+	iPhone-6s-Plus, 10.2
+	iPhone-SE, 10.2
+	iPhone-7, 10.2
+	iPhone-7-Plus, 10.2
+	iPad-Air, 10.2
+	iPad-Air-2, 10.2
+	iPad-Pro--9-7-inch-, 10.2
+	iPad-Pro, 10.2
+	iPhone-8, 13.0
+	iPhone-8-Plus, 13.0
+	iPad-Pro--9-7-inch-, 13.0
+	iPad-Pro--11-inch-, 13.0
+	iPad-Pro--12-9-inch---3rd-generation-, 13.0
+	iPad-Air--3rd-generation-, 13.0
+	iPhone-11, 13.0
+	iPhone-11-Pro, 13.0
+	iPhone-11-Pro-Max, 13.0
+	Apple-Watch-Series-5-40mm, watchOS 6.0
+	Apple-Watch-Series-5-44mm, watchOS 6.0
 
 iPhone 6.5"
-`cordova emulate ios --target "iPhone-XS-Max"`
+`cordova emulate ios --target "iPhone-11-Pro-Max"`
 
 iPad Pro (3rd Gen) 12.9"
 `cordova emulate ios --target "iPad-Pro--12-9-inch---3rd-generation-"`
@@ -31,4 +63,7 @@ iPad Pro (3rd Gen) 12.9"
 
 ## Google
 
-??
+iphone
+tablet 7 inch
+
+`adb shell screencap -p > myfile.jpg`
