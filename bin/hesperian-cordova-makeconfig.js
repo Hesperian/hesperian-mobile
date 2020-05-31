@@ -28,10 +28,10 @@ const data =
     </author>
     <content src="index.html" />
 
-    <plugin name="cordova-plugin-inappbrowser" spec="3.1.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="3.2.0" />
     <plugin name="cordova-plugin-statusbar" source="npm" spec="2.4.3" />
 
-    <plugin name="cordova-plugin-firebase-analytics" spec="4.0.0" />
+    <plugin name="cordova-plugin-firebase-analytics" spec="4.3.0" />
     <platform name="android">
         <resource-file src="private/google-services.json" target="app/google-services.json" />
             <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
@@ -40,7 +40,16 @@ const data =
     </platform>
     <platform name="ios">
         <resource-file src="private/GoogleService-Info.plist" />
+        <plugin name="cordova-plugin-wkwebview-engine" spec="1.2.1" />
+        <preference name="WKWebViewOnly" value="true" />
+
+        <feature name="CDVWKWebViewEngine">
+            <param name="ios-package" value="CDVWKWebViewEngine" />
+        </feature>
+        <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     </platform>
+
+    
 
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -61,9 +70,9 @@ const data =
     <preference name="EnableViewportScale" value="true" />
 
     <!-- Platform Version Support -->
-    <preference name="android-minSdkVersion" value="19" />  <!-- Android 4.4 -->
+    <preference name="android-minSdkVersion" value="21" />  <!-- Android 5.0 -->
     <preference name="android-targetSdkVersion" value="28"/>  <!-- Android 9.0 -->
-    <preference name="deployment-target" value="9.0"/>  <!-- iOS 9.0 -->
+    <preference name="deployment-target" value="10.0"/>  <!-- iOS 10.0 -->
 
     <!-- iOS App icons -->
     <icon src="resources/icons/ios/AppIcon-20.png" platform="ios" width="20" height="20" />
