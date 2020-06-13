@@ -20,7 +20,7 @@
     "framework7": "^3.6.X",
     "framework7-icons": "^0.9.X",
     "material-icons": "^0.2.X",
-    "sortablejs": "^1.7.X"
+    "sortablejs": "^1.10.X"
   },
   "devDependencies": {
     "@babel/core": "^7.7.0",
