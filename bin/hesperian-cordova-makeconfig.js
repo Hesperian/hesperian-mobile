@@ -49,8 +49,6 @@ const data =
         <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     </platform>
 
-    
-
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -70,9 +68,9 @@ const data =
     <preference name="EnableViewportScale" value="true" />
 
     <!-- Platform Version Support -->
-    <preference name="android-minSdkVersion" value="21" />  <!-- Android 5.0 -->
+    <preference name="android-minSdkVersion" value="19" />  <!-- Android 4.4 -->
     <preference name="android-targetSdkVersion" value="28"/>  <!-- Android 9.0 -->
-    <preference name="deployment-target" value="10.0"/>  <!-- iOS 10.0 -->
+    <preference name="deployment-target" value="9.0"/>  <!-- iOS 9.0 -->
 
     <!-- iOS App icons -->
     <icon src="resources/icons/ios/AppIcon-20.png" platform="ios" width="20" height="20" />

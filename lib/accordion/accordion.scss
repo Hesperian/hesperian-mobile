@@ -35,7 +35,7 @@ $chevron-closed: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D'13px'%2
     font-weight: bold;
   }
 }
-/*
+
 #app .page.accordion-faq {
   .list.accordion-list {
     .accordion-item {
@@ -67,7 +67,6 @@ $chevron-closed: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D'13px'%2
     }
   }
 }
-*/
 
 // workaround for https://github.com/framework7io/framework7/issues/2397
 html.device-ios .item-link.active-state {
