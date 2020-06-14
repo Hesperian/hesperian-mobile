@@ -30,6 +30,11 @@ const data =
 
     <plugin name="cordova-plugin-inappbrowser" spec="4.4.0" />
     <plugin name="cordova-plugin-statusbar" source="npm" spec="2.4.3" />
+    <!-- Social Sharing plugin support
+    <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="5.6.8" />
+    <plugin name="cordova-plugin-androidx" source="npm" spec="2.0.0" />
+    <plugin name="cordova-plugin-androidx-adapter" source="npm" spec="1.1.1" />    
+    -->
 
     <plugin name="cordova-plugin-firebase-analytics" spec="4.3.0" />
     <platform name="android">
