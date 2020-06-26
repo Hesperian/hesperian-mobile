@@ -318,8 +318,8 @@ $howto-padding: 8px;
         padding: $howto-padding;
       }
 
-      .howto-section-title {
-        background-color: lightgray;
+      .howto-section-title, .howto-section-subtitle {
+        background-color: #7ae6cd;
       }
 
       .howto-section-content {

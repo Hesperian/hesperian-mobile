@@ -20,6 +20,8 @@ These are some raw notes on how to actually push out a build.
 
 Upload build to iTunes Connect:
 
+/Applications/Transporter
+
 * XCode -> Open Developer Tool -> Application Loader
 * https://itunesconnect.apple.com -> Activity, build should appear status "Processing"
 
