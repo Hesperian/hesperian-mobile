@@ -42,8 +42,10 @@ const data =
                 <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
             </config-file>
     </platform>
+
     <platform name="ios">
         <resource-file src="private/GoogleService-Info.plist" />
+        <!-- not needs as of cordova-ios 6.0.0
         <plugin name="cordova-plugin-wkwebview-engine" spec="1.2.1" />
         <preference name="WKWebViewOnly" value="true" />
 
@@ -51,6 +53,7 @@ const data =
             <param name="ios-package" value="CDVWKWebViewEngine" />
         </feature>
         <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
+        -->
     </platform>
 
     <access origin="*" />
@@ -74,7 +77,7 @@ const data =
     <!-- Platform Version Support -->
     <preference name="android-minSdkVersion" value="19" />  <!-- Android 4.4 -->
     <preference name="android-targetSdkVersion" value="28"/>  <!-- Android 9.0 -->
-    <preference name="deployment-target" value="9.0"/>  <!-- iOS 9.0 -->
+    <preference name="deployment-target" value="11.0"/>  <!-- iOS 11.0 -->
 
     <!-- iOS App icons -->
     <icon src="resources/icons/ios/AppIcon-20.png" platform="ios" width="20" height="20" />
