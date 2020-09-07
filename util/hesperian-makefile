@@ -44,7 +44,6 @@ distclean:
 
 install:
 	npm install
-	npm link hesperian-mobile
 	
 cordova-install: $(CORDOVA_CONFIG) webpack
 	(cd ${BUILDDIR}; npm ci)

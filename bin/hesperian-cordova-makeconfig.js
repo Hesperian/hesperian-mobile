@@ -45,6 +45,8 @@ const data =
 
     <platform name="ios">
         <resource-file src="private/GoogleService-Info.plist" />
+        <preference name="scheme" value="app" />
+        <preference name="hostname" value="localhost" />
         <!-- not needs as of cordova-ios 6.0.0
         <plugin name="cordova-plugin-wkwebview-engine" spec="1.2.1" />
         <preference name="WKWebViewOnly" value="true" />
