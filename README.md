@@ -39,9 +39,15 @@ UIWebView is depricated in iOS. Ongoing plans to fix in cordova.
 ## Mobile Device Support
 
 * Android 4.4 (SDK 19) and greater
-* iOS 9.0 and greater
+* iOS 11.0 and greater
 
 # Install
+
+## Development Environment
+### XCode
+
+### Android Studio
+AVD
 
 ## Cordova
 
