@@ -1,9 +1,20 @@
-@import 'theme.scss';
+@import '../css/buttons.scss';
 
 .socialsharing {
   border: none;
   background: transparent;
   img {
     width: 100%;
+  }
+  .prompt {
+    @extend %button-base;
+    position: relative;
+    i {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 10px;
+      padding-right: 10px;
+    }
   }
 }
