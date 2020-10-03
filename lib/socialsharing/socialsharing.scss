@@ -8,6 +8,7 @@
   }
   .prompt {
     @extend %button-base;
+    font-size: 16px;
     position: relative;
     i {
       position: absolute;
