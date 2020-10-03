@@ -7,6 +7,10 @@ html.ios body {
   font-family: Helvetica, Helvetica Neue, Arial, sans-serif;
 }
 
+body {
+ height: 100vh; // Workaround iPhoneX bug https://github.com/apache/cordova-plugin-wkwebview-engine/issues/108
+}
+
 .statusbar-overlay {
   background: #000000;
 }
