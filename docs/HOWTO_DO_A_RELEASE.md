@@ -4,17 +4,15 @@ These are some raw notes on how to actually push out a build.
 
 ## Configuration
 
-* CORDOVA_SIGNING_PASSPHRASE
-* 
-
+* `export CORDOVA_SIGNING_PASSPHRASE=<password>`
 
 ## Build
 
 * Bump the version ```app-config.json```
 * commit
-* ```export CORDOVA_SIGNING_PASSPHRASE=```
 * ```make build```
 * push
+* .apk and .ipa will be in ./output
 
 ## iTunes Connect
 

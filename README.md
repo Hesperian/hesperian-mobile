@@ -2,7 +2,7 @@
 
 A javascript library for Hesperian's mobile applications.
 
-Hesperian Mobile applications are html/javascript applications pagacked as mobile applications via [Cordova](https://cordova.apache.org/). See the [Hesperian Mobile Example Application](https://github.com/hesperianit/hesperian-mobile-example) for a sample.
+Hesperian Mobile applications are html/javascript applications packaged as mobile applications via [Cordova](https://cordova.apache.org/). See the [Hesperian Mobile Example Application](https://github.com/hesperianit/hesperian-mobile-example) for a sample.
 
 
 ## Technical Stack
@@ -25,23 +25,14 @@ Hesperian Mobile applications are html/javascript applications pagacked as mobil
    * [cordova-plugin-inappbrowser](https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-inappbrowser/)
    * [cordova-plugin-statusbar](https://github.com/apache/cordova-plugin-statusbar)
 
-
-#### Cordova Issues
-
-UIWebView is depricated in iOS. Ongoing plans to fix in cordova.
-
-* https://github.com/apache/cordova-discuss/pull/110
-* https://github.com/apache/cordova-ios/issues/661
-
-
-* https://github.com/chemerisuk/cordova-support-google-services/pull/26/files merged in latest, we use it.
-
 ## Mobile Device Support
 
 * Android 4.4 (SDK 19) and greater
 * iOS 11.0 and greater
 
 # Install
+
+To build locally, you need OS X
 
 ## Development Environment
 ### XCode
