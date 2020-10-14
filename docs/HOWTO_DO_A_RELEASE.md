@@ -18,10 +18,17 @@ These are some raw notes on how to actually push out a build.
 
 Upload build to iTunes Connect:
 
-/Applications/Transporter
-
-* XCode -> Open Developer Tool -> Application Loader
+* /Applications/Transporter to upload the app
 * https://itunesconnect.apple.com -> Activity, build should appear status "Processing"
+
+* Appstore connect to the app
+* Each language:
+  * Release notes
+  * Screenshots if needed
+  * Save
+* Scroll down to select no ad thing, and save
+* Release
+
 
 
 ## Test Flight
