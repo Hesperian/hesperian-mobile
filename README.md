@@ -4,6 +4,18 @@ A javascript library for Hesperian's mobile applications.
 
 Hesperian Mobile applications are html/javascript applications packaged as mobile applications via [Cordova](https://cordova.apache.org/). See the [Hesperian Mobile Example Application](https://github.com/hesperianit/hesperian-mobile-example) for a sample.
 
+## Features
+
+### Google Analytics
+
+#### Custom Events
+* socialsharing / appsharing
+ * pageId - id of app page
+ * locale - current language
+ * file - file name of shared file
+ * url - shared url
+ * completed - success or failure
+ * app - which app was used to share
 
 ## Technical Stack
 
