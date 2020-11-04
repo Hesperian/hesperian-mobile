@@ -78,7 +78,7 @@ const data =
 
     <!-- Platform Version Support -->
     <preference name="android-minSdkVersion" value="19" />  <!-- Android 4.4 -->
-    <preference name="android-targetSdkVersion" value="28"/>  <!-- Android 9.0 -->
+    <preference name="android-targetSdkVersion" value="29"/>  <!-- Android 10.0 -->
     <preference name="deployment-target" value="11.0"/>  <!-- iOS 11.0 -->
 
     <!-- iOS App icons -->
@@ -145,18 +145,18 @@ const data =
         <config-file platform="ios" target="*-Info.plist" parent="CFBundleLocalizations">
             <array>
             {{#each localizations}}
-                <string>{{code}}</string>
+                <string>{{language_code}}</string>
             {{/each}}
             </array>
         </config-file>
         {{#each localizations}}
-        <resource-file src="resources/locales/ios/{{code}}.lproj/InfoPlist.strings" />
+        <resource-file src="resources/locales/ios/{{language_code}}.lproj/InfoPlist.strings" />
         {{/each}}
     </platform>
 
     <platform name="android">
         {{#each localizations}}
-        <resource-file src="resources/locales/android/values-{{code}}/strings.xml" target="res/values-{{code}}/strings.xml" />
+        <resource-file src="resources/locales/android/values-{{language_code}}/strings.xml" target="res/values-{{language_code}}/strings.xml" />
         {{/each}}
     </platform>
 </widget>
