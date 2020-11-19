@@ -149,7 +149,7 @@ const configData =
             </array>
         </config-file>
         {{#each localizations}}
-        <resource-file src="resources-tmp/ios/{{language_code}}.lproj/InfoPlist.strings" />
+        <resource-file src="resources-tmp/locales/ios/{{language_code}}.lproj/InfoPlist.strings" />
         {{/each}}
     </platform>
 
