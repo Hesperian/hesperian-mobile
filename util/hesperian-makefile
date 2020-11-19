@@ -31,7 +31,7 @@ build: dist
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/apk/*/*.apk output
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
-	(cd ${BUILDDIR}; ../${MAKE_CONFIG} ../app-config.json)
+	(cd ${BUILDDIR}; rm -rf resources-tmp; ../${MAKE_CONFIG} ../app-config.json)
 
 clean:
 	rm -rf ${BUILDDIR}/platforms/ios/build/

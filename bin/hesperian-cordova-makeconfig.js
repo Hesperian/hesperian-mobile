@@ -10,9 +10,8 @@ const handlebars = require('handlebars');
 const contextFile = process.argv[2];
 const contextData = fs.readFileSync(contextFile, "utf-8");
 const context = JSON.parse(contextData);
-const data = 
-`
-<?xml version='1.0' encoding='utf-8'?>
+const configData = 
+`<?xml version='1.0' encoding='utf-8'?>
 <widget id="{{{id}}}"
         version="{{{version}}}"
         {{#if android-packageName}}android-packageName="{{{android-packageName}}}"{{/if}}
@@ -150,18 +149,50 @@ const data =
             </array>
         </config-file>
         {{#each localizations}}
-        <resource-file src="resources/locales/ios/{{language_code}}.lproj/InfoPlist.strings" />
+        <resource-file src="resources-tmp/ios/{{language_code}}.lproj/InfoPlist.strings" />
         {{/each}}
     </platform>
 
     <platform name="android">
         {{#each localizations}}
-        <resource-file src="resources/locales/android/values-{{language_code}}/strings.xml" target="res/values-{{language_code}}/strings.xml" />
+        <resource-file src="resources-tmp/locales/android/values-{{language_code}}/strings.xml" target="res/values-{{language_code}}/strings.xml" />
         {{/each}}
     </platform>
 </widget>
 `;
 
-const template = handlebars.compile(data);
-const output = template(context);
-fs.writeFileSync('config.xml', output);
+const configTemplate = handlebars.compile(configData);
+fs.writeFileSync('config.xml', configTemplate(context));
+
+
+// Write out locale specific string files for cordova builds for ios and android
+// Sets the app title under the icon
+const localizations = context.localizations;
+
+const androidStringsData =
+`<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="app_name">{{app_name}}</string>
+</resources>
+`;
+const androidStringsTemplate = handlebars.compile(androidStringsData);
+
+const iOSStringsData =
+`CFBundleDisplayName = "{{app_name}}";
+CFBundleName = "{{app_name}}";
+`;
+const iOSStringsTemplate = handlebars.compile(iOSStringsData);
+
+localizations.forEach(locale => {
+    const androidDir = `resources-tmp/locales/android/values-${locale.language_code}`;
+    fs.mkdirSync(androidDir, { recursive: true });
+    fs.writeFileSync(`${androidDir}/strings.xml`, androidStringsTemplate(locale));
+    if( locale.language_code === 'en') { // default language
+        fs.mkdirSync(`resources-tmp/locales/android/values`, { recursive: true });
+        fs.writeFileSync(`resources-tmp/locales/android/values/strings.xml`, androidStringsTemplate(locale));
+    }
+
+    const iOSDir = `resources-tmp/locales/ios/${locale.language_code}.lproj`;
+    fs.mkdirSync(iOSDir, { recursive: true });
+    fs.writeFileSync(`${iOSDir}/InfoPlist.strings`, iOSStringsTemplate(locale));
+});
