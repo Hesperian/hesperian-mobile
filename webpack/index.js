@@ -6,8 +6,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const getPageInfo = require('./webpack.preprocess');
 
-
-
 function createConfig(spec) {
   const appConfig = spec.appConfig;
   const rootDir = spec.rootDir;
@@ -19,6 +17,11 @@ function createConfig(spec) {
     {
       from: 'locales/**/*',
       to: '.'
+    },
+    {
+      from: 'lib/**/*',
+      to: '.',
+      noErrorOnMissing: true
     }
   ];
 
