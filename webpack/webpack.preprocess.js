@@ -89,14 +89,11 @@ function processPages(locale) {
   return ret;
 }
 
-function getPageInfo() {
+function getPageInfo(locales) {
   let ret = {};
 
-  const locales = fs.readdirSync('www/locales');
   locales.forEach((l) => {
-    if (l.match(/^[\w-]*$/)) {
       ret[l] = processPages(l);
-    }
   });
 
   return ret;

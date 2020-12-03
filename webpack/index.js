@@ -31,6 +31,7 @@ function createConfig(spec) {
 
 
   const copyWebpackPlugin = new CopyWebpackPlugin(assets, {});
+  const localizationDirs = appConfig.localizations.map(v => v.language_code);
 
   const config = {
     mode: 'development',
@@ -39,7 +40,7 @@ function createConfig(spec) {
     plugins: [
       new webpack.DefinePlugin({
         __VERSION__: JSON.stringify(appConfig.version),
-        __PREPROCESS__: JSON.stringify(getPageInfo())
+        __PREPROCESS__: JSON.stringify(getPageInfo(localizationDirs))
       }),
       new HtmlWebpackPlugin({
         title: appConfig.description,
