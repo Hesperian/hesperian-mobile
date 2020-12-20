@@ -29,9 +29,16 @@ build: dist
 	mkdir -p output
 	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa output
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/apk/*/*.apk output
+	(cd ${BUILDDIR}; zip -r ../output/app.zip .) 
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
 	(cd ${BUILDDIR}; rm -rf resources-tmp; ../${MAKE_CONFIG} ../app-config.json)
+
+# Make sure emulator is running to pick up correct device
+# Android Studio -> Tools -> AVD's
+.PHONY: emulate-android
+emulate-android: dist
+	@(cd ${BUILDDIR}; cordova emulate android --device --release -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
 
 clean:
 	rm -rf ${BUILDDIR}/platforms/ios/build/

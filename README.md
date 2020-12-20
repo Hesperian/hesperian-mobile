@@ -111,3 +111,25 @@ Currently manual:
 Consumers should specify package dependency by git tag:
 
 `"hesperian-mobile": "git://github.com/hesperianit/hesperian-mobile.git#vx.y.x"`
+
+
+# Local Development
+
+## Mobile App Build
+
+### Environment
+
+You must have a `cordova/private` directory with private files for the build:
+* `GoogleService-Info.plist`
+* `google-services.json`
+* `android.keystore`
+
+And also key to unlock keystore:
+`export CORDOVA_SIGNING_PASSPHRASE="xxxxxxxx"`
+
+### Running
+
+To emulate android
+* make sure emulator is running to pick up correct device: `Android Studio -> Tools -> AVD's`
+* `make emulate-android`
+
