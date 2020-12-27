@@ -22,6 +22,10 @@ function createConfig(spec) {
       from: 'lib/**/*',
       to: '.',
       noErrorOnMissing: true
+    },
+    {
+      from: '../node_modules/hesperian-mobile/lib/bootstrap.js',
+      to: 'lib/bootstrap.js'
     }
   ];
 
@@ -55,6 +59,7 @@ function createConfig(spec) {
     module: {
       rules: [{
           test: /\.js$/,
+          exclude: /core-js/, // https://github.com/zloirock/core-js/issues/514 workaround not loading on android 4.4
           use: {
             loader: 'babel-loader',
             options: {
