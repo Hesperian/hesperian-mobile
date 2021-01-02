@@ -1,0 +1,14 @@
+@import 'theme.scss';
+
+.bottom-toolbar-audio {
+  display: none
+}
+
+#app.audio-mode {
+  .bottom-toolbar-standard {
+    display: none;
+  }
+  .bottom-toolbar-audio {
+    display: inherit
+  }
+}
