@@ -5,6 +5,7 @@ NODE_BIN=./node_modules/.bin
 BUILDDIR=cordova
 
 WEBPACK=$(NODE_BIN)/webpack
+WEBPACK_MODE:=production
 BABELNODE=$(NODE_BIN)/babel-node
 HTMLPDF=$(NODE_BIN)/html-pdf
 CORDOVA=$(NODE_BIN)/cordova
@@ -63,7 +64,6 @@ cordova-install: $(CORDOVA_CONFIG) webpack
 
 webpack:
 	rm -rf dist
-	$(WEBPACK) --mode=production
+	$(WEBPACK) --mode=${WEBPACK_MODE}
 watch:
 	$(WEBPACK) --watch
-
