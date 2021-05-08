@@ -11,6 +11,8 @@ HTMLPDF=$(NODE_BIN)/html-pdf
 CORDOVA=$(NODE_BIN)/cordova
 MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
 CORDOVA_CONFIG=$(BUILDDIR)/config.xml
+VERSION := $(shell node -p "require('./app-config.json').version")
+OUTPUT_DIR=output/${VERSION}
 
 
 .PHONY: build clean webpack watch dist help
@@ -18,7 +20,7 @@ CORDOVA_CONFIG=$(BUILDDIR)/config.xml
 help:
 	@echo "Common make targets:"
 	@echo "\tmake watch\t webpack watch build in the dist directory"
-	@echo "\tmake build\t full cordova release build created in cordova/output"
+	@echo "\tmake build\t full cordova release build created in ./output"
 
 
 dist: webpack $(CORDOVA_CONFIG)
@@ -27,10 +29,10 @@ dist: webpack $(CORDOVA_CONFIG)
 
 build: dist
 	@(cd ${BUILDDIR}; cordova build --device --release -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
-	mkdir -p output
-	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa output
-	cp ${BUILDDIR}/platforms/android/app/build/outputs/apk/*/*.apk output
-	(cd ${BUILDDIR}; zip -r ../output/app.zip .) 
+	mkdir -p ${OUTPUT_DIR}
+	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa ${OUTPUT_DIR}
+	cp ${BUILDDIR}/platforms/android/app/build/outputs/apk/*/*.apk ${OUTPUT_DIR}
+	(cd ${BUILDDIR}; zip -r ../${OUTPUT_DIR}/app.zip .) 
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
 	(cd ${BUILDDIR}; rm -rf resources-tmp; ../${MAKE_CONFIG} ../app-config.json)
