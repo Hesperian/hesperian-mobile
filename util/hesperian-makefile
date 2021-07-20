@@ -32,7 +32,11 @@ build: dist
 	mkdir -p ${OUTPUT_DIR}
 	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa ${OUTPUT_DIR}
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/apk/*/*.apk ${OUTPUT_DIR}
-	(cd ${BUILDDIR}; zip -r ../${OUTPUT_DIR}/app.zip .) 
+
+.PHONY: site
+site: dist
+	mkdir -p ${OUTPUT_DIR}
+	(cd dist; zip -r ../${OUTPUT_DIR}/app.zip .)
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
 	(cd ${BUILDDIR}; rm -rf resources-tmp; ../${MAKE_CONFIG} ../app-config.json)

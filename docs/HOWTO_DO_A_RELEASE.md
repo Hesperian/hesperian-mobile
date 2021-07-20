@@ -5,6 +5,7 @@ These are some raw notes on how to actually push out a build.
 ## Configuration
 
 * `export CORDOVA_SIGNING_PASSPHRASE=<password>`
+JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_291.jdk/Contents/Home
 
 ## Build
 
