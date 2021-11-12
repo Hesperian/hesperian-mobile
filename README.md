@@ -17,6 +17,10 @@ Hesperian Mobile applications are html/javascript applications packaged as mobil
  * completed - success or failure
  * app - which app was used to share
 
+## Authoring
+
+See [AUTHORING.md](docs/AUTHORING.md).
+
 ## Technical Stack
 
 ### Javascript Application
