@@ -11,3 +11,24 @@
                 "LD_RUNPATH_SEARCH_PATHS = \"@executable_path/Frameworks\""
             ]
         }
+
+
+https://developer.apple.com/
+account
+sign in as it@hesperian.org (need permissions to create)
+Certs / idents/ profiles
+profiles
++
+Distribution/app store
+Specific App ID
+Family Planning App Store 1
+Download
+
+Not 100% Sure how to "register" the .mobile provision. I think I tried:
+Double Click for Xcode
+XCode / prefs / account / download manual
+
+Open the .mobileprovision as binary to get id
+find id in `ls ~/Library/MobileDevice/Provisioning\ Profiles`
+update `build.json`
+
