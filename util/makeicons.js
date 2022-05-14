@@ -33,6 +33,9 @@ const ios = [
         size: 72
     },
     {
+        size: 76
+    },
+    {
         size: 80
     },
     {

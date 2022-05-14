@@ -86,23 +86,24 @@ const configData =
 
     <!-- iOS App icons -->
     <icon src="resources/icons/ios/AppIcon-20.png" platform="ios" width="20" height="20" />
-    <icon src="resources/icons/ios/AppIcon-29.png" platform="ios" width="29" height="29" />
-    <icon src="resources/icons/ios/AppIcon-40.png" platform="ios" width="40" height="40" />
-    <icon src="resources/icons/ios/AppIcon-50.png" platform="ios" width="50" height="50" />
-    <icon src="resources/icons/ios/AppIcon-57.png" platform="ios" width="57" height="57" />
-    <icon src="resources/icons/ios/AppIcon-58.png" platform="ios" width="58" height="58" />
-    <icon src="resources/icons/ios/AppIcon-60.png" platform="ios" width="60" height="60" />
-    <icon src="resources/icons/ios/AppIcon-72.png" platform="ios" width="72" height="72" />
-    <icon src="resources/icons/ios/AppIcon-80.png" platform="ios" width="80" height="80" />
-    <icon src="resources/icons/ios/AppIcon-87.png" platform="ios" width="87" height="87" />
-    <icon src="resources/icons/ios/AppIcon-100.png" platform="ios" width="100" height="100" />
-    <icon src="resources/icons/ios/AppIcon-114.png" platform="ios" width="114" height="114" />
-    <icon src="resources/icons/ios/AppIcon-120.png" platform="ios" width="120" height="120" />
-    <icon src="resources/icons/ios/AppIcon-144.png" platform="ios" width="144" height="144" />
-    <icon src="resources/icons/ios/AppIcon-152.png" platform="ios" width="152" height="152" />
-    <icon src="resources/icons/ios/AppIcon-167.png" platform="ios" width="167" height="167" />
-    <icon src="resources/icons/ios/AppIcon-180.png" platform="ios" width="180" height="180" />
-    <icon src="resources/icons/ios/AppIcon-1024-RBG.png" platform="ios" width="1024" height="1024" /> <!-- RGB -->
+    <icon src="resources/icons/ios/AppIcon-29.png" platform="ios" width="29" height="29" />  <!-- iPhone Spotlight and Settings Icon -->
+    <icon src="resources/icons/ios/AppIcon-40.png" platform="ios" width="40" height="40" /> <!-- Spotlight Icon -->
+    <icon src="resources/icons/ios/AppIcon-50.png" platform="ios" width="50" height="50" /> <!-- iPad Spotlight and Settings Icon -->
+    <icon src="resources/icons/ios/AppIcon-57.png" platform="ios" width="57" height="57" />  <!-- iOS 6.1 --> <!-- iPhone / iPod Touch -->
+    <icon src="resources/icons/ios/AppIcon-58.png" platform="ios" width="58" height="58" />  <!-- iPhone Spotlight and Settings Icon --> <!-- 2x -->
+    <icon src="resources/icons/ios/AppIcon-60.png" platform="ios" width="60" height="60" />   <!-- iOS 7.0+ --> <!-- iPhone / iPod Touch  -->
+    <icon src="resources/icons/ios/AppIcon-72.png" platform="ios" width="72" height="72" /> <!-- iPad -->
+    <icon src="resources/icons/ios/AppIcon-76.png" platform="ios" width="76" height="76" />  <!-- iPad -->
+    <icon src="resources/icons/ios/AppIcon-80.png" platform="ios" width="80" height="80" /> <!-- Spotlight Icon --> <!-- 2x -->
+    <icon src="resources/icons/ios/AppIcon-87.png" platform="ios" width="87" height="87" /> <!-- iPhone Spotlight and Settings Icon --> <!-- 3x -->
+    <icon src="resources/icons/ios/AppIcon-100.png" platform="ios" width="100" height="100" /> <!-- iPad Spotlight and Settings Icon --> <!-- 2x -->
+    <icon src="resources/icons/ios/AppIcon-114.png" platform="ios" width="114" height="114" /> <!-- iOS 6.1 --> <!-- iPhone / iPod Touch --> <!-- 2x -->
+    <icon src="resources/icons/ios/AppIcon-120.png" platform="ios" width="120" height="120" />  <!-- iOS 7.0+ --> <!-- iPhone / iPod Touch  --> <!-- 2x --> 
+    <icon src="resources/icons/ios/AppIcon-144.png" platform="ios" width="144" height="144" /> <!-- iPad --> <!-- 2x -->
+    <icon src="resources/icons/ios/AppIcon-152.png" platform="ios" width="152" height="152" />  <!-- iPad --> <!-- 2x --> 
+    <icon src="resources/icons/ios/AppIcon-167.png" platform="ios" width="167" height="167" /> <!-- iPad Pro -->
+    <icon src="resources/icons/ios/AppIcon-180.png" platform="ios" width="180" height="180" />  <!-- iOS 8.0+ --> <!-- iPhone 6 Plus  --> <!-- 3x -->
+    <icon src="resources/icons/ios/AppIcon-1024-RBG.png" platform="ios" width="1024" height="1024" />  <!-- iTunes Marketing Image --> <!-- RGB -->
 
     <!-- iOS splash screen a.k.a. launch image -->
 
