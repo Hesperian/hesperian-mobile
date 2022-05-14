@@ -10,9 +10,11 @@ BABELNODE=$(NODE_BIN)/babel-node
 HTMLPDF=$(NODE_BIN)/html-pdf
 CORDOVA=$(NODE_BIN)/cordova
 MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
+MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
 CORDOVA_CONFIG=$(BUILDDIR)/config.xml
 VERSION := $(shell node -p "require('./app-config.json').version")
 OUTPUT_DIR=output/${VERSION}
+WEBAPP_DIR=./dist-web
 
 
 .PHONY: build clean webpack watch dist help
@@ -35,8 +37,11 @@ build: dist
 
 .PHONY: site
 site: dist
+	rm -rf ${WEBAPP_DIR}
+	cp -R dist ${WEBAPP_DIR}
+	${MAKE_WEBINDEX} ./app-config.json ${WEBAPP_DIR}/index.html
 	mkdir -p ${OUTPUT_DIR}
-	(cd dist; zip -r ../${OUTPUT_DIR}/app.zip .)
+	(cd ${WEBAPP_DIR}; zip -r ../${OUTPUT_DIR}/app-${VERSION}.zip .)
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
 	(cd ${BUILDDIR}; rm -rf resources-tmp; ../${MAKE_CONFIG} ../app-config.json)

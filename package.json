@@ -12,7 +12,8 @@
     "format": "prettier --single-quote --write \"lib/**/*.js\""
   },
   "bin": {
-    "hesperian-cordova-makeconfig": "./bin/hesperian-cordova-makeconfig.js"
+    "hesperian-cordova-makeconfig": "./bin/hesperian-cordova-makeconfig.js",
+    "hesperian-cordova-makewebindex": "./bin/hesperian-cordova-makewebindex.js"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.md",
