@@ -36,7 +36,7 @@ build: dist
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/apk/*/*.apk ${OUTPUT_DIR}
 
 .PHONY: site
-site: dist
+site:
 	rm -rf ${WEBAPP_DIR}
 	cp -R dist ${WEBAPP_DIR}
 	${MAKE_WEBINDEX} ./app-config.json ${WEBAPP_DIR}/index.html

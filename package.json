@@ -13,7 +13,7 @@
   },
   "bin": {
     "hesperian-cordova-makeconfig": "./bin/hesperian-cordova-makeconfig.js",
-    "hesperian-cordova-makewebindex": "./bin/hesperian-web-makeindex.js"
+    "hesperian-web-makeindex": "./bin/hesperian-web-makeindex.js"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.md",
