@@ -1,19 +1,40 @@
 #!/usr/bin/env node
 /*
-    Create cordova config.xml file from app configuration.
+    Create the index.html file
 
     Run from the top level of the cordova folder.
     Pass in the path to the appConfig.json file.
+    usage:
+    hesperian-web-makeindex mode(web|app) appConfig.json(path) template-dir
 */
 const fs = require("fs");
-const contextFile = process.argv[2];
-const indexFile = process.argv[3];
-const indexFileData = fs.readFileSync(indexFile, "utf-8");
-const contextData = fs.readFileSync(contextFile, "utf-8");
-const context = JSON.parse(contextData);
-const firebaseConfig = JSON.stringify(context.firebaseConfig)
+const handlebars = require('handlebars');
 
-const firebaseEnable = `
+const mode = process.argv[2];
+const contextFile = process.argv[3];
+const templateDir = process.argv[4];
+function getFile(path) {
+    let text = '';
+ 
+    if (path && fs.existsSync(path)) {
+        text =  fs.readFileSync(path, "utf-8");
+    }
+
+    return text;
+}
+
+const appContextData = getFile(contextFile);
+const appContext = JSON.parse(appContextData);
+const appSpecifLibs = getFile(`${templateDir}/app-libs.html`);
+const webAppHeader = getFile(`${templateDir}/app-header.html`);
+
+let modeSpecific = '';
+let appHeader = '';
+
+if (mode === "web") {
+
+    const firebaseConfig = JSON.stringify(appContext.firebaseConfig)
+    modeSpecific = `
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
 import { getAnalytics, logEvent, setCurrentScreen } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
@@ -26,11 +47,101 @@ window.firebase = {
 }
 
 </script>
+`;   
+    appHeader = webAppHeader;
+} else {
+    modeSpecific = `<script type="text/javascript" charset="utf-8" src="cordova.js"></script>`;
+}
+
+let context = {
+    webmode: mode === 'web',
+    appContext: appContext,
+    appSpecific: appSpecifLibs,
+    appHeader: appHeader,
+    modeSpecific: modeSpecific
+}
+
+const appHtml = `
+<div id="app">
+    <div class="statusbar"></div>
+
+    <div class="panel panel-left panel-reveal theme-light">
+    <div class="view">
+        <div class="page">
+        <div id="sidelinks" class="page-content"></div>
+        </div>
+    </div>
+    </div>
+
+    <div class="panel panel-right panel-reveal theme-light">
+    <div class="view">
+        <div class="page">
+        <div id="settings" class="page-content"></div>
+        </div>
+    </div>
+    </div>
+
+    <div class="views">
+    <div id="view-main" class="view view-main">
+        <div class="searchbar-backdrop"></div>
+    </div>
+    </div>
+</div>
 `;
 
-const output = indexFileData
-.replace(/<!-- Cordova Start -->(?:.|[\r\n])*<!-- Cordova End -->/m, '')
-.replace(/<!-- Web Start -->(?:.|[\r\n])*<!-- Web End -->/m, firebaseEnable);
+const index = `
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content: www.google-analytics.com *.hesperian.org">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2, minimum-scale=1, user-scalable=yes, minimal-ui, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#2196f3">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <title>{{{appContext.description}}}</title>
+  <link href="main.css" rel="stylesheet"></head>
+{{#if webmode}}
+<style>
+body {
+    display: flex;
+    flex-direction: column;
+}
+#app-header {
+    padding-left: 20px;
+}
+#app-header strong {
+    font-size: 125%;
+}
+#app.framework7-root {
+    border: 1px solid black;
+    max-width: 768px;
+    align-self: center;
+    margin-bottom: 50px;
+
+}
+</style>
+{{/if}}
+</head>
+
+<body>
+  {{{appHeader}}}
+  ${appHtml}
+
+  <script type="text/javascript" charset="utf-8" src="lib/bootstrap.js"></script>
+  {{{appSpecific}}}
+  {{{modeSpecific}}}
+  <script type="text/javascript" src="main.js"></script>
+</body>
+
+</html>
+`;
+
+const indexTemplate = handlebars.compile(index);
+const output = indexTemplate(context);
 
 
-fs.writeFileSync(indexFile, output);
+fs.writeFileSync(1, output);

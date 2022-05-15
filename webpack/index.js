@@ -46,10 +46,6 @@ function createConfig(spec) {
         __VERSION__: JSON.stringify(appConfig.version),
         __PREPROCESS__: JSON.stringify(getPageInfo(localizationDirs))
       }),
-      new HtmlWebpackPlugin({
-        title: appConfig.description,
-        template: 'index.html'
-      }),
       new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css"
