@@ -120,8 +120,6 @@ body {
     border: 1px solid black;
     max-width: 768px;
     align-self: center;
-    margin-bottom: 50px;
-
 }
 </style>
 {{/if}}
