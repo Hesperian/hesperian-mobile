@@ -111,13 +111,17 @@ body {
     flex-direction: column;
 }
 #app-header {
-    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    text-align: center;
 }
 #app-header strong {
     font-size: 125%;
 }
 #app.framework7-root {
-    border: 1px solid black;
+    border: 3px solid black;
+    border-radius: 10px;
     max-width: 768px;
     align-self: center;
 }
