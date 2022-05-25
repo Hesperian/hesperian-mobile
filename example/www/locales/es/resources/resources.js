@@ -22,6 +22,11 @@ const resources = {
     },
     "about": {
       title: "Acerca de nosotros"
+    },
+    "sharing": {
+      subject: "Hesperian Mobile Applications",
+      title: "Comparte la app",
+      url: "https://hesperian.org/home-spanish/resources-in-spanish/aplicaciones-moviles-de-hesperian/"
     }
   },
   search: "Búsqueda",

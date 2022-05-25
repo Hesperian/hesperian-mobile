@@ -8,9 +8,15 @@ import "core-js/stable";
 
 import '../css/styles.scss';
 
-import { resources as enResources } from '../locales/en/resources/resources';
-import { resources as esResources } from '../locales/es/resources/resources';
-import { createApp } from 'hesperian-mobile';
+import {
+  resources as enResources
+} from '../locales/en/resources/resources';
+import {
+  resources as esResources
+} from '../locales/es/resources/resources';
+import {
+  createApp
+} from 'hesperian-mobile';
 import appConfig from './../../app-config.json';
 
 
@@ -18,19 +24,16 @@ import appConfig from './../../app-config.json';
   window.app = createApp({
     f7: {
       id: appConfig.id,
-      name: appConfig.name   
+      name: appConfig.name
     },
     configVersion: '0.0.2',
-    locales: [{
-        language: 'English',
-        language_code: 'en',
-        resources: enResources
-      },
-      {
-        language: 'Español',
-        language_code: 'es',
-        resources: esResources
-      }
-    ]
+    "theme": {
+      "bottomToolbar": true
+    },
+    appData: appConfig,
+    localeData: {
+      en: enResources,
+      es: esResources
+    }
   });
 })();
