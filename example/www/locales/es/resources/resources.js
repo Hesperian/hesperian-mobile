@@ -9,7 +9,7 @@ const resources = {
       title: 'Inicio'
     },
     {
-      link: '/pages/A42-frequently_asked_questions/',
+      link: '/pages/FAQ/',
       title: 'Preguntas frecuentes'
     }
   ],
