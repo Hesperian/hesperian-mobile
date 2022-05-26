@@ -7,7 +7,7 @@
 import {
   Template7,
   Dom7
-} from 'framework7/framework7.esm.bundle.js';
+} from 'framework7/bundle';
 import './settings.scss';
 import {
   resources

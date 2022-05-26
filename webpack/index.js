@@ -85,13 +85,15 @@ function createConfig(spec) {
           }, 'css-loader', {
             loader: "sass-loader",
             options: {
-              includePaths: ['./www/css']
+              sassOptions: {
+                includePaths: ['./www/css']
+              }
             }
           }]
         },
         {
           test: /\.(woff|woff2|eot|ttf)$/,
-          loader: 'url-loader?limit=100000'
+          type: 'asset/inline'
         }
       ]
     },

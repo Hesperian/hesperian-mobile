@@ -140,3 +140,5 @@ To emulate android
 ### Pushing lib code
 
 rsync -avu --delete --exclude=node_modules --exclude=.git ./ ../hesperian-mobile-XXX/node_modules/hesperian-mobile
+
+rsync -avu --delete --exclude=node_modules --exclude=.git ./ example/node_modules/hesperian-mobile
