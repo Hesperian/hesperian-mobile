@@ -32,3 +32,41 @@ Open the .mobileprovision as binary to get id
 find id in `ls ~/Library/MobileDevice/Provisioning\ Profiles`
 update `build.json`
 
+# Creating or updating code signing cert
+
+## Create a CSR certSigningRequest?
+https://support.apple.com/en-in/guide/keychain-access/kyca8916/mac
+https://help.apple.com/developer-account/#/devbfa00fef7
+
+Create self-signed certificates in Keychain Access on Mac
+
+In the User Email Address field, enter the email address to identify with this certificate
+In the Common Name field, enter your name
+In the Request group, click the "Saved to disk" option
+
+makes .cer
+
+Certificate Name
+The Hesperian Foundation
+Certificate Type
+iOS Distribution
+Expiration Date
+2022/05/31
+Created By
+Stuart McCalla (it@hesperian.org)
+
+
+* it@hesperian.org
+* The Hesperian Foundation 2
+* <blank>
+
+## Create a .cer
+on the apple site create a Certificat, download install in keychain
+
+## .p12
+not needed
+export from keychain
+Select Personal Information Exchange (.p12) for File Format.
+Save the certificate, giving it a strong password.
+
+

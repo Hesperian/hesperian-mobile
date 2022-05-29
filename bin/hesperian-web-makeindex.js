@@ -31,7 +31,7 @@ const webAppHeader = getFile(`${templateDir}/app-header.html`);
 let modeSpecific = '';
 let appHeader = '';
 
-if (mode === "web") {
+if (mode === "web" && appContext.firebaseConfig) {
 
     const firebaseConfig = JSON.stringify(appContext.firebaseConfig)
     modeSpecific = `
