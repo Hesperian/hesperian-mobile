@@ -22,6 +22,11 @@ const resources = {
     },
     "about": {
       title: "About us"
+    },
+    "sharing": {
+      subject: "Hesperian Mobile Applications",
+      title: "Share this App",
+      url: "https://hesperian.org/books-and-resources/our-mobile-applications"
     }
   },
   search: "Search",

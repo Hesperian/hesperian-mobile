@@ -10,10 +10,14 @@
     },
     "localizations": [
         {
-            "code": "en"
+            "language": "English",
+            "language_code": "en",
+            "app_name": "HelloWorld"
         },
         {
-            "code": "es"
+            "language" : "Español",
+            "language_code": "es",
+            "app_name": "HelloWorld"
         }
     ]
 }
