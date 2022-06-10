@@ -36,7 +36,7 @@ const configData =
 
     <plugin name="cordova-plugin-firebase-analytics" spec="6.1.0" />
     <plugin name="cordova-plugin-firebase-dynamiclinks" spec="6.1.3">
-        <variable name="APP_DOMAIN_NAME" value="hesperian.page.link" />
+        <variable name="APP_DOMAIN_NAME" value="{{dynamicLinksConfig.appDomainName}}" />
     </plugin>
     <platform name="android">
         <resource-file src="private/google-services.json" target="app/google-services.json" />
