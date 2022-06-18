@@ -37,6 +37,15 @@
   line-height: inherit;
 }
 
+.dot {
+  height: 50px;
+  width: 50px;
+  background-color: $button-link-background-color;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
 /* default link color */
 
 #app {
