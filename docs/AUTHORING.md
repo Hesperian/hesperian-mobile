@@ -2,7 +2,8 @@
 
 ## Deep Linking
 
-Set `data-section=${sectionId}`, and then link to it with `/pages/${pageId}/${sectionId}`
+Set `data-section=${sectionId}`, and then link to it with `/pages/${pageId}/${sectionId}`: `<a href="/pages/${pageId}/${sectionId}">...</a>`
+For links in the sampe page, use `<a class="external self" href="${sectionId}">...</a>`
 
 ## Special CSS
 
