@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "framework7": "^7.0.3",
     "framework7-icons": "^3.0.1",
+    "hesperian-mobile": "file:..",
     "material-icons": "^0.2.3",
     "sortablejs": "^1.10.2",
     "template7": "^1.4.2"
@@ -32,7 +33,7 @@
     "html-webpack-plugin": "^5.5.0",
     "jasmine": "^3.5.0",
     "jasmine-expect": "^4.0.3",
-    "mini-css-extract-plugin": "^2.6.0",
+    "mini-css-extract-plugin": "^2.6.1",
     "node-sass": "^4.14.1",
     "sass-loader": "^13.0.0",
     "webpack": "^5.72.1",

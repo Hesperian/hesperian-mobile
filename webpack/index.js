@@ -40,6 +40,9 @@ function createConfig(spec) {
   const config = {
     mode: 'development',
     context: path.resolve(rootDir, 'www'),
+    resolve: {
+      modules: [path.resolve(rootDir, 'node_modules')]
+    },
     entry: './js/app.js',
     plugins: [
       new webpack.DefinePlugin({
@@ -80,9 +83,9 @@ function createConfig(spec) {
         },
         {
           test: /\.(s*)css$/,
-          use: [{
+          use: [/*{
             loader: MiniCssExtractPlugin.loader
-          }, 'css-loader', {
+          }, */'css-loader', {
             loader: "sass-loader",
             options: {
               sassOptions: {

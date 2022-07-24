@@ -73,11 +73,13 @@ cordova-install: $(CORDOVA_CONFIG) webpack
 	rm -rf ${BUILDDIR}/plugins
 	(cd ${BUILDDIR}; cordova prepare)
 
+.PHONY: appconfig
+appconfig:
+	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 
-webpack:
+webpack: appconfig
 	rm -rf dist
 	$(WEBPACK) --mode=${WEBPACK_MODE}
-	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 
 watch:
 	$(WEBPACK) --watch
