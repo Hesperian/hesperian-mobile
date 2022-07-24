@@ -6,7 +6,7 @@
 
 import "core-js/stable";
 
-import '../css/styles.scss';
+ import '../css/styles.scss';
 
 import {
   resources as enResources

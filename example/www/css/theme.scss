@@ -3,8 +3,6 @@
  *  theme variables
  */
 
-// Layout constants
-
 $page-navigaton-height: 56px + 48px;
 
 // Colors
@@ -52,4 +50,20 @@ $tool-internal-header-contrast-color: black;
 
 $subheading-background-color: lightgray;
 
+
+:root {
+  --f7-theme-color: #ffffff;
+  --f7-theme-color-rgb: 255, 255, 255;
+  --f7-theme-color-shade: #ebebeb;
+  --f7-theme-color-tint: #ffffff;
+  --f7-searchbar-input-bg-color: #{$subnavbar-background};
+  --f7-searchbar-search-icon-color: white;
+}
+
+/*
+:root {
+  --f7-navbar-link-color: white;
+  --f7-navbar-link-color: white;
+}
+*/
 

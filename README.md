@@ -51,6 +51,10 @@ See [AUTHORING.md](docs/AUTHORING.md).
 To build locally, you need OS X
 
 ## Development Environment
+
+https://github.com/nvm-sh/nvm
+node 14
+
 ### XCode
 
 ### Android Studio

@@ -46,14 +46,10 @@ $chevron-closed: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D'13px'%2
       }
     }
 
-    .accordion-item .item-inner {
-      background-image: $chevron-closed;
+    .accordion-item {
+      --f7-list-chevron-icon-color: black;
     }
-
-    .accordion-item-opened .item-inner {
-      background-image: $chevron-opened;
-    }
-
+ 
     .item-inner::after {
       display: none;
     }
@@ -66,9 +62,4 @@ $chevron-closed: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D'13px'%2
       color: black;
     }
   }
-}
-
-// workaround for https://github.com/framework7io/framework7/issues/2397
-html.device-ios .item-link.active-state {
-  pointer-events: none;
 }
