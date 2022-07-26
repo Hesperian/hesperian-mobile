@@ -77,8 +77,10 @@ cordova-install: $(CORDOVA_CONFIG) webpack
 appconfig:
 	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 
-webpack: appconfig
+webpack:
 	rm -rf dist
+	mkdir dist
+	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 	$(WEBPACK) --mode=${WEBPACK_MODE}
 
 watch:

@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
@@ -49,10 +48,7 @@ function createConfig(spec) {
         __VERSION__: JSON.stringify(appConfig.version),
         __PREPROCESS__: JSON.stringify(getPageInfo(localizationDirs))
       }),
-      new MiniCssExtractPlugin({
-        filename: "[name].css",
-        chunkFilename: "[id].css"
-      }),
+      new MiniCssExtractPlugin(),
       copyWebpackPlugin
     ],
     module: {
@@ -83,16 +79,17 @@ function createConfig(spec) {
         },
         {
           test: /\.(s*)css$/,
-          use: [/*{
-            loader: MiniCssExtractPlugin.loader
-          }, */'css-loader', {
-            loader: "sass-loader",
-            options: {
-              sassOptions: {
-                includePaths: ['./www/css']
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader', {
+              loader: "sass-loader",
+              options: {
+                sassOptions: {
+                  includePaths: ['./www/css']
+                }
               }
             }
-          }]
+          ]
         },
         {
           test: /\.(woff|woff2|eot|ttf)$/,
