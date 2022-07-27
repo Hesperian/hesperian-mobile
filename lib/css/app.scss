@@ -108,14 +108,7 @@ body {
   font-size: inherit; // skip f7 size change
 }
 
-// workaround for https://github.com/framework7io/framework7/issues/2397
-html.device-ios .item-link.active-state {
-  pointer-events: none;
-}
-
-
 /* default link color */
-
 .md a,
 .ios a {
   color: $inline-link-text-color;
