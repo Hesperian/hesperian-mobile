@@ -9,13 +9,21 @@ Hesperian Mobile applications are html/javascript applications packaged as mobil
 ### Google Analytics
 
 #### Custom Events
-* socialsharing / appsharing
- * pageId - id of app page
- * locale - current language
- * file - file name of shared file
- * url - shared url
- * completed - success or failure
- * app - which app was used to share
+
+Common attributes for all events:
+* `locale` - current language
+* `pageId` - current page id
+
+Events:
+* `external` - external event
+ * `href` - what was opened
+* `socialsharing` or custom event name via `data-ga-event` parameter
+ * `file` - file name of shared file
+ * `url` - shared url
+ * `completed` - success or failure
+ * `app` - which app was used to share
+* `menu` - sidepanel menu opened
+ * `side` - `left` or `right` side
 
 ## Authoring
 
