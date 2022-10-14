@@ -69,6 +69,3 @@ https://developer.apple.com/ -> account -> profiles
 Open the .mobileprovision as binary to get id
 find id in `ls ~/Library/MobileDevice/Provisioning\ Profiles`
 update `build.json` provisioningProfile
-
-
-
