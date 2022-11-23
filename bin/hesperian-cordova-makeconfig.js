@@ -34,7 +34,7 @@ const configData =
     <plugin name="cordova-plugin-androidx" source="npm" spec="2.0.0" />
     <plugin name="cordova-plugin-androidx-adapter" source="npm" spec="1.1.1" />
 
-    <plugin name="cordova-plugin-firebase-analytics" spec="7.0.5" />
+    <plugin name="cordova-plugin-firebase-analytics" spec="6.1.0" />
     <plugin name="cordova-plugin-firebase-dynamiclinks" spec="7.0.2">
         <variable name="APP_DOMAIN_NAME" value="{{dynamicLinksConfig.appDomainName}}" />
     </plugin>
@@ -81,7 +81,7 @@ const configData =
 
     <!-- Platform Version Support -->
     <preference name="android-minSdkVersion" value="19" />  <!-- Android 4.4 -->
-    <preference name="android-targetSdkVersion" value="31"/>  <!-- Android 11.0 -->
+    <preference name="android-targetSdkVersion" value="32"/>  <!-- Android 11.0 -->
     <preference name="deployment-target" value="11.0"/>  <!-- iOS 11.0 -->
 
     <!-- iOS App icons -->
