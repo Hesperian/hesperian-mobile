@@ -41,7 +41,7 @@ const configData =
     <platform name="android">
         <resource-file src="private/google-services.json" target="app/google-services.json" />
             <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
-                <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+                <meta-data android:name="google_analytics_adid_collection_enabled" android:exported="false" android:value="false" />
             </config-file>
     </platform>
 
@@ -138,10 +138,7 @@ const configData =
     <icon src="resources/icons/android/xxxhdpi.png" platform="android" density="xxxhdpi" />
 
     <!-- Android Splash Screen -->
-    <splash src="resources/splash/android/ldpi.png" platform="android" density="ldpi" />
-    <splash src="resources/splash/android/mdpi.png" platform="android" density="mdpi" />
-    <splash src="resources/splash/android/hdpi.png" platform="android" density="hdpi" />
-    <splash src="resources/splash/android/xhdpi.png" platform="android" density="xhdpi" />
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/icons/android/xxxhdpi.png" />
 
     <!-- Localization -->
     <!-- iOS -->
