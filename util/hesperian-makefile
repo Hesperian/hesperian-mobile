@@ -33,7 +33,7 @@ build: dist
 	@(cd ${BUILDDIR}; cordova build --device --release -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
 	mkdir -p ${OUTPUT_DIR}
 	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa ${OUTPUT_DIR}
-	cp ${BUILDDIR}/platforms/android/app/build/outputs/apk/*/*.apk ${OUTPUT_DIR}
+	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*/*.aab ${OUTPUT_DIR}
 
 .PHONY: site
 site:

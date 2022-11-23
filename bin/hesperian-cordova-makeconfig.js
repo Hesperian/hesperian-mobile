@@ -138,7 +138,7 @@ const configData =
     <icon src="resources/icons/android/xxxhdpi.png" platform="android" density="xxxhdpi" />
 
     <!-- Android Splash Screen -->
-    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/icons/android/xxxhdpi.png" />
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/splash/android/splash.png" />
 
     <!-- Localization -->
     <!-- iOS -->
