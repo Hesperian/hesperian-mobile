@@ -81,7 +81,7 @@ const configData =
 
     <!-- Platform Version Support -->
     <preference name="android-minSdkVersion" value="19" />  <!-- Android 4.4 -->
-    <preference name="android-targetSdkVersion" value="30"/>  <!-- Android 11.0 -->
+    <preference name="android-targetSdkVersion" value="31"/>  <!-- Android 11.0 -->
     <preference name="deployment-target" value="11.0"/>  <!-- iOS 11.0 -->
 
     <!-- iOS App icons -->
