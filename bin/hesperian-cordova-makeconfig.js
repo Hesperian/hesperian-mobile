@@ -30,12 +30,12 @@ const configData =
     <plugin name="cordova-plugin-inappbrowser" spec="4.0.0" />
     <plugin name="cordova-plugin-statusbar" source="npm" spec="2.4.3" />
     <!-- Social Sharing plugin support -->
-    <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="5.6.8" />
+    <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="6.0.4" />
     <plugin name="cordova-plugin-androidx" source="npm" spec="2.0.0" />
     <plugin name="cordova-plugin-androidx-adapter" source="npm" spec="1.1.1" />
 
-    <plugin name="cordova-plugin-firebase-analytics" spec="6.1.0" />
-    <plugin name="cordova-plugin-firebase-dynamiclinks" spec="6.1.3">
+    <plugin name="cordova-plugin-firebase-analytics" spec="7.0.5" />
+    <plugin name="cordova-plugin-firebase-dynamiclinks" spec="7.0.2">
         <variable name="APP_DOMAIN_NAME" value="{{dynamicLinksConfig.appDomainName}}" />
     </plugin>
     <platform name="android">
