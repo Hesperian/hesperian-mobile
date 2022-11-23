@@ -80,7 +80,7 @@ const configData =
     <preference name="EnableViewportScale" value="true" />
 
     <!-- Platform Version Support -->
-    <preference name="android-minSdkVersion" value="19" />  <!-- Android 4.4 -->
+    <preference name="android-minSdkVersion" value="21" />  <!-- Android 5.0 -->
     <preference name="android-targetSdkVersion" value="32"/>  <!-- Android 11.0 -->
     <preference name="deployment-target" value="11.0"/>  <!-- iOS 11.0 -->
 
