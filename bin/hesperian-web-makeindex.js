@@ -31,23 +31,26 @@ const webAppHeader = getFile(`${templateDir}/app-header.html`);
 let modeSpecific = '';
 let appHeader = '';
 
-if (mode === "web" && appContext.firebaseConfig) {
+if (mode === "web") {
 
-    const firebaseConfig = JSON.stringify(appContext.firebaseConfig)
-    modeSpecific = `
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
-import { getAnalytics, logEvent, setCurrentScreen } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
-
-const app = initializeApp(${firebaseConfig});
-window.firebase = {
-    analytics: getAnalytics(app),
-    logEvent: logEvent,
-    setCurrentScreen: setCurrentScreen
-}
-
-</script>
-`;   
+    if(appContext.firebaseConfig) {
+        const firebaseConfig = JSON.stringify(appContext.firebaseConfig)
+        modeSpecific = `
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+    import { getAnalytics, logEvent, setCurrentScreen } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
+    
+    const app = initializeApp(${firebaseConfig});
+    window.firebase = {
+        analytics: getAnalytics(app),
+        logEvent: logEvent,
+        setCurrentScreen: setCurrentScreen
+    }
+    
+    </script>
+    `;
+    }
+   
     appHeader = webAppHeader;
 } else {
     modeSpecific = `<script type="text/javascript" charset="utf-8" src="cordova.js"></script>`;
