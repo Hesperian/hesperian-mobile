@@ -1,6 +1,6 @@
 {
   "name": "hesperian-mobile",
-  "version": "2.14.1",
+  "version": "2.15.0",
   "description": "Hesperian Mobile Application Library",
   "main": "index.js",
   "directories": {
@@ -21,7 +21,8 @@
     "framework7": "^3.6.X",
     "framework7-icons": "^3.0.1",
     "material-icons": "^0.2.X",
-    "sortablejs": "^1.10.X"
+    "sortablejs": "^1.10.X",
+    "shepherd.js": "^11.0.X"
   },
   "devDependencies": {
     "@babel/core": "^7.7.0",
