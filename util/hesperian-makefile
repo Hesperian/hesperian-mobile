@@ -86,3 +86,7 @@ watch:
 index:
 	${MAKE_WEBINDEX} web ./app-config.json www-templates > ${WEBAPP_DIR}/index.html
 
+.PHONY: libsync
+libsync:
+	rsync -avu --delete --exclude=node_modules --exclude=.git ../hesperian-mobile/ ./node_modules/hesperian-mobile; chmod +x ./node_modules/.bin/*
+
