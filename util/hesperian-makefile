@@ -40,6 +40,7 @@ site:
 	rm -rf ${WEBAPP_DIR}
 	cp -R dist ${WEBAPP_DIR}
 	${MAKE_WEBINDEX} web ./app-config.json www-templates > ${WEBAPP_DIR}/index.html
+	cp -R ./node_modules/hesperian-mobile/website-common ${WEBAPP_DIR}/
 	cp -R www-templates/web-img ${WEBAPP_DIR}/
 	mkdir -p ${OUTPUT_DIR}
 	(cd ${WEBAPP_DIR}; zip -r ../${OUTPUT_DIR}/app-${VERSION}.zip .)
@@ -81,3 +82,7 @@ webpack:
 
 watch:
 	$(WEBPACK) --watch
+
+index:
+	${MAKE_WEBINDEX} web ./app-config.json www-templates > ${WEBAPP_DIR}/index.html
+

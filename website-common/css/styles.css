@@ -1,0 +1,41 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+#app-header {
+    display: flex;
+    align-self: center;
+    text-align: center;
+}
+#app-header strong {
+    font-size: 125%;
+}
+#app-header .app-store-button {
+    width: 160px;
+    height: 60px;
+}
+
+#app-header .app-header-icon {
+    height: 120px;
+}
+
+#app-header .app-store-icon {
+    height: 100%;
+}
+#app-header .app-header-languages {
+    display: flex;
+    flex-wrap: wrap;
+}
+#app-header .app-header-languages a {
+    display: inline-block;
+    height: auto;
+    width: inherit;
+    height: fit-content;
+}
+
+#app.framework7-root {
+    border: 3px solid black;
+    border-radius: 10px;
+    max-width: 768px;
+    align-self: center;
+}
