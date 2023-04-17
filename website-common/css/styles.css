@@ -38,6 +38,7 @@ body {
 
 #app-header .app-header-icon {
     height: 100%;
+    width: 5.5em;
 }
 
 #app-header .app-store-icon {
