@@ -5,7 +5,6 @@ function updateLangLinks(event) {
     ...document.querySelectorAll(".app-header-languages .choose-language"),
   ];
   langs.forEach((l) => {
-    console.log(l);
     const lc = l.dataset.lang;
     if (locale === lc) {
       l.setAttribute("disabled", true);

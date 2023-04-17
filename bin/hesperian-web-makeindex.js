@@ -40,7 +40,7 @@ const webAppHeader = `
     </div>
     <div class="app-header-languages">
     {{#each appContext.localizations}}
-        <button class="choose-language language-switch" data-lang="{{this.language_code}}">
+        <button class="choose-language language-switch no-ripple"" data-lang="{{this.language_code}}">
             {{this.language}}
         </button>
     {{/each}}
