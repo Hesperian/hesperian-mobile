@@ -29,7 +29,7 @@ dist: webpack $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 
-build: dist
+app: dist
 	@(cd ${BUILDDIR}; cordova build --device --release -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
 	mkdir -p ${OUTPUT_DIR}
 	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa ${OUTPUT_DIR}
@@ -44,6 +44,9 @@ site:
 	cp -R www-templates/web-img ${WEBAPP_DIR}/
 	mkdir -p ${OUTPUT_DIR}
 	(cd ${WEBAPP_DIR}; zip -r ../${OUTPUT_DIR}/app-${VERSION}.zip .)
+
+.PHONY: build
+build: app site
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
 	(cd ${BUILDDIR}; rm -rf resources-tmp; ../${MAKE_CONFIG} ../app-config.json)
@@ -83,8 +86,6 @@ webpack:
 watch:
 	$(WEBPACK) --watch
 
-index:
-	${MAKE_WEBINDEX} web ./app-config.json www-templates > ${WEBAPP_DIR}/index.html
 
 .PHONY: libsync
 libsync:
