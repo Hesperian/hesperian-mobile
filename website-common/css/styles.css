@@ -48,7 +48,7 @@ body {
     display: grid;
     grid-template-rows: repeat(3, calc(100%/3));
     grid-auto-flow: column;
-    overflow-x: scroll;
+    overflow-x: auto;
     margin-right: 10px;
 }
 #app-header .app-header-languages .choose-language {
