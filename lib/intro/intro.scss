@@ -1,5 +1,14 @@
 @import 'theme.scss';
 
+body.shepherd-enabled #app {
+    pointer-events: none;
+    background-color: black;
+}
+
+body.shepherd-enabled #app > *{
+    opacity: 0.5;
+}
+
 .hm-tour {
     margin-top: 12px !important;
     margin-bottom: 12px !important;
