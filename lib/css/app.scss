@@ -379,3 +379,16 @@ $howto-padding: 8px;
   }
 }
 
+.choose-language {
+  display: inline-block;
+  height: auto;
+  width: inherit;
+  height: fit-content;
+  color: #ff7606;
+  background-color: transparent;
+  border: 1px solid gainsboro;
+  border-radius: 10px;
+  margin: 5px;
+  white-space: nowrap;
+}
+
