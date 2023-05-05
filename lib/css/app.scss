@@ -60,8 +60,21 @@ $breakpoint-small-large: 390px;
   padding-right: 3px;
 }
 
+
 html {
   font-size: $font-size-base;
+}
+
+/* Spport user text size preference 
+  use supports-dynamic-text class on html element as a feature flag
+  will remove feature flag once apps pass testing
+*/
+html.supports-dynamic-text {
+  font-size: 100%;
+}
+
+html.supports-dynamic-text.device-ios body {
+  font: -apple-system-body;
 }
 
 body {

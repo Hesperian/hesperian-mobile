@@ -26,28 +26,51 @@ function getFile(path) {
 const appContextData = getFile(contextFile);
 const appContext = JSON.parse(appContextData);
 const appSpecifLibs = getFile(`${templateDir}/app-libs.html`);
-const webAppHeader = getFile(`${templateDir}/app-header.html`);
+
+const webAppHeader = `
+<div id="app-header">
+    <div class="app-header-icon-area">
+        <div class="app-header-icon">
+            <img class="app-store-icon" src="./web-img/appIcon.png" alt="" valign="middle">
+        </div>
+        <div class="app-header-buttons">
+            <div class="app-store-button"><a href="https://play.google.com/store/apps/details?id={{appContext.android-packageName}}" class="external"><img src="./website-common/img/google-play-badge.svg" alt="{{appContext.websiteConfig.playStoreAltText}}" valign="middle"></a></div>
+            <div class="app-store-button"><a href="https://apps.apple.com/us/app/family-planning/id{{appContext.apple-appId}}" class="external"><img src="./website-common/img/app-store-badge.svg" alt="{{appContext.websiteConfig.appStoreAltText}}" valign="middle"></a></div>
+        </div>
+    </div>
+    <div class="app-header-languages">
+    {{#each appContext.localizations}}
+        <button class="choose-language language-switch no-ripple"" data-lang="{{this.language_code}}">
+            {{this.language}}
+        </button>
+    {{/each}}
+    </div>
+</div>
+`;
 
 let modeSpecific = '';
 let appHeader = '';
 
 if (mode === "web") {
 
-    const firebaseConfig = JSON.stringify(appContext.firebaseConfig)
-    modeSpecific = `
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
-import { getAnalytics, logEvent, setCurrentScreen } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
-
-const app = initializeApp(${firebaseConfig});
-window.firebase = {
-    analytics: getAnalytics(app),
-    logEvent: logEvent,
-    setCurrentScreen: setCurrentScreen
-}
-
-</script>
-`;   
+    if(appContext.firebaseConfig) {
+        const firebaseConfig = JSON.stringify(appContext.firebaseConfig)
+        modeSpecific = `
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
+    import { getAnalytics, logEvent, setCurrentScreen } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
+    
+    const firebaseApp = initializeApp(${firebaseConfig});
+    window.firebase = {
+        analytics: getAnalytics(firebaseApp),
+        logEvent: logEvent,
+        setCurrentScreen: setCurrentScreen
+    }
+    </script>
+    <script type="text/javascript" src="website-common/js/main.js"></script>
+    `;
+    }
+   
     appHeader = webAppHeader;
 } else {
     modeSpecific = `<script type="text/javascript" charset="utf-8" src="cordova.js"></script>`;
@@ -105,32 +128,12 @@ const index = `
   <title>{{{appContext.description}}}</title>
   <link href="main.css" rel="stylesheet"></head>
 {{#if webmode}}
-<style>
-body {
-    display: flex;
-    flex-direction: column;
-}
-#app-header {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    text-align: center;
-}
-#app-header strong {
-    font-size: 125%;
-}
-#app.framework7-root {
-    border: 3px solid black;
-    border-radius: 10px;
-    max-width: 768px;
-    align-self: center;
-}
-</style>
+  <link href="website-common/css/styles.css" rel="stylesheet">
 {{/if}}
 </head>
 
 <body>
-  {{{appHeader}}}
+  ${appHeader}
   ${appHtml}
 
   <script type="text/javascript" charset="utf-8" src="lib/bootstrap.js"></script>

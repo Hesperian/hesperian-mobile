@@ -29,20 +29,24 @@ dist: webpack $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 
-build: dist
+app: dist
 	@(cd ${BUILDDIR}; cordova build --device --release -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
 	mkdir -p ${OUTPUT_DIR}
 	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa ${OUTPUT_DIR}
-	cp ${BUILDDIR}/platforms/android/app/build/outputs/apk/*/*.apk ${OUTPUT_DIR}
+	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*.aab ${OUTPUT_DIR}
 
 .PHONY: site
 site:
 	rm -rf ${WEBAPP_DIR}
 	cp -R dist ${WEBAPP_DIR}
 	${MAKE_WEBINDEX} web ./app-config.json www-templates > ${WEBAPP_DIR}/index.html
+	cp -R ./node_modules/hesperian-mobile/website-common ${WEBAPP_DIR}/
 	cp -R www-templates/web-img ${WEBAPP_DIR}/
 	mkdir -p ${OUTPUT_DIR}
 	(cd ${WEBAPP_DIR}; zip -r ../${OUTPUT_DIR}/app-${VERSION}.zip .)
+
+.PHONY: build
+build: app site
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
 	(cd ${BUILDDIR}; rm -rf resources-tmp; ../${MAKE_CONFIG} ../app-config.json)
@@ -85,3 +89,11 @@ webpack:
 
 watch:
 	$(WEBPACK) --watch
+
+
+.PHONY: libsync
+libsync:
+	rsync -avu --delete --exclude=node_modules --exclude=.git ../hesperian-mobile/ ./node_modules/hesperian-mobile; chmod +x ./node_modules/.bin/*
+
+.PHONY: libsyncpack
+libsyncpack: libsync webpack --mode=development

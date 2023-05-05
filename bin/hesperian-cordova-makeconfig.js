@@ -30,18 +30,18 @@ const configData =
     <plugin name="cordova-plugin-inappbrowser" spec="4.0.0" />
     <plugin name="cordova-plugin-statusbar" source="npm" spec="2.4.3" />
     <!-- Social Sharing plugin support -->
-    <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="5.6.8" />
+    <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="6.0.4" />
     <plugin name="cordova-plugin-androidx" source="npm" spec="2.0.0" />
     <plugin name="cordova-plugin-androidx-adapter" source="npm" spec="1.1.1" />
 
     <plugin name="cordova-plugin-firebase-analytics" spec="6.1.0" />
-    <plugin name="cordova-plugin-firebase-dynamiclinks" spec="6.1.3">
-        <variable name="APP_DOMAIN_NAME" value="hesperian.page.link" />
+    <plugin name="cordova-plugin-firebase-dynamiclinks" spec="7.0.2">
+        <variable name="APP_DOMAIN_NAME" value="{{dynamicLinksConfig.appDomainName}}" />
     </plugin>
     <platform name="android">
         <resource-file src="private/google-services.json" target="app/google-services.json" />
             <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
-                <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+                <meta-data android:name="google_analytics_adid_collection_enabled" android:exported="false" android:value="false" />
             </config-file>
     </platform>
 
@@ -80,8 +80,8 @@ const configData =
     <preference name="EnableViewportScale" value="true" />
 
     <!-- Platform Version Support -->
-    <preference name="android-minSdkVersion" value="19" />  <!-- Android 4.4 -->
-    <preference name="android-targetSdkVersion" value="30"/>  <!-- Android 11.0 -->
+    <preference name="android-minSdkVersion" value="21" />  <!-- Android 5.0 -->
+    <preference name="android-targetSdkVersion" value="32"/>  <!-- Android 11.0 -->
     <preference name="deployment-target" value="11.0"/>  <!-- iOS 11.0 -->
 
     <!-- iOS App icons -->
@@ -138,10 +138,7 @@ const configData =
     <icon src="resources/icons/android/xxxhdpi.png" platform="android" density="xxxhdpi" />
 
     <!-- Android Splash Screen -->
-    <splash src="resources/splash/android/ldpi.png" platform="android" density="ldpi" />
-    <splash src="resources/splash/android/mdpi.png" platform="android" density="mdpi" />
-    <splash src="resources/splash/android/hdpi.png" platform="android" density="hdpi" />
-    <splash src="resources/splash/android/xhdpi.png" platform="android" density="xhdpi" />
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/splash/android/splash.png" />
 
     <!-- Localization -->
     <!-- iOS -->
