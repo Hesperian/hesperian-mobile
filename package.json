@@ -41,7 +41,7 @@
     "jasmine": "^3.5.0",
     "jasmine-expect": "^4.0.3",
     "mini-css-extract-plugin": "^2.6.1",
-    "node-sass": "^4.14.1",
+    "node-sass": "^6.0.0",
     "sass-loader": "^13.0.0",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
