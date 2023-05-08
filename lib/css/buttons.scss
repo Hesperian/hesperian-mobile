@@ -84,4 +84,12 @@
       }
     }
   }
+  /* v7 removes min-width on buttons inside of .md */
+  .toolbar-bottom-md {
+    .button {
+      min-width: 64px;
+      margin: 5px;
+    }
+  }
+
 }

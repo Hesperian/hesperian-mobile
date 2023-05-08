@@ -2,6 +2,17 @@
 @import './navbar.scss';
 @import './buttons.scss';
 
+:root {
+  /* override font size variable that is 14px in v7 */
+  --f7-font-size: 16px;
+  /* set toolbar color to white */
+  --f7-toolbar-text-color: #fff;
+  --f7-subnavbar-link-color: #fff;
+  --f7-list-bg-color: inherit;
+  --f7-messages-content-bg-color: #eee;
+  --f7-input-clear-button-size: 22px;
+}
+
 html.md body,
 html.ios body {
   font-family: Helvetica, Helvetica Neue, Arial, sans-serif;
@@ -113,6 +124,11 @@ body {
   font-size: $font-size-normal;
 }
 
+.block-strong {
+  padding-left: calc(var(--f7-block-padding-horizontal) + var(--f7-safe-area-left));
+  padding-right: calc(var(--f7-block-padding-horizontal) + var(--f7-safe-area-right));
+}
+
 .button {
   font-size: $font-size-normal;
 }
@@ -127,9 +143,26 @@ body {
   color: $inline-link-text-color;
 }
 
+/* skip the above link color for navbar and toolbar */
+.navbar a {
+  color: inherit;
+}
+
+.md .subnavbar a {
+  color: var(--f7-subnavbar-link-color, var(--f7-bars-link-color, var(--f7-theme-color)));
+}
+
+.md .toolbar a {
+  color: inherit;
+}
+
 
 #app .links-list a {
   height: inherit;
+}
+
+.list.links-list.list-block a {
+  color: inherit;
 }
 
 #app .list .item-title {
@@ -372,3 +405,11 @@ $howto-padding: 8px;
   }
 }
 
+/* restore badge styling from F7 v3 */
+.md .badge {
+  font-size: 10px;
+  border-radius: 3px;
+  padding: 1px 6px;
+  vertical-align: middle;
+  background-color: $badge-background-color;
+}

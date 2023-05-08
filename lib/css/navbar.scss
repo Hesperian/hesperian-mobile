@@ -43,12 +43,10 @@
 	display: none;
 }
 
-.navbar, .page-content {
+.navbar {
   padding: 0px 8px;
   background-clip: content-box;
 }
-
-
 
 .navbar .left {
 	margin-left: 5px;
@@ -89,7 +87,6 @@
 .navbar-home-title {
   padding-left: 10px;
 }
-
 
 /* Content pages */
 .page.content ul, .page.content ol {
