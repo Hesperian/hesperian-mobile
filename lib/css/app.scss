@@ -379,6 +379,10 @@ $howto-padding: 8px;
   }
 }
 
+.languagescontainer {
+  margin-top: 10px;
+}
+
 .choose-language {
   display: inline-block;
   height: auto;
@@ -390,5 +394,6 @@ $howto-padding: 8px;
   border-radius: 10px;
   margin: 5px;
   white-space: nowrap;
+  font-size: 120%;
 }
 
