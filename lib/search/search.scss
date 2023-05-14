@@ -25,3 +25,11 @@ $searchbar-icon-preview: url("data:image/svg+xml;charset=utf-8,%3Csvg%20fill%3D'
 #app .searchbar .input-clear-button {
   background-image: $input-clean-button
 }
+
+.local-search-list {
+  display: none;
+}
+
+#app.local-search-in .local-search-list {
+  display: inherit;
+}
