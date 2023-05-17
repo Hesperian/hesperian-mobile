@@ -12,3 +12,24 @@ TBD
 ## Special Pages
 
 * `privacy.html` - privacy page that appears in the right-hand sidebar
+
+## Search
+
+### Global Search
+
+Global search is keyed off of the top level div of the pages
+
+`<div data-page="content" class="page" data-id="FAQ" data-title="FAQs" data-keywords="common, dangerous, restriction, risk, safe, statistics, frequently, asked, questions">
+
+* `data-title`: Text of search link to the page
+* `data-keywords`: Page keywords
+
+Internal page links (`data-section="{{section id}}"`) can also have search title and keywords.
+
+### Local Search
+
+You can instantiate a search form for a given page:
+
+`<div class="local-search" data-placeholder="Search for a FAQ"></div>`
+
+Use `class="searchbar-hide-on-local-search"` to hide content you don't want to show while search is active.
