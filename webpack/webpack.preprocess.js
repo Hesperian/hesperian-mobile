@@ -67,6 +67,7 @@ function processPage(pagePath, pageId) {
 
     ret.sections.push({
       'route': `/pages/${pageId}/${sectionId}`,
+      sectionId,
       'title': title,
       'keywords': keywordsStringToArray(keywordsString)
     });
