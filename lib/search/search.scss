@@ -31,8 +31,19 @@ $input-clear-button-preview: url("data:image/svg+xml;charset=utf-8,%3Csvg%20fill
   background-image: $searchbar-icon-preview;
 }
 
+
 #app .searchbar .input-clear-button {
-  background-image: $input-clear-button
+  background-image: $input-clear-button;
+}
+
+#app .searchbar .search-disable-button {
+  padding-left: 10px;
+  padding-right: 10px;
+  display: none;
+}
+
+#app.local-search-enabled .searchbar .search-disable-button  {
+  display: inherit;
 }
 
 .local-search-list {
@@ -41,4 +52,8 @@ $input-clear-button-preview: url("data:image/svg+xml;charset=utf-8,%3Csvg%20fill
 
 #app.local-search-in .local-search-list {
   display: inherit;
+}
+
+#app.local-search-enabled .searchbar-hide-on-local-search {
+  display: none;
 }
