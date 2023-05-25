@@ -68,7 +68,7 @@ function createConfig(spec) {
                       "proposals": true
                     },
                     "targets": {
-                      "android": "4.4",
+                      "android": "4.1",
                       "ios": "9"
                     }
                   }
@@ -97,10 +97,15 @@ function createConfig(spec) {
         }
       ]
     },
-    output: {
-      filename: 'main.js',
-      path: path.resolve(rootDir, 'dist')
+      output: {
+        filename: 'main.js',
+        path: path.resolve(rootDir, 'dist'),
+            environment: {
+        // ...
+        arrowFunction: false, // <-- this line does the trick
+      },
     }
+    
   };
 
   return config;
