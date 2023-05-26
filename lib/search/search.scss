@@ -50,10 +50,20 @@ $input-clear-button-preview: url("data:image/svg+xml;charset=utf-8,%3Csvg%20fill
   display: none;
 }
 
-#app.local-search-in .local-search-list {
+#app.local-search-enabled .local-search-list {
   display: inherit;
 }
 
-#app.local-search-in .searchbar-hide-on-local-search {
+
+#app.local-search-enabled .searchbar-hide-on-local-search-enabled {
   display: none;
 }
+
+/*
+
+#app.local-search-enabled .local-search ~ .searchbar-hide-on-local-search-enabled {
+  display: inherit;
+  visibility: hidden;
+  pointer-events: none;
+}
+*/
