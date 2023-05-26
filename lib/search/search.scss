@@ -59,6 +59,14 @@ $input-clear-button-preview: url("data:image/svg+xml;charset=utf-8,%3Csvg%20fill
   display: none;
 }
 
+#app .local-search-list .search-link {
+  display: none;
+}
+
+#app .local-search-list .search-link.search-passes {
+  display: inherit;
+}
+
 /*
 
 #app.local-search-enabled .local-search ~ .searchbar-hide-on-local-search-enabled {
