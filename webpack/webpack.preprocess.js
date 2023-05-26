@@ -44,10 +44,9 @@ function processPage(pagePath, pageId) {
   const pageKeywords = page.data('keywords') || '';
   const imgPath = `./www/img/${pageId}.png`;
   const hasImg = fs.existsSync(imgPath);
-  let keywords = keywordsStringToArray([pageHeader, pageKeywords].join(','));
+  const titleKeyword = page.data('no-title-keywords') ? '' : pageHeader;
 
-  ret.keywords = keywords;
-
+  ret.keywords = keywordsStringToArray([titleKeyword, pageKeywords].join(','));
   ret.route = `/pages/${pageId}`;
 
   if (pageHeader) {

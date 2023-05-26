@@ -12,3 +12,9 @@ TBD
 ## Special Pages
 
 * `privacy.html` - privacy page that appears in the right-hand sidebar
+
+## Search
+
+Search links to pages and sections with the data-keywords attribute. Attributes that influence the search:
+* `data-keywords="one two three"` - space and/or comma separated keywords for search
+* `data-title="page title"` will also be used as a (single) keyword, unless `data-no-title-keywords="true"` is present.
