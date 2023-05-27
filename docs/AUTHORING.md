@@ -15,11 +15,10 @@ TBD
 
 ## Search
 
-<<<<<<< HEAD
 Search links to pages and sections with the data-keywords attribute. Attributes that influence the search:
 * `data-keywords="one two three"` - space and/or comma separated keywords for search
 * `data-title="page title"` will also be used as a (single) keyword, unless `data-no-title-keywords="true"` is present.
-=======
+
 ### Global Search
 
 Global search is keyed off of the top level div of the pages
@@ -38,4 +37,3 @@ You can instantiate a search form for a given page:
 `<div class="local-search" data-placeholder="Search for a FAQ"></div>`
 
 Use `class="searchbar-hide-on-local-search"` to hide content you don't want to show while search is active.
->>>>>>> fr/pagesearch
