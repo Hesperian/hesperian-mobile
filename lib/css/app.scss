@@ -397,3 +397,9 @@ $howto-padding: 8px;
   font-size: 120%;
 }
 
+.choose-language:disabled {
+  border-color: black;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
