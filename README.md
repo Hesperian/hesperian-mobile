@@ -147,6 +147,9 @@ To emulate android
 * make sure emulator is running to pick up correct device: `Android Studio -> Tools -> AVD's`
 * `make emulate-android`
 
+OS X Mac Sillicon:
+`arch -xarm64 open -a XCode`
+
 ### Pushing lib code
 
 rsync -avu --delete --exclude=node_modules --exclude=.git ./ ../hesperian-mobile-XXX/node_modules/hesperian-mobile

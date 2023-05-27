@@ -13,7 +13,9 @@ MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
 MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
 CORDOVA_CONFIG=$(BUILDDIR)/config.xml
 VERSION := $(shell node -p "require('./app-config.json').version")
+APPNAME := $(shell node -p "require('./app-config.json').name")
 OUTPUT_DIR=output/${VERSION}
+OUTPUT_NAME=${APPNAME}-${VERSION}
 WEBAPP_DIR=./dist-web
 
 
@@ -29,11 +31,13 @@ dist: webpack $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 
-app: dist
+cordova-build: dist
 	@(cd ${BUILDDIR}; cordova build --device --release -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
+
+app: cordova-build
 	mkdir -p ${OUTPUT_DIR}
-	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa ${OUTPUT_DIR}
-	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*.aab ${OUTPUT_DIR}
+	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa ${OUTPUT_DIR}/${OUTPUT_NAME}.ipa
+	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*.aab ${OUTPUT_DIR}/${OUTPUT_NAME}.aab
 
 .PHONY: site
 site:
