@@ -1,49 +1,61 @@
-@import 'theme.scss';
+@import "theme.scss";
 
 body.shepherd-enabled #app {
-    pointer-events: none;
-    background-color: black;
+  pointer-events: none;
+  background-color: black;
 }
 
-body.shepherd-enabled #app > *{
-    opacity: 0.5;
+body.shepherd-enabled #app > * {
+  opacity: 0.5;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .hm-tour {
-    margin-top: 12px !important;
-    margin-bottom: 12px !important;
+  animation-name: fadeIn;
+  animation-duration: 1s;
+  border: 1px solid darkgray;
+  margin-top: 12px !important;
+  margin-bottom: 12px !important;
 
-    .shepherd-header {
-        .shepherd-cancel-icon {
-            font-size: 1.5em;
-        }
-        padding-top: 5px;
+  .shepherd-header {
+    .shepherd-cancel-icon {
+      font-size: 1.5em;
     }
+    padding-top: 5px;
+  }
 
-    .shepherd-text {
-        padding-top: 0;
-    }
+  .shepherd-text {
+    padding-top: 0;
+  }
 
-    .shepherd-footer {
-        padding-bottom: 4px;
-    }
-    
-    button {
-        width: initial;
-    }
+  .shepherd-footer {
+    padding-bottom: 4px;
+  }
 
-    button.shepherd-button {
-        background-color:  $button-link-background-color;
-        border-radius: 10%;
-        color: $button-link-text-color;
-    }
+  button {
+    width: initial;
+  }
 
-    .dontaskcontainer {
-        display: flex;
-        align-items: center;
-        label {
-            padding-right: 8px;
-        }
-        margin: 0 10px 10px 10px;
+  button.shepherd-button {
+    background-color: $button-link-background-color;
+    border-radius: 10%;
+    color: $button-link-text-color;
+  }
+
+  .dontaskcontainer {
+    display: flex;
+    align-items: center;
+    label {
+      padding-right: 8px;
     }
+    margin: 0 10px 10px 10px;
+  }
 }
