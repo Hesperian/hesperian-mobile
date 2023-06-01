@@ -205,4 +205,12 @@ html.device-android.with-statusbar .favorites-sheet {
       background-color: $subnavbar-background;
     }
   }
+
+  a.button.toolbar-audio-button-play {
+    display: none;
+  }
+
+  &.hm-audio-enabled a.button.toolbar-audio-button-play {
+    display: inherit;
+  }
 }
