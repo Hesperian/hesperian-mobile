@@ -1,5 +1,6 @@
 @import "theme.scss";
 
+/*
 body.shepherd-enabled #app {
   pointer-events: none;
   background-color: black;
@@ -8,6 +9,12 @@ body.shepherd-enabled #app {
 body.shepherd-enabled #app > * {
   opacity: 0.5;
 }
+
+*/
+body.shepherd-enabled #app > .sheet-backdrop {
+  opacity: 0;
+}
+
 
 @keyframes fadeIn {
   0% {
@@ -54,5 +61,17 @@ body.shepherd-enabled #app > * {
       padding-right: 8px;
     }
     margin: 0 10px 10px 10px;
+  }
+
+  
+}
+
+#app .hm-choose-language {
+  margin-left: inherit;
+  max-width: fit-content;
+  right: 0;
+  left: unset;
+  .choose-language {
+    display: block;
   }
 }
