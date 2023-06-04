@@ -67,6 +67,8 @@ body.shepherd-enabled #app > .sheet-backdrop {
   }
   .dialog-buttons {
     justify-content: flex-start;
+    margin-top: 10px;
+    margin-bottom : 5px;
     .dialog-button {
       text-transform: inherit;
       background-color: $button-link-background-color;
