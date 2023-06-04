@@ -1,20 +1,8 @@
 @import "theme.scss";
 
-/*
-body.shepherd-enabled #app {
-  pointer-events: none;
-  background-color: black;
-}
-
-body.shepherd-enabled #app > * {
-  opacity: 0.5;
-}
-
-*/
 body.shepherd-enabled #app > .sheet-backdrop {
   opacity: 0;
 }
-
 
 @keyframes fadeIn {
   0% {
@@ -62,8 +50,6 @@ body.shepherd-enabled #app > .sheet-backdrop {
     }
     margin: 0 10px 10px 10px;
   }
-
-  
 }
 
 #app .hm-choose-language {
@@ -79,6 +65,18 @@ body.shepherd-enabled #app > .sheet-backdrop {
     color: $navbar-textcolor;
     padding: 10px;
   }
+  .dialog-buttons {
+    justify-content: flex-start;
+    .dialog-button {
+      text-transform: inherit;
+      background-color: $button-link-background-color;
+      color: $button-link-text-color;
+      i {
+        padding-left: 10px;
+      }
+    }
+  }
+
   .languageslist {
     margin: 0;
     margin-top: 12px;
@@ -93,9 +91,10 @@ body.shepherd-enabled #app > .sheet-backdrop {
     li.current {
       font-weight: bold;
       text-decoration: underline;
+      color: black;
     }
     li::after {
-      left: 0px;  
+      left: 0px;
     }
   }
   .choose-language {
