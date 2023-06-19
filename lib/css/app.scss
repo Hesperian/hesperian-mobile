@@ -405,6 +405,31 @@ $howto-padding: 8px;
   }
 }
 
+.languagescontainer {
+  margin-top: 10px;
+}
+
+.choose-language {
+  display: inline-block;
+  height: auto;
+  width: inherit;
+  height: fit-content;
+  color: #ff7606;
+  background-color: transparent;
+  border: 1px solid gainsboro;
+  border-radius: 10px;
+  margin: 5px;
+  white-space: nowrap;
+  font-size: 120%;
+}
+
+.choose-language:disabled {
+  background-color: #ff7606;
+  color: white;
+
+  pointer-events: none;
+}
+
 /* restore badge styling from F7 v3 */
 .md .badge {
   font-size: 10px;

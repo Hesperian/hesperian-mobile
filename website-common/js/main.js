@@ -1,3 +1,5 @@
+window.isWebsite = true;
+
 function updateLangLinks(event) {
   const app = event.detail;
   const locale = app.api.locale();
