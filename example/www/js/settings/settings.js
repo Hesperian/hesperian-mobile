@@ -5,9 +5,9 @@
  */
 
 import {
-  Template7,
   Dom7
 } from 'framework7/bundle';
+import Template7 from 'template7';
 import './settings.scss';
 import {
   resources
