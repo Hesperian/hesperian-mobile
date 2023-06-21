@@ -1,5 +1,14 @@
 @import 'theme.scss';
 
+/* set font size to be identical to f7 v3*/
+.md .pregnancy-calculator{
+  --f7-calendar-day-font-size: 16px;
+  --f7-calendar-height: 320px;
+  /* restore f7 v3 colors for calendar */
+  --f7-calendar-week-header-text-color: rgba(0, 0, 0, 0.54);
+  --f7-calendar-prev-next-text-color: #b8b8b8;
+  --f7-link-highlight-color: rgba(0, 0, 0, 0.15);
+}
 
 .smart-select-page li.disabled {
 	display:none
@@ -83,6 +92,9 @@
 
       .item-title-row {
         font-weight: bold;
+        .item-title {
+          font-weight: inherit;
+        }
       }
 
       .item-text {
@@ -139,6 +151,13 @@
         width: 34px;
         height: 34px;
       }
+      .icon-next:after,
+      .icon-prev:after {
+        line-height: 34px;
+        font-size: 28px;
+        opacity: 0.54;
+      }
+
     }
 
     .calendar-year-selector {
@@ -150,6 +169,15 @@
     border-width: 0px 1px 1px 1px;
     border-style: solid;
     border-color: $tool-internal-header-background-color;
+
+    .toolbar-top {
+      top: 0;
+    }
+
+    .toolbar {
+      background: unset;
+      --f7-toolbar-text-color: #212121;
+    }
 
     .calendar-day.calendar-day-selected,
     .calendar-day.calendar-day-was-selected {

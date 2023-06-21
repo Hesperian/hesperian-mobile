@@ -51,6 +51,10 @@ $breakpoint-small-large: 390px;
 #app .content-list {
   font-weight: bold;
   color: $inline-link-text-color;
+
+  .item-title {
+    font-weight: bold;
+  }
 }
 
 /* Take control over framework7 list styles */
@@ -131,6 +135,7 @@ body {
 
 .button {
   font-size: $font-size-normal;
+  white-space: normal;
 }
 
 #app .list {
