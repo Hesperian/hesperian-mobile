@@ -51,6 +51,10 @@ $breakpoint-small-large: 390px;
 #app .content-list {
   font-weight: bold;
   color: $inline-link-text-color;
+
+  .item-title {
+    font-weight: bold;
+  }
 }
 
 /* Take control over framework7 list styles */
@@ -131,6 +135,7 @@ body {
 
 .button {
   font-size: $font-size-normal;
+  white-space: normal;
 }
 
 #app .list {
@@ -403,6 +408,31 @@ $howto-padding: 8px;
       width: 100%;
     }
   }
+}
+
+.languagescontainer {
+  margin-top: 10px;
+}
+
+.choose-language {
+  display: inline-block;
+  height: auto;
+  width: inherit;
+  height: fit-content;
+  color: #ff7606;
+  background-color: transparent;
+  border: 1px solid gainsboro;
+  border-radius: 10px;
+  margin: 5px;
+  white-space: nowrap;
+  font-size: 120%;
+}
+
+.choose-language:disabled {
+  background-color: #ff7606;
+  color: white;
+
+  pointer-events: none;
 }
 
 /* restore badge styling from F7 v3 */

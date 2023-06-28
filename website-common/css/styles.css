@@ -46,7 +46,7 @@ body {
 }
 #app-header .app-header-languages {
     display: grid;
-    grid-template-rows: repeat(3, calc(100%/3));
+    grid-template-rows: repeat(3, calc(100%/3.1));
     grid-auto-flow: column;
     overflow-x: auto;
     margin-right: 10px;
