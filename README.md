@@ -82,6 +82,12 @@ export PATH=/Users/$USER/Library/Android/sdk/tools:$PATH
 export PATH=/Users/$USER/Library/Android/sdk/tools/bin:$PATH
 export PATH=/Users/$USER/Library/Android/sdk/platform-tools:$PATH
 
+## Library Release
+
+* Bump version number, e.g. `npm version patch`
+* `git push --follow-tags`
+* `.github/workflows/release.yaml` action will take it from there
+
 ## Addition Information
 
 * [HOWTO_CREATE_NEW_APP.md](docs/HOWTO_CREATE_NEW_APP.md)
