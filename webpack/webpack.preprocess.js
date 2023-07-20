@@ -68,6 +68,7 @@ function processPage(pagePath, pageId) {
       'route': `/pages/${pageId}/${sectionId}`,
       sectionId,
       'title': title,
+      'titleKeywords': keywordsStringToArray(title),
       'keywords': keywordsStringToArray(keywordsString)
     });
   });
