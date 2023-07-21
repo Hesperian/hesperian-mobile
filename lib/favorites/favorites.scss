@@ -198,19 +198,15 @@ html.device-android.with-statusbar .favorites-sheet {
       justify-content: center;
       align-items: center;
     }
+
+    &:not(.hm-audio-enabled) a.toolbar-audio-button-play {
+      display: none;
+    }
   }
 
   .favorites-sheet {
     .toolbar {
       background-color: $subnavbar-background;
     }
-  }
-
-  a.button.toolbar-audio-button-play {
-    display: none;
-  }
-
-  &.hm-audio-enabled a.button.toolbar-audio-button-play {
-    display: inherit;
   }
 }

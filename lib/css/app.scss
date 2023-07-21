@@ -1,6 +1,7 @@
 @import 'theme.scss';
 @import './navbar.scss';
 @import './buttons.scss';
+@import './util.scss';
 
 html.md body,
 html.ios body {
@@ -119,6 +120,9 @@ body {
 
 #app .list {
   font-size: inherit; // skip f7 size change
+  .item-media::after {
+    @include hairline;
+  }
 }
 
 // workaround for https://github.com/framework7io/framework7/issues/2397
@@ -175,6 +179,11 @@ html.device-ios .item-link.active-state {
 }
 
 /* Current page sub-heading */
+
+.full-page-width {
+  margin-left: -11px;
+  margin-right: -11px;
+}
 
 .page-header {
   border-color: $heading-border-color;
