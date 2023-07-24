@@ -1,4 +1,5 @@
-@import 'theme.scss';
+@import "theme.scss";
+@import "../css/util.scss";
 
 $chevron-color: a7a7a7;
 $chevron-opened: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D'13px'%20height%3D'8px'%20viewBox%3D'0%200%208%2013'%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%3E%3Cpolygon%20fill%3D'%23#{$chevron-color}'%20transform%3D'translate(1.5%2C%206.5)%20rotate(-135)%20translate(-10%2C%20-6.5)'%20points%3D'11%2011%2011%202%209%202%209%209%202%209%202%2011%2010%2011'%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E");
@@ -14,19 +15,7 @@ $chevron-closed: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D'13px'%2
 }
 
 .accordion-item.accordion-item-opened:after {
-  content: '';
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.12);
-  display: block;
-  z-index: 15;
-  top: auto;
-  right: auto;
-  bottom: 0;
-  left: 0;
-  height: 1px;
-  width: 100%;
-  -webkit-transform-origin: 50% 100%;
-  transform-origin: 50% 100%;
+  @include hairline;
 }
 
 #app .accordion-item {
@@ -39,6 +28,9 @@ $chevron-closed: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D'13px'%2
   }
   .item-title {
     font-size: 110%;
+  }
+  .item-media img {
+    max-height: 2em;
   }
 }
 
@@ -68,4 +60,9 @@ $chevron-closed: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D'13px'%2
       color: black;
     }
   }
+}
+
+// workaround for https://github.com/framework7io/framework7/issues/2397
+html.device-ios .item-link.active-state {
+  pointer-events: none;
 }

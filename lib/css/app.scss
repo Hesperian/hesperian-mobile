@@ -1,6 +1,7 @@
 @import 'theme.scss';
 @import './navbar.scss';
 @import './buttons.scss';
+@import './util.scss';
 
 :root {
   /* override font size variable that is 14px in v7 */
@@ -140,6 +141,9 @@ body {
 
 #app .list {
   font-size: inherit; // skip f7 size change
+  .item-media::after {
+    @include hairline;
+  }
 }
 
 /* default link color */
@@ -206,6 +210,11 @@ body {
 }
 
 /* Current page sub-heading */
+
+.full-page-width {
+  margin-left: -11px;
+  margin-right: -11px;
+}
 
 .page-header {
   border-color: $heading-border-color;

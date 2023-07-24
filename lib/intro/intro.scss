@@ -1,12 +1,7 @@
 @import "theme.scss";
 
-body.shepherd-enabled #app {
-  pointer-events: none;
-  background-color: black;
-}
-
-body.shepherd-enabled #app > * {
-  opacity: 0.5;
+body.shepherd-enabled #app > .sheet-backdrop {
+  opacity: 0;
 }
 
 @keyframes fadeIn {
@@ -54,5 +49,57 @@ body.shepherd-enabled #app > * {
       padding-right: 8px;
     }
     margin: 0 10px 10px 10px;
+  }
+}
+
+#app .hm-choose-language {
+  margin-left: inherit;
+  max-width: fit-content;
+  right: 0;
+  left: unset;
+  .dialog-inner {
+    padding: 0;
+  }
+  .dialog-title {
+    background-color: $navbar-background;
+    color: $navbar-textcolor;
+    padding: 10px;
+  }
+  .dialog-buttons {
+    justify-content: flex-start;
+    margin-top: 10px;
+    margin-bottom : 5px;
+    .dialog-button {
+      text-transform: inherit;
+      background-color: $button-link-background-color;
+      color: $button-link-text-color;
+      i {
+        padding-left: 10px;
+      }
+    }
+  }
+
+  .languageslist {
+    margin: 0;
+    margin-top: 12px;
+    li {
+      height: inherit;
+      line-height: inherit;
+      font-size: 120%;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      color: #ff7606;
+    }
+    li.current {
+      font-weight: bold;
+      text-decoration: underline;
+      color: black;
+    }
+    li::after {
+      left: 0px;
+    }
+  }
+  .choose-language {
+    display: block;
   }
 }
