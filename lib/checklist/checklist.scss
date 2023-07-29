@@ -1,0 +1,14 @@
+/*
+   audio styles
+*/
+
+@import 'theme.scss';
+
+.checklist > li {
+   display: flex;
+   align-items: center;
+   margin-bottom: 10px;
+   .checkbox {
+      margin-right: 10px;
+   }
+}
