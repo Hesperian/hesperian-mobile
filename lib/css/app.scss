@@ -413,3 +413,15 @@ $howto-padding: 8px;
   pointer-events: none;
 }
 
+
+/* Figure - basically and image with caption here */
+figure {
+  img {
+    max-width: 100%;
+  }
+  figcaption {
+    text-align: center
+  }
+}
+
+
