@@ -26,8 +26,10 @@ $searchbar-icon-local: url("data:image/svg+xml;charset=utf-8,%3Csvg%20fill%3D'%2
     font-size: 24px;
   }
 }
+
 #app .searchbar-local{
   border: 1px solid $heading-border-color;
+  --f7-searchbar-input-bg-color: --f7-searchbar-bg-color;
 }
 
 #app .searchbar-local .searchbar-icon {
