@@ -1,7 +1,7 @@
-@import 'theme.scss';
-@import './navbar.scss';
-@import './buttons.scss';
-@import './util.scss';
+@import "theme.scss";
+@import "./navbar.scss";
+@import "./buttons.scss";
+@import "./util.scss";
 
 html.md body,
 html.ios body {
@@ -51,8 +51,6 @@ $breakpoint-small-large: 390px;
   -webkit-line-clamp: inherit;
 }
 
-
-
 .debug {
   visibility: hidden;
   border: 1px solid gray;
@@ -60,7 +58,6 @@ $breakpoint-small-large: 390px;
   margin-left: 3px;
   padding-right: 3px;
 }
-
 
 html {
   font-size: $font-size-base;
@@ -105,8 +102,6 @@ body {
   padding-right: 10px;
 }
 
-
-
 /* over-ride framework7 font-size to % */
 
 .list-block,
@@ -130,14 +125,12 @@ html.device-ios .item-link.active-state {
   pointer-events: none;
 }
 
-
 /* default link color */
 
 .md a,
 .ios a {
   color: $inline-link-text-color;
 }
-
 
 #app .links-list a {
   height: inherit;
@@ -215,10 +208,9 @@ html.device-ios .item-link.active-state {
   line-height: 28px;
 }
 
-.page-header+.list-block {
+.page-header + .list-block {
   margin-top: 15px;
 }
-
 
 #app .mc-toolbar {
   background-color: $navbar-background;
@@ -250,8 +242,6 @@ i.app-gear {
   }
 }
 
-
-
 /* Custom list styles */
 
 #app {
@@ -261,13 +251,12 @@ i.app-gear {
     margin-top: 15px;
     margin-bottom: 10px;
 
-    &>li {
+    & > li {
       margin-bottom: 6px;
     }
   }
 
   .list {
-
     .item-inner:after,
     ul:after {
       background-color: $list-divider-color;
@@ -296,12 +285,8 @@ img.center {
   margin: 0 auto;
 }
 
-.float-right {
-  float: right;
-}
-
-.float-left {
-  float: left;
+.clear {
+  clear: both;
 }
 
 img.center {
@@ -314,7 +299,7 @@ img.center {
     background-color: $toggle-no-primary;
   }
 
-  .toggle input[type="checkbox"]:checked+.toggle-icon:after {
+  .toggle input[type="checkbox"]:checked + .toggle-icon:after {
     background-color: $toggle-yes-primary;
   }
 
@@ -322,7 +307,7 @@ img.center {
     background-color: $toggle-no-secondary;
   }
 
-  .toggle input[type="checkbox"]:checked+.toggle-icon {
+  .toggle input[type="checkbox"]:checked + .toggle-icon {
     background-color: $toggle-yes-secondary;
   }
 }
@@ -343,11 +328,12 @@ $howto-padding: 8px;
     .howto-section {
       border-top: 1px solid black;
 
-      &>* {
+      & > * {
         padding: $howto-padding;
       }
 
-      .howto-section-title, .howto-section-subtitle {
+      .howto-section-title,
+      .howto-section-subtitle {
         background-color: #7ae6cd;
       }
 
@@ -367,12 +353,12 @@ $howto-padding: 8px;
 }
 
 .float-block,
-.accordion-item-content>.block {
-  &>p:before {
+.accordion-item-content > .block {
+  & > p:before {
     @extend %float-block-item;
   }
 
-  &>ul:before {
+  & > ul:before {
     @extend %float-block-item;
   }
 }
@@ -413,15 +399,12 @@ $howto-padding: 8px;
   pointer-events: none;
 }
 
-
 /* Figure - basically and image with caption here */
 figure {
   img {
     max-width: 100%;
   }
   figcaption {
-    text-align: center
+    text-align: center;
   }
 }
-
-
