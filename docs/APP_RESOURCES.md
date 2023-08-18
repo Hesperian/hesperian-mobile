@@ -76,7 +76,9 @@ Various scripts
 
 ## Making photos smaller
 
-```mogrify -resize 800x800\> -sampling-factor 4:2:0 -strip -quality 85 -interlace JPEG -colorspace RGB *.jpg```
+* ```mogrify -resize 800x800\> -sampling-factor 4:2:0 -strip -quality 85 -interlace JPEG -colorspace RGB *.jpg```
+* ```find www -name "*.png" -exec mogrify -resize 800x800\> -strip {} \;```
+
 
 ## Creating App Icons
 

@@ -35,7 +35,7 @@ const webAppHeader = `
         </div>
         <div class="app-header-buttons">
             <div class="app-store-button"><a href="https://play.google.com/store/apps/details?id={{appContext.android-packageName}}" class="external"><img src="./website-common/img/google-play-badge.svg" alt="{{appContext.websiteConfig.playStoreAltText}}" valign="middle"></a></div>
-            <div class="app-store-button"><a href="https://apps.apple.com/us/app/family-planning/id{{appContext.apple-appId}}" class="external"><img src="./website-common/img/app-store-badge.svg" alt="{{appContext.websiteConfig.appStoreAltText}}" valign="middle"></a></div>
+            <div class="app-store-button"><a href="https://apps.apple.com/us/app/id{{appContext.apple-appId}}" class="external"><img src="./website-common/img/app-store-badge.svg" alt="{{appContext.websiteConfig.appStoreAltText}}" valign="middle"></a></div>
         </div>
     </div>
     <div class="app-header-languages">
