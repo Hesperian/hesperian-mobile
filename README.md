@@ -153,7 +153,13 @@ To emulate android
 * make sure emulator is running to pick up correct device: `Android Studio -> Tools -> AVD's`
 * `make emulate-android`
 
-OS X Mac Sillicon:
+Or
+`bundletool build-apks --bundle=X-1.14.8.aab --output=X-1.14.8.apks --mode=universal` to get the apk to drag to the emulator.
+
+* `emulator -list-avds`
+* `emulator -avd XXX`
+
+OS X Mac Silicon:
 `arch -xarm64 open -a XCode`
 
 ### Pushing lib code
