@@ -8,19 +8,19 @@
     hesperian-web-makeindex mode(web|app) appConfig.json(path) template-dir
 */
 const fs = require("fs");
-const handlebars = require('handlebars');
+const handlebars = require("handlebars");
 
 const mode = process.argv[2];
 const contextFile = process.argv[3];
 const templateDir = process.argv[4];
 function getFile(path) {
-    let text = '';
- 
-    if (path && fs.existsSync(path)) {
-        text =  fs.readFileSync(path, "utf-8");
-    }
+  let text = "";
 
-    return text;
+  if (path && fs.existsSync(path)) {
+    text = fs.readFileSync(path, "utf-8");
+  }
+
+  return text;
 }
 
 const appContextData = getFile(contextFile);
@@ -35,14 +35,14 @@ const webAppHeader = `
 </div>
 `;
 
-let modeSpecific = '';
-let appHeader = '';
+let modeSpecific = "";
+let appHeader = "";
+const isWeb = mode === "web" || mode === "webembed";
 
-if (mode === "web") {
-
-    if(appContext.firebaseConfig) {
-        const firebaseConfig = JSON.stringify(appContext.firebaseConfig)
-        modeSpecific = `
+if (isWeb) {
+  if (appContext.firebaseConfig) {
+    const firebaseConfig = JSON.stringify(appContext.firebaseConfig);
+    modeSpecific = `
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-app.js";
     import { getAnalytics, logEvent, setCurrentScreen } from "https://www.gstatic.com/firebasejs/9.8.1/firebase-analytics.js";
@@ -56,20 +56,21 @@ if (mode === "web") {
     </script>
     <script type="text/javascript" src="website-common/js/main.js"></script>
     `;
-    }
-   
-    appHeader = webAppHeader;
+  }
+
+  appHeader = webAppHeader;
 } else {
-    modeSpecific = `<script type="text/javascript" charset="utf-8" src="cordova.js"></script>`;
+  modeSpecific = `<script type="text/javascript" charset="utf-8" src="cordova.js"></script>`;
 }
 
 let context = {
-    webmode: mode === 'web',
-    appContext: appContext,
-    appSpecific: appSpecifLibs,
-    appHeader: appHeader,
-    modeSpecific: modeSpecific
-}
+  webmode: isWeb,
+  htmlClass: mode === "webembed" ? "hm-embed" : "",
+  appContext: appContext,
+  appSpecific: appSpecifLibs,
+  appHeader: appHeader,
+  modeSpecific: modeSpecific,
+};
 
 const appHtml = `
 <div id="app">
@@ -101,7 +102,7 @@ const appHtml = `
 
 const index = `
 <!DOCTYPE html>
-<html>
+<html class="{{htmlClass}}">
 
 <head>
   <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content: www.google-analytics.com *.hesperian.org">
@@ -113,7 +114,7 @@ const index = `
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
   <title>{{{appContext.description}}}</title>
-  <link href="main.css" rel="stylesheet"></head>
+  <link href="main.css" rel="stylesheet">
 {{#if webmode}}
   <link href="website-common/css/styles.css" rel="stylesheet">
 {{/if}}
@@ -134,6 +135,5 @@ const index = `
 
 const indexTemplate = handlebars.compile(index);
 const output = indexTemplate(context);
-
 
 fs.writeFileSync(1, output);
