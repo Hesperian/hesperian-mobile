@@ -1,4 +1,5 @@
 # Account
+
 https://developer.apple.com/
 account
 sign in as it@hesperian.org (need permissions to create)
@@ -8,8 +9,7 @@ Certs / idents/ profiles
 
 ## Create a CSR certSigningRequest
 
-https://support.apple.com/en-in/guide/keychain-access/kyca8916/mac
-https://help.apple.com/developer-account/#/devbfa00fef7
+https://developer.apple.com/help/account/create-certificates/create-a-certificate-signing-request
 
 Create self-signed certificates in Keychain Access on Mac
 
@@ -19,41 +19,35 @@ In the Request group, click the "Saved to disk" option
 
 makes .cer
 
-Certificate Name
-The Hesperian Foundation
-Certificate Type
-iOS Distribution
-Expiration Date
-2022/05/31
-Created By
-Stuart McCalla (it@hesperian.org)
-
-
-* it@hesperian.org
-* The Hesperian Foundation 2
-* <blank>
+- it@hesperian.org
+- The Hesperian Foundation 3
+- <blank>
 
 ## Create a .cer
+
 on the apple site create a Certificat, download install in keychain
 
 ## .p12
+
 export from keychain
 Select Personal Information Exchange (.p12) for File Format.
 Save the certificate, giving it a strong password.
 
 # Provisioning Profile
+
 https://developer.apple.com/ -> account -> profiles
 
+- Distribution/app store
+- Specific App ID
+- Family Planning App Store 1 (for example)
+- Double Click for Xcode to register it (no feedback it just happens)
 
-* Distribution/app store
-* Specific App ID
-* Family Planning App Store 1 (for example)
-* Double Click for Xcode to register it (no feedback it just happens)
+Enabled Capabilities: Associated Domains, In-App Purchase
 
 # App Configuration
 
- cordova/build.json   
-    
+cordova/build.json
+
         "release": {
             "codeSignIdentity": "iPhone Distribution",
             "developmentTeam": "72WY4Q4382",
@@ -69,3 +63,5 @@ https://developer.apple.com/ -> account -> profiles
 Open the .mobileprovision as binary to get id
 find id in `ls ~/Library/MobileDevice/Provisioning\ Profiles`
 update `build.json` provisioningProfile
+
+60798ba1-4d61-403e-bad4-10e74d91ac90.mobileprovision
