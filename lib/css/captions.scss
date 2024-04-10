@@ -1,0 +1,68 @@
+@import "theme.scss";
+
+#app .caption-container {
+  margin: 5px;
+  border-radius: 20px;
+  border: 2px solid $caption-color;
+  background-color: white;
+  color: $caption-color;
+  width: 150px;
+  min-height: 100px;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: flex-end;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+
+  img {
+    object-fit: contain;
+    max-height: 115px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .caption {
+    color: $caption-color;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    line-height: 1.2;
+    font-weight: bold;
+    .inline-link {
+      color: $caption-color;
+      text-decoration: underline;
+    }
+  }
+}
+
+#app .checklist .caption-container {
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  img {
+    max-width: 90px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .caption {
+    text-align: inherit;
+    flex-grow: 1;
+  }
+}
+
+#app .button-array.how-to {
+  .caption-container {
+    min-height: 150px;
+  }
+
+  .caption {
+    min-height: 2em;
+  }
+
+  img {
+    object-fit: contain;
+    max-height: 70px;
+  }
+}

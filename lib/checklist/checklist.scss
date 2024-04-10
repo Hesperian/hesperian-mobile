@@ -2,22 +2,22 @@
    audio styles
 */
 
-@import 'theme.scss';
+@import "theme.scss";
 
 .checklist {
-   width: fit-content;
+  width: fit-content;
 }
 
 .checklist > li {
-   display: flex;
-   align-items: center;
-   margin-bottom: 10px;
-   label {
-      display: flex;
-      align-items: center;
-      width: 100%;
-   }
-   .checkbox {
-      margin-right: 10px;
-   }
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  label {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  .checkbox .icon-checkbox {
+    margin-right: 10px;
+  }
 }
