@@ -6,6 +6,7 @@
 // Layout constants
 
 $page-navigaton-height: 56px + 48px;
+$page-horizontal-margin: 11px;
 
 // Colors
 
@@ -21,8 +22,8 @@ $content-block-text-color: #36363b;
 $inline-link-text-color: #138f9b;
 $accordion-item-content-color: $inline-link-text-color;
 $link-border-color: $inline-link-text-color;
-$button-link-background-color: white;
-$button-link-text-color: $link-border-color;
+$button-link-background-color: $link-border-color;
+$button-link-text-color: white;
 $list-divider-color: rgba(0, 0, 0, 0.25);
 
 $favorite-icon-color: #ffed10;
@@ -50,3 +51,34 @@ $tool-internal-header-color: white;
 $tool-internal-header-contrast-color: black;
 
 $subheading-background-color: lightgray;
+
+$toggle-yes-primary: #00b202;
+$toggle-yes-secondary: #d4f9d4;
+$toggle-no-primary: #ececec;
+$toggle-no-secondary: #d3d3d3;
+
+$caption-color: #138f9b;
+
+$accordion-active-background-color: #f5f5f5;
+
+f7-icon {
+  font-family: "Framework7 Icons";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 25px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  font-feature-settings: "liga";
+  text-align: center;
+}

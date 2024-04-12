@@ -1,8 +1,7 @@
-@import 'theme.scss';
-
+@import "theme.scss";
 
 %f7-icon {
-  font-family: 'Framework7 Icons';
+  font-family: "Framework7 Icons";
   font-weight: normal;
   font-style: normal;
   font-size: 25px;
@@ -24,7 +23,6 @@
 }
 
 /* Buttons and links */
-
 
 .button {
   border: 2px solid $link-border-color;
@@ -54,9 +52,9 @@
 }
 
 #app {
-
   .inline-link,
   .external {
+    font-weight: bold;
     color: $inline-link-text-color;
   }
 
@@ -75,7 +73,7 @@
 
       &::after {
         @extend %f7-icon;
-        content: 'chevron_right';
+        content: "chevron_right";
         position: absolute;
         top: 50%;
         transform: translateY(-50%);

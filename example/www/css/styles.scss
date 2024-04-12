@@ -1,5 +1,5 @@
-@import '../../node_modules/framework7/css/framework7.css';
-@import 'theme.scss';
+@import "../../node_modules/framework7/css/framework7.css";
+@import "theme.scss";
 
 #app .links-list a {
   height: inherit;
@@ -53,14 +53,13 @@
   }
 }
 
-
 /* Utility classes */
 
 .subheading {
   font-weight: bold;
   background-color: $subheading-background-color;
-  margin: 0px -11px 0px -11px;
-  padding: 5px 5px 5px 11px;
+  margin: 0px -$page-horizontal-margin 0px -$page-horizontal-margin;
+  padding: 5px 5px 5px $page-horizontal-margin;
 }
 
 .image-padding.float-right {
@@ -70,8 +69,6 @@
 .image-padding.float-left {
   padding-right: 10px;
 }
-
-
 
 table {
   border: none;
@@ -102,12 +99,12 @@ table {
 }
 
 .float-block,
-.accordion-item-content>.block {
-  &>p:before {
+.accordion-item-content > .block {
+  & > p:before {
     @extend %float-block-item;
   }
 
-  &>ul:before {
+  & > ul:before {
     @extend %float-block-item;
   }
 }
