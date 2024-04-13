@@ -1,0 +1,22 @@
+@import "theme.scss";
+
+%button-base {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $button-link-background-color;
+  border: 1px solid $button-link-text-color;
+  border-radius: 15px;
+  color: $button-link-text-color;
+  margin: 10px 15px 10px 15px;
+  min-height: 50px;
+  padding: 5px 10px 5px 10px;
+  text-align: center;
+  font-weight: bold;
+  line-height: 25px;
+  &.button-invert {
+    background-color: $button-link-text-color;
+    border-color: $button-link-background-color;
+    color: $button-link-background-color;
+  }
+}
