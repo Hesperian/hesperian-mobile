@@ -58,7 +58,7 @@
 .subheading {
   font-weight: bold;
   background-color: $subheading-background-color;
-  margin: 0px -$page-horizontal-margin 0px -$page-horizontal-margin;
+  margin: 0px (-$page-horizontal-margin) 0px (-$page-horizontal-margin);
   padding: 5px 5px 5px $page-horizontal-margin;
 }
 

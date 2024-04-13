@@ -91,7 +91,7 @@ body {
 .subheading {
   font-weight: bold;
   background-color: $subheading-background-color;
-  margin: 0px -$page-horizontal-margin 0px -$page-horizontal-margin;
+  margin: 0px (-$page-horizontal-margin) 0px (-$page-horizontal-margin);
   padding: 5px 5px 5px $page-horizontal-margin;
 }
 
@@ -175,15 +175,15 @@ html.device-ios .item-link.active-state {
 /* Current page sub-heading */
 
 .full-page-width {
-  margin-left: -$page-horizontal-margin;
-  margin-right: -$page-horizontal-margin;
+  margin-left: (-$page-horizontal-margin);
+  margin-right: (-$page-horizontal-margin);
 }
 
 .page-header {
   border-color: $heading-border-color;
   border-width: 1px 0px 1px 0px;
   border-style: solid;
-  margin: 20px -$page-horizontal-margin 22px -$page-horizontal-margin;
+  margin: 20px (-$page-horizontal-margin) 22px (-$page-horizontal-margin);
   color: $heading-text-color;
   background-color: $heading-background-color;
   padding: 0px 0px 0px 12px;
