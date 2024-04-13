@@ -40,6 +40,11 @@ body.shepherd-enabled #app > .sheet-backdrop {
     background-color: $button-link-background-color;
     border-radius: 10%;
     color: $button-link-text-color;
+    &.shepherd-button-secondary {
+      color: $button-link-background-color;
+      border: 1px solid $button-link-background-color;
+      background-color: white;
+    }
   }
 
   .dontaskcontainer {
@@ -68,7 +73,7 @@ body.shepherd-enabled #app > .sheet-backdrop {
   .dialog-buttons {
     justify-content: flex-start;
     margin-top: 10px;
-    margin-bottom : 5px;
+    margin-bottom: 5px;
     .dialog-button {
       text-transform: inherit;
       background-color: $button-link-background-color;
