@@ -19,6 +19,7 @@
   .external {
     font-weight: bold;
     color: $inline-link-text-color;
+    word-break: break-word;
   }
 
   a.button-link {
