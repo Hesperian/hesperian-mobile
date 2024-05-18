@@ -8,6 +8,7 @@
   background-color: white;
   color: $caption-color;
   transition: background-color 0.5s;
+
   &:hover {
     background-color: #f8f8f8;
     border-color: darken($caption-color, 5%);
@@ -50,8 +51,9 @@
     line-height: 1.2;
     font-weight: bold;
     .inline-link {
-      color: $caption-color;
+      color: black;
       text-decoration: underline;
+      text-decoration-color: $caption-color;
     }
   }
 }
