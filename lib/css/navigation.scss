@@ -1,0 +1,9 @@
+/*
+ *  navigation.scss
+ */
+
+@import "theme.scss";
+
+[data-section] {
+  scroll-margin-top: $page-navigaton-height + 24px; // navbar plus a little to see what's above
+}
