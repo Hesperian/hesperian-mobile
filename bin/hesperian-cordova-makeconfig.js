@@ -58,7 +58,7 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
         <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
         -->
     </platform>
-    <plugin name="cordova-plugin-tts-advanced" spec="git+https://github.com/saqimtiaz/cordova-plugin-tts-advanced.git/#hesperian" />
+    <plugin name="cordova-plugin-tts-advanced" spec="git+https://github.com/Hesperian/cordova-plugin-tts-advanced.git/#hesperian" />
 
     <access origin="*" />
     <allow-intent href="http://*/*" />
