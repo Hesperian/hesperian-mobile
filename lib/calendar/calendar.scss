@@ -37,6 +37,7 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
       border: 1px solid $subnavbar-background;
       background: $triangle-down no-repeat calc(100% - 6px) 50%;
       padding-right: 18px;
+      font-weight: bold;
       .item-title {
         background-color: $navbar-background;
         color: white;
