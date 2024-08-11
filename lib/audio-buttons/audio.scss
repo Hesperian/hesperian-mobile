@@ -1,0 +1,175 @@
+/*
+   audio styles
+*/
+
+@import 'theme.scss';
+
+.toolbar-audio .button {
+  cursor: pointer;
+  min-width: 40px;
+  flex: 2;
+}
+
+.toolbar-audio .button.hm-audio-button-rate {
+  min-width: 36px;
+  width: 36px;
+  flex: 0;
+  padding-left: 12px;
+  margin-left: 0;
+}
+
+#app .app-toolbar.toolbar-audio {
+  background-color: #000;
+  opacity: 0.9;
+  
+  &.hm-audio-playing {
+    .hm-audio-button-start {
+      display: none;
+    }
+    
+    .hm-audio-button-pause {
+      display: flex;
+    }
+    
+  }
+  
+  .hm-audio-button-pause {
+    display: none;
+  }  
+  
+}
+
+.hm-audio-only {
+  display: none;
+}
+
+.hm-audio-block, .hm-active-block {
+  position: relative;
+}
+
+.hm-audio-block-item-top {
+  position: absolute;
+  top: -$page-navigaton-height;
+}
+
+#app .hm-active-block {
+  -webkit-transition: background-color 1000ms linear;
+  transition: background-color 1000ms linear;
+  background-color: #fff1c9;
+  -webkit-box-shadow: 0px 0px 24px 1px rgba(255,238,191,1);
+  box-shadow: 0px 0px 24px 1px rgba(255,238,191,1);
+}
+
+/* prevent bug where both menu bars can be visible at end of page */
+.toolbar.toolbar-bottom-md.app-toolbar.toolbar-hidden {
+  height: 0%;
+}
+
+/* ensure highlighted audio blocks do not occlude floated images */
+.page-content {
+  img.float-right,
+  img.float-left {
+    position: relative;
+    z-index: 20;
+  }
+}
+
+/* popover for audio feature */
+.popover.hm-audio-popover {
+  width: 220px;
+  display: block;
+  padding: 15px 0;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  left: 50% !important;
+
+  .hm-audio-popover-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: rgb(19, 143, 155);
+  }
+
+  &.modal-in {
+    -webkit-transform: scale(1) translateX(-50%);
+    transform: scale(1) translateX(-50%);
+    left: 50% !important;
+  }
+  
+  &.modal-out {
+    -webkit-transform: scale(1)  translateX(-50%);
+    transform: scale(1)  translateX(-50%);
+    left: 50% !important;
+  }
+
+  .block {
+    margin: 0;
+  }
+
+  .popover-play-link {
+    display:flex;
+  }
+
+  .popover-play-caption {
+    line-height: 24px;
+    padding-left: 5px;
+  }
+}
+
+.sheet-modal.hm-audio-config-sheet {
+  
+  height: 340px;
+  
+  .toolbar {
+    background-color: #000;
+    opacity: 0.8;
+    
+    .toolbar-inner {
+      
+      .title.left {
+        padding-left: 12px;
+      }
+      
+    }
+    
+  }
+  
+  .page-content {
+    padding-right: 0;
+    padding-left: 0;
+    overflow: hidden;
+    
+    .list.hm-audio-rate-list {
+      margin:0;
+      
+      ul:before {
+        display: none;
+      }
+      
+      ul:after {
+        display: none; 
+      }
+      
+      .button {
+        text-transform: none;
+      }
+
+      .button.hm-audio-rateoption-button {
+          text-align: left;
+          padding-left: 25px;
+      }
+
+      span.hm-rateoption-caption {
+        font-size: 90%;
+        font-weight: normal;
+        color: #444;
+      }
+
+      .hm-audio-rate-current span.hm-rateoption-caption {
+          color: #fff;
+      }
+      
+    }
+    
+  }
+}
