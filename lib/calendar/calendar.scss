@@ -25,19 +25,23 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
 #app .calendar-date-select-container {
   margin-bottom: 16px;
   overflow: hidden;
+  max-width: 30em;
   .calendar-date-select {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 24px;
+    flex-wrap: wrap;
   }
   .calendar-button {
+    flex-grow: 1;
     .item-inner {
       display: flex;
       border: 1px solid $subnavbar-background;
       background: $triangle-down no-repeat calc(100% - 6px) 50%;
       padding-right: 18px;
       font-weight: bold;
+      white-space: nowrap;
       .item-title {
         background-color: $navbar-background;
         color: white;
@@ -47,6 +51,8 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
         min-width: 2em;
         padding: 12px;
         color: black;
+        flex-grow: 1;
+        text-align: center;
       }
     }
     &.date-choice-go-container {
@@ -55,6 +61,8 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
         background: $triangle-right no-repeat calc(100% - 6px) 50%, green;
         .item-title {
           background-color: green;
+          width: 100%;
+          text-align: center;
         }
       }
     }
