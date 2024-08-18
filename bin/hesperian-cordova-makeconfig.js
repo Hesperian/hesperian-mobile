@@ -34,9 +34,6 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     <plugin name="cordova-plugin-androidx-adapter" source="npm" spec="1.1.1" />
 
     <plugin name="cordova-plugin-firebase-analytics" spec="6.1.0" />
-    <plugin name="cordova-plugin-firebase-dynamiclinks" spec="7.0.2">
-        <variable name="APP_DOMAIN_NAME" value="{{dynamicLinksConfig.appDomainName}}" />
-    </plugin>
     <platform name="android">
         <resource-file src="private/google-services.json" target="app/google-services.json" />
             <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
