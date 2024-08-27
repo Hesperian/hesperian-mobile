@@ -19,7 +19,7 @@
 $triangle-right-fill: ffffff;
 $triangle-right: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2712px%27%20height%3D%2715px%27%20viewBox%3D%270%200%2012%2015%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%3E%3Cpolygon%20fill%3D'%23#{$triangle-right-fill}'%20points%3D%270%200%200%2014%2011%207%27%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E");
 
-$triangle-down-fill: $subnavbar-background-hex;
+$triangle-down-fill: $navbar-background-hex;
 $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%27%20height%3D%2712px%27%20viewBox%3D%270%200%2015%2013%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%3E%3Cpolygon%20fill%3D'%23#{$triangle-down-fill}'%20points%3D%270%200%207%2014%2014%200%27%3E%3C%2Fpolygon%3E%3C%2Fsvg%3E");
 
 #app .calendar-date-select-container {
@@ -30,14 +30,15 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 24px;
+    row-gap: 12px;
+    column-gap: 24px;
     flex-wrap: wrap;
   }
   .calendar-button {
     flex-grow: 1;
     .item-inner {
       display: flex;
-      border: 1px solid $subnavbar-background;
+      border: 1px solid $navbar-background;
       background: $triangle-down no-repeat calc(100% - 6px) 50%;
       padding-right: 18px;
       font-weight: bold;
@@ -45,24 +46,31 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
       .item-title {
         background-color: $navbar-background;
         color: white;
-        padding: 12px;
+        padding: 8px;
       }
       .item-after {
         min-width: 2em;
-        padding: 12px;
+        padding: 8px;
         color: black;
         flex-grow: 1;
         text-align: center;
       }
     }
     &.date-choice-go-container {
-      .item-inner {
-        border-color: green;
-        background: $triangle-right no-repeat calc(100% - 6px) 50%, green;
-        .item-title {
-          background-color: green;
-          width: 100%;
-          text-align: center;
+      flex-grow: 0;
+      margin: auto;
+      .item-content {
+        border-radius: 15px;
+        overflow: hidden;
+        .item-inner {
+          border-color: $inline-link-text-color;
+          background: $triangle-right no-repeat calc(100% - 6px) 50%,
+            $inline-link-text-color;
+          .item-title {
+            background-color: $inline-link-text-color;
+            width: 100%;
+            text-align: center;
+          }
         }
       }
     }
