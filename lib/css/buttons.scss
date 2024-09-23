@@ -23,7 +23,7 @@
   }
 
   // Icon after external links
-  a.external::after {
+  .page-content a.external::after {
     content: "";
     width: 1em;
     height: 1em;
