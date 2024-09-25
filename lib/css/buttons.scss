@@ -23,7 +23,7 @@
   }
 
   // Icon after external links
-  .page-content a.external::after {
+  .page-content a.external:not(.button-link)::after {
     content: "";
     width: 1em;
     height: 1em;
