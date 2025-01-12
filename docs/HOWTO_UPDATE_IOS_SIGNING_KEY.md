@@ -25,9 +25,11 @@ makes .cer
 
 ## Create a .cer
 
-on the apple site create a Certificat, download install in keychain
+on the apple site create a Certificate, download install in keychain
 
 ## .p12
+
+NOT NEEDED
 
 export from keychain
 Select Personal Information Exchange (.p12) for File Format.

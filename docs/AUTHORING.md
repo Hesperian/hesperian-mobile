@@ -7,7 +7,28 @@ For links in the sampe page, use `<a class="external self" href="${sectionId}">.
 
 ## Special CSS
 
-TBD
+### button-array
+
+And responsive array of buttons - links with image and caption. Structure:
+
+* `div.button-array` - Top level. Add `.uniform-spacing` to attempt to regularize image sizes to be roughly equivalent.
+* `div.button-row` - `Each row
+* `div.caption-container` - Content container with:
+    * `a` - the link
+        * `img` - The image
+        * `div.caption` - The caption
+
+```html
+<div class="button-array">
+    <div class="button-row">
+        <a class="caption-container hm-audio-block" href="/pages/PAGENAME">
+            <img src="img/IMAGE.png" />
+            <div class="caption">CAPTION TEXT</div>
+        </a>
+    </div>
+</div>
+```
+
 
 ## Special Pages
 

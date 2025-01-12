@@ -79,13 +79,6 @@
   flex-wrap: wrap;
   justify-content: center;
 
-  /*
-    Z01-pregnancy - overlap of images issue
-  display: grid;
-  grid-auto-rows: 1fr;
-  grid-template-columns: repeat( auto-fit, minmax(165px,1fr));
-  */
-
   .button-row {
     display: flex;
     justify-content: center;
@@ -94,20 +87,18 @@
   .caption-container {
     min-height: unset;
   }
-}
-
-#app .button-array.how-to {
-  .caption-container {
-    min-height: 150px;
-  }
-
-  .caption {
-    min-height: 2em;
-  }
-
-  img {
-    object-fit: contain;
-    max-width: 100%;
-    max-height: 70px;
+  &.how-to, &.uniform-spacing {
+    .caption-container {
+      min-height: 150px;
+    }
+    .caption {
+      min-height: 2em;
+    }
+    img {
+      object-fit: contain;
+      max-width: 100%;
+      max-height: 70px;
+    }
   }
 }
+
