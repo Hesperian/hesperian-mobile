@@ -11,6 +11,7 @@ HTMLPDF=$(NODE_BIN)/html-pdf
 CORDOVA=$(NODE_BIN)/cordova
 MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
 MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
+MAKE_VALIDATE=$(NODE_BIN)/hesperian-validate
 CORDOVA_CONFIG=$(BUILDDIR)/config.xml
 VERSION := $(shell node -p "require('./app-config.json').version")
 APPNAME := $(shell node -p "require('./app-config.json').name")
@@ -95,4 +96,8 @@ watch:
 .PHONY: libsync
 libsync:
 	rsync -avu --delete --exclude=node_modules --exclude=.git ../hesperian-mobile/ ./node_modules/hesperian-mobile; chmod +x ./node_modules/.bin/*
+
+.PHONY: validate
+validate:
+	${MAKE_VALIDATE}
 
