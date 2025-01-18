@@ -15,6 +15,7 @@
 }
 
 #app {
+
   .inline-link,
   .external {
     font-weight: bold;
@@ -50,10 +51,27 @@
       padding: 5px;
     }
 
-    & > :not(:first-child) {
+    &> :not(:first-child) {
       flex-grow: 1;
       text-align: left;
       margin-left: 15px;
+    }
+
+
+    &.button-prev {
+      position: relative;
+      background-color: $button-link-text-color;
+      color: $button-link-background-color;
+      padding-left: 30px;
+
+      &::before {
+        @extend %f7-icon;
+        content: "chevron_left";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 10px;
+      }
     }
 
     &.button-next {
@@ -69,6 +87,43 @@
         top: 50%;
         transform: translateY(-50%);
         right: 10px;
+      }
+    }
+
+  }
+
+
+  .list-item-nav {
+    .nav-list-menu {
+      font-size: 300%;
+      padding-inline-end: 20px;
+    }
+
+    a.button-prev {
+      justify-content: flex-start;
+      padding-inline-start: 40px;
+      border-color: $button-link-background-color;
+
+    }
+
+    a.button-next {
+      justify-content: flex-end;
+      padding-inline-end: 40px;
+      border-color: $button-link-background-color;
+    }
+
+    a.button-up {
+      text-transform: uppercase;
+    }
+
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+
+      .button-link {
+        width: 20em;
+        overflow-wrap: anywhere;
       }
     }
   }
