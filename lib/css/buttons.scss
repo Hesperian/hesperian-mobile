@@ -94,9 +94,15 @@
 
 
   .list-item-nav {
+
     .nav-list-menu {
       font-size: 300%;
       padding-inline-end: 20px;
+    }
+
+    a.button-link {
+      padding-top: 0;
+      padding-bottom: 0;
     }
 
     a.button-prev {
@@ -119,12 +125,23 @@
     .nav-row {
       display: flex;
       justify-content: space-between;
+
       align-items: stretch;
 
       .button-link {
-        width: 20em;
+        width: 15em;
         overflow-wrap: anywhere;
       }
+    }
+
+
+
+    &.list-item-nav-start .nav-row {
+      justify-content: flex-end;
+    }
+
+    &.list-item-nav-end .nav-row {
+      justify-content: flex-start;
     }
   }
 }
