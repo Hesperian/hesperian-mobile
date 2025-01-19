@@ -6,6 +6,7 @@
 */
 
 const fs = require('fs');
+const path = require('path');
 const cheerio = require('cheerio');
 
 const appConfig = JSON.parse(fs.readFileSync('app-config.json', 'utf8'));
@@ -77,6 +78,7 @@ function processPages(locale) {
     return ret;
 }
 
+/*
 function processImagesInDir(dir) {
     const images = fs.readdirSync(`./www/${dir}`);
     images.forEach((img) => {
@@ -88,14 +90,30 @@ function processImagesInDir(dir) {
         }
     });
 }
+    */
+
+function processImagesInDir(dir) {
+    const items = fs.readdirSync(dir);
+    items.forEach((item) => {
+        const itemPath = path.join(dir, item);
+        const stat = fs.statSync(itemPath);
+        if (stat.isDirectory()) {
+            processImagesInDir(itemPath);
+        } else if (stat.isFile() && !item.startsWith('.')) {
+            const relativePath = path.relative('./www', itemPath);
+            if (!usedImages[relativePath]) {
+                process.stdout.write(`Unused image: ${relativePath}\n`);
+            }
+        }
+    });
+}
 
 localizationDirs.forEach((l) => {
     processPages(l);
 });
 
-processImagesInDir('img');
-
+processImagesInDir('./www/img');
 
 localizationDirs.forEach((l) => {
-    processImagesInDir(`locales/${l}/img`);
+    processImagesInDir(`./www/locales/${l}/img`);
 });
