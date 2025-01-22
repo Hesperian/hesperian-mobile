@@ -26,6 +26,9 @@ const usedImages = {
     "img/CountryInfo-Globe.png": {
         count: 0
     },
+    "img/HG-logo-small-circle.png": {
+        count: 0
+    },
 };
 
 function addUsedImage(imgPath) {

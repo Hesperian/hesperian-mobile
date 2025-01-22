@@ -103,6 +103,7 @@
     a.button-link {
       padding-top: 0;
       padding-bottom: 0;
+      line-height: 1.0;
     }
 
     a.button-prev {
@@ -132,8 +133,6 @@
         width: 15em;
       }
     }
-
-
 
     &.list-item-nav-start .nav-row {
       justify-content: flex-end;
