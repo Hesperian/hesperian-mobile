@@ -3,7 +3,7 @@
 ## Deep Linking
 
 Set `data-section=${sectionId}`, and then link to it with `/pages/${pageId}/${sectionId}`: `<a href="/pages/${pageId}/${sectionId}">...</a>`
-For links in the sampe page, use `<a class="external self" href="${sectionId}">...</a>`
+For links in the same page, use `<a class="external self" href="${sectionId}">...</a>`
 
 ## Special CSS
 
@@ -33,6 +33,29 @@ And responsive array of buttons - links with image and caption. Structure:
 ## Special Pages
 
 * `privacy.html` - privacy page that appears in the right-hand sidebar
+
+## Filter Pages
+
+Filter pages have class `filter-page`, and routes in the app specific section to map filter
+button links to filter parameters
+
+Clicking on a filter button link takes you to a new page, same template, with content filtered
+to the given filter.
+
+Used for pages which are very close to each other in content.
+
+HTML for content displayed in new page:
+```html
+     <h2 class="filter-content hm-audio-block" data-filter="filter-name">Title for filter page</h2>
+
+      <div class="filter-content" data-filter="filter-name" data-section="filter/filter-name" data-title="search title" data-keywords="search keywords">
+        ... content for filter page
+     </div>
+```
+
+* `filter-name` - replace with the name for your filter. Lowercase letters and a dash '-'
+* `data-section` - optional. Set if you want to link to this section, including via search. For search name must be `filter/filter-name`
+* `data-title` and `data-keywords` as in search
 
 ## Search
 
