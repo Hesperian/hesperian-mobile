@@ -81,3 +81,24 @@ You can instantiate a search form for a given page:
 `<div class="local-search" data-placeholder="Search for a FAQ"></div>`
 
 Use `class="searchbar-hide-on-local-search"` to hide content you don't want to show while search is active.
+
+### Video
+
+Create your video html according to this pattern:
+
+```html
+<div class="hm-video-container content-block">
+    <video controls>
+        <source src="img/video/test.mp4" type="video/mp4">
+        <track src="locales/en/img/video/test.vtt" kind="captions" srclang="en" label="English" default>
+    </video>
+</div>
+```
+
+* The containing `<div>` must have class `hm-video-container` to get the right sizing and behavior
+* For the [video element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video)
+    * Your video `src` path should be to the video directory under the `img` director. Use an `mp4` format for the file.
+    * For your (optional) [caption track](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/track)
+        * Use a `.vtt` file from the `img/video` subdirectory of the appropriate `locales` directory
+        * `kind="captions"`
+        * set `srclang` and `label` as appropriate for the locale
