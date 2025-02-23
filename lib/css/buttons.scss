@@ -51,8 +51,7 @@
       padding: 5px;
     }
 
-    &> :not(:first-child) {
-      flex-grow: 1;
+    &> * {
       text-align: left;
       margin-left: 15px;
     }
@@ -110,7 +109,6 @@
       justify-content: flex-start;
       padding-inline-start: 40px;
       border-color: $button-link-background-color;
-
     }
 
     a.button-next {
@@ -120,6 +118,7 @@
     }
 
     a.button-up {
+      justify-content: flex-start;
       text-transform: uppercase;
     }
 
