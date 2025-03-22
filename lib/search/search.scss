@@ -19,7 +19,12 @@ $searchbar-icon-local: url("data:image/svg+xml;charset=utf-8,%3Csvg%20fill%3D'%2
     font-size: 24px;
   }
 }
-#app .searchbar-local{
+
+#app .searchbar input[type="search"]::placeholder {
+  font-size: 85%;
+}
+
+#app .searchbar-local {
   border: 1px solid $heading-border-color;
 }
 
