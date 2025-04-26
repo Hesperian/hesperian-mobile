@@ -26,14 +26,14 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     </author>
     <content src="index.html" />
 
-    <plugin name="cordova-plugin-inappbrowser" spec="4.0.0" />
-    <plugin name="cordova-plugin-statusbar" source="npm" spec="2.4.3" />
+    <plugin name="cordova-plugin-inappbrowser" spec="6.0.0" />
+    <plugin name="cordova-plugin-statusbar" source="npm" spec="4.0.0" />
     <!-- Social Sharing plugin support -->
     <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="6.0.4" />
-    <plugin name="cordova-plugin-androidx" source="npm" spec="2.0.0" />
-    <plugin name="cordova-plugin-androidx-adapter" source="npm" spec="1.1.1" />
+    <plugin name="cordova-plugin-androidx" source="npm" spec="3.0.0" />
+    <plugin name="cordova-plugin-androidx-adapter" source="npm" spec="1.1.3" />
 
-    <plugin name="cordova-plugin-firebase-analytics" spec="6.1.0" />
+    <plugin name="cordova-plugin-firebase-analytics" spec="8.0.0" />
     <platform name="android">
         <resource-file src="private/google-services.json" target="app/google-services.json" />
             <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
@@ -45,15 +45,6 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
         <resource-file src="private/GoogleService-Info.plist" />
         <preference name="scheme" value="app" />
         <preference name="hostname" value="localhost" />
-        <!-- not needs as of cordova-ios 6.0.0
-        <plugin name="cordova-plugin-wkwebview-engine" spec="1.2.1" />
-        <preference name="WKWebViewOnly" value="true" />
-
-        <feature name="CDVWKWebViewEngine">
-            <param name="ios-package" value="CDVWKWebViewEngine" />
-        </feature>
-        <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
-        -->
     </platform>
     <plugin name="cordova-plugin-tts-advanced" spec="git+https://github.com/Hesperian/cordova-plugin-tts-advanced.git/#hesperian" />
 
@@ -76,8 +67,8 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     <preference name="EnableViewportScale" value="true" />
 
     <!-- Platform Version Support -->
-    <preference name="android-minSdkVersion" value="21" />  <!-- Android 5.0 -->
-    <preference name="android-targetSdkVersion" value="34"/>  <!-- Android 14.0 -->
+    <preference name="android-minSdkVersion" value="24" />  <!-- Android ? -->
+    <preference name="android-targetSdkVersion" value="35"/>  <!-- Android ?14.0 -->
     <preference name="deployment-target" value="11.0"/>  <!-- iOS 11.0 -->
 
     <!-- iOS App icons -->
@@ -152,6 +143,10 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     </platform>
 
     <platform name="android">
+          <preference name="GradlePluginGoogleServicesEnabled" value="true" />
+          <preference name="GradlePluginGoogleServicesVersion" value="4.4.0" />
+          <resource-file src="resources-tmp/locales/android/values/themes.xml" target="res/values/themes.xml" />
+
         {{#each localizations}}
         <resource-file src="resources-tmp/locales/android/values-{{language_code}}/strings.xml" target="res/values-{{language_code}}/strings.xml" />
         {{/each}}
@@ -195,3 +190,61 @@ localizations.forEach((locale) => {
   fs.mkdirSync(iOSDir, { recursive: true });
   fs.writeFileSync(`${iOSDir}/InfoPlist.strings`, iOSStringsTemplate(locale));
 });
+
+
+// Write out themes.xml for android
+const themesData = `
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen.IconBackground">
+      <!-- Optional: Set the splash screen background. (Default: #FFFFFF) -->
+      <item name="windowSplashScreenBackground">@color/cdv_splashscreen_background</item>
+
+      <!-- Required: Add either a drawable or an animated drawable -->
+      <item name="windowSplashScreenAnimatedIcon">@drawable/ic_cdv_splashscreen</item>
+
+      <!-- Required: For animated icons -->
+      <item name="windowSplashScreenAnimationDuration">200</item>
+
+      <!-- Required: Set the theme of the Activity that directly follows your splash screen. -->
+      <item name="postSplashScreenTheme">@style/Theme.AppCompat.NoActionBar</item>
+
+      <!-- Disable Edge-to-Edge for SDK 35 -->
+      <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+    </style>
+</resources>
+`;
+
+fs.writeFileSync(
+      `resources-tmp/locales/android/values/themes.xml`,
+      themesData
+);
+
+const colorsData = `
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="cdv_splashscreen_background">#FFFFFF</color>
+</resources>
+`;
+fs.writeFileSync(
+      `resources-tmp/locales/android/values/colors.xml`,
+      colorsData
+);

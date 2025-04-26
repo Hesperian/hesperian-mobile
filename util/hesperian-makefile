@@ -19,6 +19,9 @@ OUTPUT_DIR=output/${VERSION}
 OUTPUT_NAME=${APPNAME}-${VERSION}
 WEBAPP_DIR=./dist-web
 
+CD_BUILDDIR= (cd ${BUILDDIR}; fnm use v22.3.0;)
+WEBPACK_CMD = fnm use v14.21.3 && ${WEBPACK}
+
 
 .PHONY: build clean webpack watch dist help
 
@@ -33,13 +36,12 @@ dist: webpack $(CORDOVA_CONFIG)
 	cp -R dist ${BUILDDIR}/www
 
 cordova-build: dist
-	@(cd ${BUILDDIR}; cordova build --device --release -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
+	@(cd ${BUILDDIR}; fnm use v22.3.0; cordova build --device --release --verbose -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
 
 app: cordova-build
 	mkdir -p ${OUTPUT_DIR}
-	cp ${BUILDDIR}/platforms/ios/build/device/*.ipa ${OUTPUT_DIR}/${OUTPUT_NAME}.ipa
+	cp ${BUILDDIR}/platforms/ios/build/Release-iphoneos/*.ipa ${OUTPUT_DIR}/${OUTPUT_NAME}.ipa
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*.aab ${OUTPUT_DIR}/${OUTPUT_NAME}.aab
-
 .PHONY: site
 site:
 	rm -rf ${WEBAPP_DIR}
@@ -76,17 +78,17 @@ install:
 	npm install
 	
 cordova-install: $(CORDOVA_CONFIG) webpack
-	(cd ${BUILDDIR}; npm ci)
+	(${CD_BUILDDIR}; npm ci)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 	rm -rf ${BUILDDIR}/platforms
 	rm -rf ${BUILDDIR}/plugins
-	(cd ${BUILDDIR}; cordova prepare)
+	(${CD_BUILDDIR}; cordova prepare)
 
 
 webpack:
 	rm -rf dist
-	$(WEBPACK) --mode=${WEBPACK_MODE}
+	$(WEBPACK_CMD) --mode=${WEBPACK_MODE}
 	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 
 watch:

@@ -10,6 +10,19 @@ Certs / idents/ profiles
 ## Create a CSR certSigningRequest
 
 https://developer.apple.com/help/account/create-certificates/create-a-certificate-signing-request
+```
+Launch Keychain Access located in /Applications/Utilities.
+
+Choose Keychain Access > Certificate Assistant > Request a Certificate from a Certificate Authority.
+
+In the Certificate Assistant dialog, enter an email address in the User Email Address field.
+
+In the Common Name field, enter a name for the key (for example, Gita Kumar Dev Key).
+
+Leave the CA Email Address field empty.
+
+Choose “Saved to disk,” then click Continue.
+```
 
 Create self-signed certificates in Keychain Access on Mac
 
