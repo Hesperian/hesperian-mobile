@@ -19,7 +19,7 @@ OUTPUT_DIR=output/${VERSION}
 OUTPUT_NAME=${APPNAME}-${VERSION}
 WEBAPP_DIR=./dist-web
 
-CD_BUILDDIR= (cd ${BUILDDIR}; fnm use v22.3.0;)
+CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
 WEBPACK_CMD = fnm use v14.21.3 && ${WEBPACK}
 
 
