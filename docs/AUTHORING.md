@@ -5,6 +5,16 @@
 Set `data-section=${sectionId}`, and then link to it with `/pages/${pageId}/${sectionId}`: `<a href="/pages/${pageId}/${sectionId}">...</a>`
 For links in the same page, use `<a class="external self" href="${sectionId}">...</a>`
 
+## Date Support
+
+Add an element with class `format-date` to have it format a date in the current page locale. Supported specifications
+
+* Attribute `data-days-from-now` to set the date a relative number of dates from now.
+
+```
+<span class="format-date" data-days-from-now="30"></span>
+```
+
 ## Special CSS
 
 ### button-array
