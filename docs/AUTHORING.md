@@ -9,10 +9,13 @@ For links in the same page, use `<a class="external self" href="${sectionId}">..
 
 Add an element with class `format-date` to have it format a date in the current page locale. Supported specifications
 
-* Attribute `data-days-from-now` to set the date a relative number of dates from now.
+* Attribute `data-days-from-now` to set the date a relative number of days from now.
+* Attribute `data-months-from-now` to set the date a relative number of months from now.
+
+Multiple attributes are allowed and are added.
 
 ```
-<span class="format-date" data-days-from-now="30"></span>
+<span class="format-date" data-months-from-now="1"></span>
 ```
 
 ## Special CSS
