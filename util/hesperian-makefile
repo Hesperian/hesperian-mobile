@@ -20,7 +20,6 @@ OUTPUT_NAME=${APPNAME}-${VERSION}
 WEBAPP_DIR=./dist-web
 
 CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
-WEBPACK_CMD = fnm use v14.21.3 && ${WEBPACK}
 
 
 .PHONY: build clean webpack watch dist help
@@ -88,7 +87,11 @@ cordova-install: $(CORDOVA_CONFIG) webpack
 
 webpack:
 	rm -rf dist
-	$(WEBPACK_CMD) --mode=${WEBPACK_MODE}
+	@if command -v fnm >/dev/null 2>&1; then \
+		fnm use v14.21.3 && $(WEBPACK) --mode=${WEBPACK_MODE}; \
+	else \
+		$(WEBPACK) --mode=${WEBPACK_MODE}; \
+	fi
 	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 
 watch:
