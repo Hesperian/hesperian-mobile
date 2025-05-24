@@ -44,3 +44,31 @@
     right: 10px;
   }
 }
+
+#app .filter-list {
+  display: flex;
+  justify-content: flex-end;
+  .filter-menu {
+    padding-inline-end: 20px;
+    .filter-menu-content {
+      display: flex;
+      font-size: 120%;
+    }
+    .filter-menu-text {
+      display: flex;
+      align-content: center;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+#app [data-filter] {
+    transition-property: opacity, display;
+    transition-duration: 0.25s;
+    transition-behavior: allow-discrete;
+  
+  &.fade-out {
+    opacity: 0;
+    display: none;
+  }
+}
