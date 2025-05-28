@@ -47,17 +47,38 @@
 
 #app .filter-list {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+  & > ul {
+    width: 100%;
+    margin: 0 10px;
+  }
   .filter-menu {
-    padding-inline-end: 20px;
     .filter-menu-content {
       display: flex;
       font-size: 120%;
+      border: 1px solid $link-border-color;
+      padding: 5px 15px;
+      gap: 10px;
+      border-radius: 15px;
+      &::after {
+        @extend %f7-icon;
+        content: "chevron_down";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 10px;
+        color: $link-border-color
+      }
+    }
+    .filter-menu-icon {
+      height: 1em;
+      margin: auto 0;
     }
     .filter-menu-text {
       display: flex;
       align-content: center;
       flex-wrap: wrap;
+      color: $caption-color
     }
   }
 }
