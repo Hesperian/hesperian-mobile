@@ -69,7 +69,7 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     <!-- Platform Version Support -->
     <preference name="android-minSdkVersion" value="24" />  <!-- Android ? -->
     <preference name="android-targetSdkVersion" value="35"/>  <!-- Android ?14.0 -->
-    <preference name="deployment-target" value="11.0"/>  <!-- iOS 11.0 -->
+    <preference name="deployment-target" value="15.6"/>  <!-- iOS 15.6 August 17, 2022 https://developer.apple.com/documentation/xcode-release-notes/xcode-16_4-release-notes -->
 
     <!-- iOS App icons -->
     <icon src="resources/icons/ios/AppIcon-20.png" platform="ios" width="20" height="20" />
