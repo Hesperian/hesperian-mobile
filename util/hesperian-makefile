@@ -39,7 +39,7 @@ cordova-build: dist
 
 app: cordova-build
 	mkdir -p ${OUTPUT_DIR}
-	cp ${BUILDDIR}/platforms/ios/build/Release-iphoneos/*.ipa ${OUTPUT_DIR}/${OUTPUT_NAME}.ipa
+	cp ${BUILDDIR}/platforms/ios/build/*/*.ipa ${OUTPUT_DIR}/${OUTPUT_NAME}.ipa
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*.aab ${OUTPUT_DIR}/${OUTPUT_NAME}.aab
 .PHONY: site
 site:
