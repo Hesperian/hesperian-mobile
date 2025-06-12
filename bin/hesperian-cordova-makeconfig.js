@@ -16,6 +16,8 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
         {{#if android-packageName}}android-packageName="{{{android-packageName}}}"{{/if}}
         {{#if ios-CFBundleIdentifier}}ios-CFBundleIdentifier="{{{ios-CFBundleIdentifier}}}"{{/if}}
         xmlns="http://www.w3.org/ns/widgets"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
     xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>{{name}}</name>
     <description>
@@ -36,9 +38,13 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     <plugin name="cordova-plugin-firebase-analytics" spec="8.0.0" />
     <platform name="android">
         <resource-file src="private/google-services.json" target="app/google-services.json" />
-            <config-file parent="/manifest/application" target="app/src/main/AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
-                <meta-data android:name="google_analytics_adid_collection_enabled" android:exported="false" android:value="false" />
-            </config-file>
+        <edit-config file="AndroidManifest.xml" target="/manifest" mode="merge">
+            <manifest xmlns:tools="http://schemas.android.com/tools" />
+        </edit-config>
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+        </config-file>
+
     </platform>
 
     <platform name="ios">
