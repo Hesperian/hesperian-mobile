@@ -23,12 +23,18 @@ WEBAPP_DIR=./dist-web
 CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
 
 
-.PHONY: build clean webpack watch dist help site web
+.PHONY: build clean webpack watch dist help site web docker-web docker-watch
 
 help:
 	@echo "Common make targets:"
 	@echo "\tmake watch\t webpack watch build in the dist directory"
 	@echo "\tmake build\t full cordova release build created in ./output"
+
+docker-web:
+	docker run -v .:/app/webpack -w /app/webpack hesperian-mobile make web
+
+docker-watch:
+	docker run --init -it -v .:/app/webpack -w /app/webpack hesperian-mobile make watch
 
 webpack:
 	rm -rf dist
