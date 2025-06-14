@@ -22,6 +22,11 @@ WEBAPP_DIR=./dist-web
 
 CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
 
+CURRENT_DIR=$(shell pwd)
+
+WEBPACK_DOCKER=docker run -v ${CURRENT_DIR}:/app/webpack -w /app/webpack hesperian-mobile
+WEBPACK_DOCKER_CORDOVA=docker run -v ${CURRENT_DIR}:/app/webpack -w /app/webpack/cordova hesperian-mobile
+
 
 .PHONY: build clean webpack watch dist help site web docker-web docker-watch docker-site
 
@@ -31,10 +36,10 @@ help:
 	@echo "\tmake build\t full cordova release build created in ./output"
 
 docker-webpack:
-	docker run -v .:/app/webpack -w /app/webpack hesperian-mobile make webpack
+	${WEBPACK_DOCKER} make webpack
 
 docker-site:
-	docker run -v .:/app/webpack -w /app/webpack hesperian-mobile make site
+	${WEBPACK_DOCKER} make site
 
 docker-watch:
 	docker run --init -it -v .:/app/webpack -w /app/webpack hesperian-mobile make watch
@@ -71,10 +76,10 @@ app: cordova-build
 
 
 .PHONY: build
-build: app site
+build: app docker-site
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
-	(cd ${BUILDDIR}; rm -rf resources-tmp; ../${MAKE_CONFIG} ../app-config.json)
+	(cd ${BUILDDIR}; rm -rf resources-tmp; ${WEBPACK_DOCKER_CORDOVA} ../${MAKE_CONFIG} ../app-config.json)
 
 # Make sure emulator is running to pick up correct device
 # Android Studio -> Tools -> AVD's
