@@ -2,12 +2,13 @@
 #
 
 NODE_BIN=./node_modules/.bin
+DOCKER_NODE_BIN=../node_modules/.bin
 BUILDDIR=cordova
 
-WEBPACK=$(NODE_BIN)/webpack
+WEBPACK=$(DOCKER_NODE_BIN)/webpack
 WEBPACK_MODE:=production
-BABELNODE=$(NODE_BIN)/babel-node
-HTMLPDF=$(NODE_BIN)/html-pdf
+BABELNODE=$(DOCKER_NODE_BIN)/babel-node
+HTMLPDF=$(DOCKER_NODE_BIN)/html-pdf
 CORDOVA=$(NODE_BIN)/cordova
 MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
 MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
@@ -22,13 +23,36 @@ WEBAPP_DIR=./dist-web
 CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
 
 
-.PHONY: build clean webpack watch dist help
+.PHONY: build clean webpack watch dist help site web
 
 help:
 	@echo "Common make targets:"
 	@echo "\tmake watch\t webpack watch build in the dist directory"
 	@echo "\tmake build\t full cordova release build created in ./output"
 
+webpack:
+	rm -rf dist
+	@if command -v fnm >/dev/null 2>&1; then \
+		fnm use v14.21.3 && $(WEBPACK) --mode=${WEBPACK_MODE}; \
+	else \
+		$(WEBPACK) --mode=${WEBPACK_MODE}; \
+	fi
+	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
+
+watch:
+	$(WEBPACK) --watch
+
+site:
+	rm -rf ${WEBAPP_DIR}
+	cp -R dist ${WEBAPP_DIR}
+	${MAKE_WEBINDEX} web ./app-config.json www-templates > ${WEBAPP_DIR}/index.html
+	${MAKE_WEBINDEX} webembed ./app-config.json www-templates > ${WEBAPP_DIR}/embed.html
+	cp -R ./node_modules/hesperian-mobile/website-common ${WEBAPP_DIR}/
+	cp -R www-templates/web-img ${WEBAPP_DIR}/
+	mkdir -p ${OUTPUT_DIR}
+	(cd ${WEBAPP_DIR}; zip -r ../${OUTPUT_DIR}/app-${VERSION}.zip .)
+
+web: webpack site
 
 dist: webpack $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
@@ -41,16 +65,7 @@ app: cordova-build
 	mkdir -p ${OUTPUT_DIR}
 	cp ${BUILDDIR}/platforms/ios/build/*/*.ipa ${OUTPUT_DIR}/${OUTPUT_NAME}.ipa
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*.aab ${OUTPUT_DIR}/${OUTPUT_NAME}.aab
-.PHONY: site
-site:
-	rm -rf ${WEBAPP_DIR}
-	cp -R dist ${WEBAPP_DIR}
-	${MAKE_WEBINDEX} web ./app-config.json www-templates > ${WEBAPP_DIR}/index.html
-	${MAKE_WEBINDEX} webembed ./app-config.json www-templates > ${WEBAPP_DIR}/embed.html
-	cp -R ./node_modules/hesperian-mobile/website-common ${WEBAPP_DIR}/
-	cp -R www-templates/web-img ${WEBAPP_DIR}/
-	mkdir -p ${OUTPUT_DIR}
-	(cd ${WEBAPP_DIR}; zip -r ../${OUTPUT_DIR}/app-${VERSION}.zip .)
+
 
 .PHONY: build
 build: app site
@@ -85,22 +100,16 @@ cordova-install: $(CORDOVA_CONFIG) webpack
 	(${CD_BUILDDIR}; cordova prepare)
 
 
-webpack:
-	rm -rf dist
-	@if command -v fnm >/dev/null 2>&1; then \
-		fnm use v14.21.3 && $(WEBPACK) --mode=${WEBPACK_MODE}; \
-	else \
-		$(WEBPACK) --mode=${WEBPACK_MODE}; \
-	fi
-	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 
-watch:
-	$(WEBPACK) --watch
 
 
 .PHONY: libsync
 libsync:
 	rsync -avu --delete --exclude=node_modules --exclude=.git ../hesperian-mobile/ ./node_modules/hesperian-mobile; chmod +x ./node_modules/.bin/*
+
+.PHONY: example-libsync
+example-libsync:
+	rsync -avu --delete --exclude=node_modules --exclude=.git --exclude=example ../ ./node_modules/hesperian-mobile; chmod +x ./node_modules/.bin/*
 
 .PHONY: validate
 validate:

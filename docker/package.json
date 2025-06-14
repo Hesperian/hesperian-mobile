@@ -1,0 +1,50 @@
+{
+  "name": "hesperian-mobile-build",
+  "version": "1.0.0",
+  "description": "Generic build for Hesperian mobile apps.",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "babel-node spec/run.js --presets=@babel/preset-env",
+    "format": "prettier --single-quote --write \"www/js/**/*.js\"",
+    "validate": "find www -name \\*.html -exec html-validate {} \\; | tee validate.txt",
+    "checkspaces": "find www/locales/fr -name '*.html' -exec grep -e ' [?:;]' {} \\;"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "framework7": "^3.6.2",
+    "framework7-icons": "^3.0.1",
+    "material-icons": "^0.2.3",
+    "message-format": "^6.2.4",
+    "moment": "^2.29.4",
+    "sass": "^1.52.2",
+    "shepherd.js": "^11.0.X",
+    "sortablejs": "^1.10.X"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/node": "^7.10.1",
+    "@babel/preset-env": "^7.10.2",
+    "@messageformat/core": "^3.0.1",
+    "babel-loader": "^8.1.0",
+    "babel-node": "0.0.1-security",
+    "cheerio": "^1.0.0-rc.3",
+    "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^1.0.0",
+    "deploy-aws-s3-cloudfront": "^3.7.0",
+    "file-loader": "^1.1.11",
+    "handlebars": "^4.7.6",
+    "html-pdf": "^2.2.0",
+    "html-validate": "^0.16.1",
+    "html-webpack-plugin": "^3.2.0",
+    "jasmine": "^3.5.0",
+    "jasmine-expect": "^4.0.3",
+    "messageformat": "^2.0.5",
+    "mini-css-extract-plugin": "^0.4.1",
+    "sass-loader": "^7.3.1",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  }
+}
