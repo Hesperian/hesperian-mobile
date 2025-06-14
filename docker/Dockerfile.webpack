@@ -1,5 +1,7 @@
 FROM node:14.21.3
 
+RUN apt-get update && apt-get install -y zip && rm -rf /var/lib/apt/lists/*
+
 # Set working directory
 WORKDIR /app
 
