@@ -23,26 +23,25 @@ WEBAPP_DIR=./dist-web
 CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
 
 
-.PHONY: build clean webpack watch dist help site web docker-web docker-watch
+.PHONY: build clean webpack watch dist help site web docker-web docker-watch docker-site
 
 help:
 	@echo "Common make targets:"
 	@echo "\tmake watch\t webpack watch build in the dist directory"
 	@echo "\tmake build\t full cordova release build created in ./output"
 
-docker-web:
-	docker run -v .:/app/webpack -w /app/webpack hesperian-mobile make web
+docker-webpack:
+	docker run -v .:/app/webpack -w /app/webpack hesperian-mobile make webpack
+
+docker-site:
+	docker run -v .:/app/webpack -w /app/webpack hesperian-mobile make site
 
 docker-watch:
 	docker run --init -it -v .:/app/webpack -w /app/webpack hesperian-mobile make watch
 
 webpack:
 	rm -rf dist
-	@if command -v fnm >/dev/null 2>&1; then \
-		fnm use v14.21.3 && $(WEBPACK) --mode=${WEBPACK_MODE}; \
-	else \
-		$(WEBPACK) --mode=${WEBPACK_MODE}; \
-	fi
+	$(WEBPACK) --mode=${WEBPACK_MODE};
 	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 
 watch:
@@ -58,9 +57,7 @@ site:
 	mkdir -p ${OUTPUT_DIR}
 	(cd ${WEBAPP_DIR}; zip -r ../${OUTPUT_DIR}/app-${VERSION}.zip .)
 
-web: webpack site
-
-dist: webpack $(CORDOVA_CONFIG)
+dist: docker-webpack $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 
