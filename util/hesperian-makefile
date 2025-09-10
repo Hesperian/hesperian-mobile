@@ -35,6 +35,9 @@ help:
 	@echo "\tmake watch\t webpack watch build in the dist directory"
 	@echo "\tmake build\t full cordova release build created in ./output"
 
+docker-install:
+	${WEBPACK_DOCKER} npm install
+	
 docker-webpack:
 	${WEBPACK_DOCKER} make webpack
 
