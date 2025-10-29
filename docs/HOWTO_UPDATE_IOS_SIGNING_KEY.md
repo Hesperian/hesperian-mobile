@@ -16,43 +16,31 @@ Launch Keychain Access located in /Applications/Utilities.
 Choose Keychain Access > Certificate Assistant > Request a Certificate from a Certificate Authority.
 
 In the Certificate Assistant dialog, enter an email address in the User Email Address field.
+`it@hesperian.org`
 
-In the Common Name field, enter a name for the key (for example, Gita Kumar Dev Key).
+In the Common Name field, enter a name for the key 
+`Hesperian App Signing Certificate"
 
 Leave the CA Email Address field empty.
 
 Choose “Saved to disk,” then click Continue.
-```
-
-Create self-signed certificates in Keychain Access on Mac
-
-In the User Email Address field, enter the email address to identify with this certificate
-In the Common Name field, enter your name
-In the Request group, click the "Saved to disk" option
-
-makes .cer
-
-- it@hesperian.org
-- The Hesperian Foundation 3
-- <blank>
 
 ## Create a .cer
 
 on the apple site create a Certificate, download install in keychain
 
-## .p12
+https://developer.apple.com/account/resources/certificates/add
+iOS Distribution (App Store Connect and Ad Hoc)
+no services
 
-NOT NEEDED
+Download your certificate to your Mac, then double click the .cer file to install in Keychain Access. Make sure to save a backup copy of your private and public keys somewhere secure.
 
-export from keychain
-Select Personal Information Exchange (.p12) for File Format.
-Save the certificate, giving it a strong password.
 
 # Provisioning Profile
 
 https://developer.apple.com/ -> account -> profiles
 
-- Distribution/app store
+- Distribution / App Store Connect
 - Specific App ID
 - Family Planning App Store 1 (for example)
 - Double Click for Xcode to register it (no feedback it just happens)
