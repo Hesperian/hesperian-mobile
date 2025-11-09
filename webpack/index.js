@@ -34,13 +34,21 @@ function createConfig(spec) {
     assets = assets.concat(spec.addtionalAssets);
   }
 
-  const copyWebpackPlugin = new CopyWebpackPlugin(assets, {});
+  const copyWebpackPlugin = new CopyWebpackPlugin({
+    patterns: assets,
+  });
   const localizationDirs = appConfig.localizations.map((v) => v.language_code);
 
   const config = {
     mode: "development",
     context: path.resolve(rootDir, "www"),
     entry: "./js/app.js",
+    resolve: {
+      alias: {
+        "hesperian-mobile": path.resolve(__dirname, ".."),
+      },
+      extensions: [".js", ".json"],
+    },
     plugins: [
       new webpack.DefinePlugin({
         __VERSION__: JSON.stringify(appConfig.version),
@@ -90,14 +98,23 @@ function createConfig(spec) {
             {
               loader: "sass-loader",
               options: {
-                includePaths: ["./www/css", "node_modules"],
+                sassOptions: {
+                  includePaths: ["./www/css", "node_modules"],
+                },
               },
             },
           ],
         },
         {
           test: /\.(woff|woff2|eot|ttf)$/,
-          loader: "url-loader?limit=100000",
+          use: [
+            {
+              loader: "url-loader",
+              options: {
+                limit: 100000,
+              },
+            },
+          ],
         },
       ],
     },

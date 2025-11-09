@@ -20,20 +20,18 @@ import {
 import appConfig from './../../app-config.json';
 
 
-(function() {
-  window.app = createApp({
-    f7: {
-      id: appConfig.id,
-      name: appConfig.name
-    },
-    configVersion: '0.0.2',
-    "theme": {
-      "bottomToolbar": true
-    },
-    appData: appConfig,
-    localeData: {
-      en: enResources,
-      es: esResources
-    }
-  });
-})();
+window.app = createApp({
+  f7: {
+    id: appConfig.id,
+    name: appConfig.name
+  },
+  configVersion: '0.0.2',
+  "theme": {
+    "bottomToolbar": true
+  },
+  appData: appConfig,
+  localeData: {
+    en: enResources,
+    es: esResources
+  }
+});

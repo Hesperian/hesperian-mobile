@@ -68,3 +68,4 @@ find id in `ls ~/Library/MobileDevice/Provisioning\ Profiles`
 update `build.json` provisioningProfile
 
 60798ba1-4d61-403e-bad4-10e74d91ac90.mobileprovision
+ 60798ba1-4d61-403e-bad4-10e74d91ac90.mobileprovision
