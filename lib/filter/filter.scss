@@ -1,4 +1,4 @@
-@import 'theme.scss';
+@use "../css/theme.scss" as *;
 
 .filter-content {
   display: none;

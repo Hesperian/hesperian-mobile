@@ -1,4 +1,4 @@
-@import "theme.scss";
+@use "../css/theme.scss" as *;
 
 .smart-select-page li.disabled {
   display: none;
@@ -137,6 +137,7 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
       .item-text {
         max-height: inherit;
         max-width: 60%;
+  line-clamp: inherit;
         -webkit-line-clamp: inherit;
       }
     }

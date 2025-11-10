@@ -2,7 +2,7 @@
  *  navbar.scss
  */
 
-@import 'theme.scss';
+@use "./theme.scss" as *;
 
 
 #app .navbar {

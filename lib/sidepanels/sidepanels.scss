@@ -1,4 +1,4 @@
-@import 'theme.scss';
+@use "../css/theme.scss" as *;
 
 #app .settings-header {
   font-weight: bold;

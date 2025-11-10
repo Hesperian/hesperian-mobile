@@ -1,4 +1,4 @@
-@import "theme.scss";
+@use "../css/theme.scss" as *;
 
 body.shepherd-enabled #app > .sheet-backdrop {
   opacity: 0;

@@ -1,4 +1,4 @@
-@import 'theme.scss';
+@use "../css/theme.scss" as *;
 
 $seachbar-icon-color: ffffff;
 $seachbar-icon-color-preview: 000000;

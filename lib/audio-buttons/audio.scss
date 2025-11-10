@@ -2,7 +2,7 @@
    audio styles
 */
 
-@import 'theme.scss';
+@use "../css/theme.scss" as *;
 
 .toolbar-audio .button {
   cursor: pointer;

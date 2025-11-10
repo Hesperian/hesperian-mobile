@@ -1,9 +1,9 @@
-@import "theme.scss";
-@import "./navbar.scss";
-@import "./buttons.scss";
-@import "./captions.scss";
-@import "./navigation.scss";
-@import "./util.scss";
+@use "./theme.scss" as *;
+@use "./navbar.scss";
+@use "./buttons.scss";
+@use "./captions.scss";
+@use "./navigation.scss";
+@use "./util.scss" as *;
 
 html.md body,
 html.ios body {
@@ -55,6 +55,7 @@ $breakpoint-small-large: 390px;
 .list-block .item-text {
   white-space: normal;
   height: inherit;
+  line-clamp: inherit;
   -webkit-line-clamp: inherit;
 }
 

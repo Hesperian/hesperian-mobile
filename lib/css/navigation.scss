@@ -2,7 +2,7 @@
  *  navigation.scss
  */
 
-@import "theme.scss";
+@use "./theme.scss" as *;
 
 [data-section] {
   scroll-margin-top: $page-navigaton-height + 24px; // navbar plus a little to see what's above

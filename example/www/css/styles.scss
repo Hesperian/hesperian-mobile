@@ -1,5 +1,5 @@
-@import 'framework7/css/bundle';
-@import 'theme.scss';
+@use "./theme.scss" as *;
+@import "framework7/css/bundle";
 
 // .app-toolbar { display: none; }
 
@@ -83,6 +83,7 @@
 .list-block .item-text {
   white-space: normal;
   height: inherit;
+  line-clamp: inherit;
   -webkit-line-clamp: inherit;
 }
 

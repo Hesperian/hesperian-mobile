@@ -1,4 +1,4 @@
-@import "../css/buttons-common.scss";
+@use "../css/buttons-common.scss" as *;
 
 $sharing-rgb: 9C2790;
 $sharing-color: #{"#" + $sharing-rgb};

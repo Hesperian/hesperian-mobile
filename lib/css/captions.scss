@@ -1,5 +1,5 @@
 @use "sass:color";
-@import "theme.scss";
+@use "./theme.scss" as *;
 
 #app .caption-container {
   margin: 5px;
@@ -11,7 +11,7 @@
 
   &:hover {
     background-color: #f8f8f8;
-    border-color: darken($caption-color, 5%);
+  border-color: color.adjust($caption-color, $lightness: -5%);
   }
   width: 150px;
   min-height: 100px;

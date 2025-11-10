@@ -1,7 +1,7 @@
-@import "theme.scss";
+@use "./theme.scss" as *;
 
 /* Buttons and links */
-@import "buttons-common.scss";
+@use "./buttons-common.scss" as *;
 
 .button {
   border: 2px solid $link-border-color;

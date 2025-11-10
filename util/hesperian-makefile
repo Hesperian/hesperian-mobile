@@ -1,12 +1,14 @@
 # Common makefile for inclusion
 #
 
-NODE_BIN=./node_modules/.bin
-DOCKER_NODE_BIN=../node_modules/.bin
+NODE_BIN := $(CURDIR)/node_modules/.bin
+DOCKER_NODE_BIN := $(NODE_BIN)
 BUILDDIR=cordova
 
 WEBPACK=$(DOCKER_NODE_BIN)/webpack
 WEBPACK_MODE:=production
+VITE=$(NODE_BIN)/vite
+VITE_MODE:=production
 BABELNODE=$(DOCKER_NODE_BIN)/babel-node
 HTMLPDF=$(DOCKER_NODE_BIN)/html-pdf
 CORDOVA=$(NODE_BIN)/cordova
@@ -32,7 +34,7 @@ WEBPACK_DOCKER_CORDOVA=docker run -v ${CURRENT_DIR}:/app/webpack -w /app/webpack
 
 help:
 	@echo "Common make targets:"
-	@echo "\tmake watch\t webpack watch build in the dist directory"
+	@echo "\tmake watch\t vite watch build in the dist directory"
 	@echo "\tmake build\t full cordova release build created in ./output"
 
 docker-install:
@@ -49,11 +51,11 @@ docker-watch:
 
 webpack:
 	rm -rf dist
-	$(WEBPACK) --mode=${WEBPACK_MODE};
+	$(VITE) build --mode=${VITE_MODE}
 	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 
 watch:
-	$(WEBPACK) --watch
+	$(VITE) build --mode=development --watch
 
 site:
 	rm -rf ${WEBAPP_DIR}
@@ -65,7 +67,7 @@ site:
 	mkdir -p ${OUTPUT_DIR}
 	(cd ${WEBAPP_DIR}; zip -r ../${OUTPUT_DIR}/app-${VERSION}.zip .)
 
-dist: docker-webpack $(CORDOVA_CONFIG)
+dist: webpack $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 
