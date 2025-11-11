@@ -5,10 +5,25 @@
 @use "./theme.scss" as *;
 
 
+// Framework7 CSS variables
+:root {
+  --f7-navbar-height: 64px;
+  --f7-subnavbar-height: 48px;
+}
+
+
 #app .navbar {
   background-color: $navbar-background;
   color: $navbar-textcolor;
   border: 0px;
+  height: var(--f7-navbar-height);
+}
+
+#app .navbar a,
+#app .toolbar a {
+  color: white;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 #app .navbar .subnavbar, .navbar .searchbar {
@@ -30,9 +45,12 @@
 
 /* Center the navbar title even in md theme */
 .navbar .title {
+  display: flex;
+  justify-content: center;
   position: relative;
   flex-grow: 1;
   max-height: 100%;
+
 }
 .navbar .title > img {
   height: 45px;
@@ -42,13 +60,6 @@
 .navbar:after {
 	display: none;
 }
-
-.navbar, .page-content {
-  padding: 0px 8px;
-  background-clip: content-box;
-}
-
-
 
 .navbar .left {
 	margin-left: 5px;
