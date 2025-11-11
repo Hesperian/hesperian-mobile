@@ -10,10 +10,6 @@ html.ios body {
   font-family: Helvetica, Helvetica Neue, Arial, sans-serif;
 }
 
-html.ios-user-agent body {
-  height: 100vh; // Workaround iPhoneX bug https://github.com/apache/cordova-plugin-wkwebview-engine/issues/108
-}
-
 .statusbar-overlay {
   background: #000000;
 }
@@ -71,7 +67,7 @@ html {
   font-size: $font-size-base;
 }
 
-/* Spport user text size preference 
+/* Support user text size preference 
   use supports-dynamic-text class on html element as a feature flag
   will remove feature flag once apps pass testing
 */
@@ -126,11 +122,6 @@ body {
   .item-media::after {
     @include hairline;
   }
-}
-
-// workaround for https://github.com/framework7io/framework7/issues/2397
-html.device-ios .item-link.active-state {
-  pointer-events: none;
 }
 
 /* default link color */
