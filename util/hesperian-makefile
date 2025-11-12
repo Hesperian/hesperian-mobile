@@ -6,7 +6,8 @@ DOCKER_NODE_BIN := $(NODE_BIN)
 BUILDDIR=cordova
 
 VITE=$(NODE_BIN)/vite
-VITE_MODE:=production
+#VITE_MODE:=production
+VITE_MODE:=development
 BABELNODE=$(DOCKER_NODE_BIN)/babel-node
 HTMLPDF=$(DOCKER_NODE_BIN)/html-pdf
 CORDOVA=$(NODE_BIN)/cordova
