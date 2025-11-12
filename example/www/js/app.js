@@ -15,12 +15,12 @@ import {
   resources as esResources
 } from '../locales/es/resources/resources';
 import {
-  createApp
+  initApp
 } from 'hesperian-mobile';
 import appConfig from './../../app-config.json';
 
 
-window.app = createApp({
+initApp({
   f7: {
     id: appConfig.id,
     name: appConfig.name
