@@ -53,10 +53,7 @@
   height: 100%;
 }
 
-/* Navbar 44px with 8px top margin */
 .navbar {
-	height: 52px;
-  padding: 0px;
   border-color: #efeff4; /* Border serves as margin, so content isn't visibile above navbar on scroll */
   border-style: solid;
   border-width: 8px 8px 0px 8px;
