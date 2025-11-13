@@ -1,5 +1,10 @@
 @use "../css/theme.scss" as *;
 
+/* Safe Area support for panel content */
+.panel .page-content {
+  padding-top: var(--f7-safe-area-top, 0px);
+}
+
 #app .settings-header {
   font-weight: bold;
   .item-inner {
