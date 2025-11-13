@@ -12,6 +12,12 @@
   --f7-toolbar-height: 48px;
 }
 
+#app .toolbar {
+  .button {
+    border: none;
+  }
+}
+
 
 #app .navbar {
   background-color: $navbar-background;
@@ -26,7 +32,8 @@
   padding-right: 16px;
 }
 
-#app .navbar .subnavbar, .navbar .searchbar {
+#app .navbar .subnavbar,
+.navbar .searchbar {
   background-color: $subnavbar-background;
   border-color: $subnavbar-background;
 }
@@ -52,22 +59,23 @@
   max-height: 100%;
 
 }
-.navbar .title > img {
+
+.navbar .title>img {
   height: 45px;
 }
 
 /* Disable f7 horizontal rules */
 .navbar:after {
-	display: none;
+  display: none;
 }
 
 .navbar .left {
-	margin-left: 5px;
+  margin-left: 5px;
   height: 100%;
 }
 
 .navbar .right {
-	margin-right: 5px;
+  margin-right: 5px;
   height: 100%;
 }
 
@@ -79,7 +87,7 @@
   background-color: #0071b7;
 }
 
-.secondary-navbar > .subnavbar-inner {
+.secondary-navbar>.subnavbar-inner {
   padding-left: 0px;
   padding-right: 0px;
 }
@@ -101,16 +109,20 @@
 
 
 /* Content pages */
-.page.content ul, .page.content ol {
+.page.content ul,
+.page.content ol {
   padding-left: 20px;
 }
 
-.page.content ul > li, .page.content ol > li {
+.page.content ul>li,
+.page.content ol>li {
   margin-bottom: 10px;
 }
 
 /* Content starts (44+8)px down */
-.tabbar-fixed .page-content, .tabbar-through .page-content,
-.toolbar-fixed .page-content, .toolbar-through .page-content {
-	padding-top: 52px;
+.tabbar-fixed .page-content,
+.tabbar-through .page-content,
+.toolbar-fixed .page-content,
+.toolbar-through .page-content {
+  padding-top: 52px;
 }
