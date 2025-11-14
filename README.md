@@ -154,11 +154,10 @@ To emulate android
 * `make emulate-android`
 
 Or
-* `bundletool build-apks --bundle=X-1.14.8.aab --output=X-1.14.8.apks --mode=universal` to get the apk to drag to the emulator.
-* `unzip -d . FamilyPlanning-1.4.4.apks universal.apk`
+* `make extract_apk`
 * `emulator -list-avds`
 * `emulator -avd XXX`
-* `chrome://inspect/#devices`
+* `chrome://inspect/#devices` to debug
 
 OS X Mac Silicon:
 `arch -xarm64 open -a XCode`

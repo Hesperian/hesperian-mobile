@@ -73,9 +73,9 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     <preference name="EnableViewportScale" value="true" />
 
     <!-- Platform Version Support -->
-    <preference name="android-minSdkVersion" value="24" />  <!-- Android ? -->
-    <preference name="android-targetSdkVersion" value="35"/>  <!-- Android ?14.0 -->
-    <preference name="deployment-target" value="15.6"/>  <!-- iOS 15.6 August 17, 2022 https://developer.apple.com/documentation/xcode-release-notes/xcode-16_4-release-notes -->
+    <preference name="android-minSdkVersion" value="24" />  <!-- Android 7.0 Nougat (API 24) - Minimum supported version - Released August 2016 - https://developer.android.com/tools/releases/platforms -->
+    <preference name="android-targetSdkVersion" value="35"/>  <!-- Android 15 (API 35) - Target SDK version - Released October 2024 - https://developer.android.com/tools/releases/platforms -->
+    <preference name="deployment-target" value="15.6"/>  <!-- iOS 15.6 - Minimum supported version (IPHONEOS_DEPLOYMENT_TARGET) - https://cordova.apache.org/docs/en/latest/config_ref/index.html#preference -->
 
     <!-- iOS App icons -->
     <icon src="resources/icons/ios/AppIcon-20.png" platform="ios" width="20" height="20" />

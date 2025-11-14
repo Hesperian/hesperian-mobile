@@ -29,8 +29,9 @@ CURRENT_DIR=$(shell pwd)
 
 help:
 	@echo "Common make targets:"
-	@echo "\tmake watch\t vite watch build in the dist directory"
-	@echo "\tmake build\t full cordova release build created in ./output"
+	@echo "\tmake watch\t\t vite watch build in the dist directory"
+	@echo "\tmake build\t\t full cordova release build created in ./output"
+	@echo "\tmake extract_apk\t extract universal APK from AAB for emulator testing"
 
 webpack:
 	rm -rf dist
@@ -62,6 +63,21 @@ app: cordova-build
 	cp ${BUILDDIR}/platforms/ios/build/*/*.ipa ${OUTPUT_DIR}/${OUTPUT_NAME}.ipa
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*.aab ${OUTPUT_DIR}/${OUTPUT_NAME}.aab
 
+# Extract universal APK from AAB bundle for emulator testing
+.PHONY: extract_apk
+extract_apk:
+	@if [ ! -f ${OUTPUT_DIR}/${OUTPUT_NAME}.aab ]; then \
+		echo "Error: AAB file not found at ${OUTPUT_DIR}/${OUTPUT_NAME}.aab"; \
+		echo "Run 'make app' first to build the AAB file."; \
+		exit 1; \
+	fi
+	@echo "Extracting universal APK from ${OUTPUT_NAME}.aab..."
+	bundletool build-apks --bundle=${OUTPUT_DIR}/${OUTPUT_NAME}.aab --output=${OUTPUT_DIR}/${OUTPUT_NAME}.apks --mode=universal
+	@echo "Unzipping universal.apk..."
+	unzip -o ${OUTPUT_DIR}/${OUTPUT_NAME}.apks universal.apk -d ${OUTPUT_DIR}
+	mv ${OUTPUT_DIR}/universal.apk ${OUTPUT_DIR}/${OUTPUT_NAME}.apk
+	rm ${OUTPUT_DIR}/${OUTPUT_NAME}.apks
+	@echo "Universal APK created: ${OUTPUT_DIR}/${OUTPUT_NAME}.apk"
 
 .PHONY: build
 build: app docker-site
