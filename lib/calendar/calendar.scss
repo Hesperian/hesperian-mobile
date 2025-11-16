@@ -26,6 +26,7 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
   margin-bottom: 16px;
   overflow: hidden;
   max-width: 30em;
+
   .calendar-date-select {
     display: flex;
     align-items: center;
@@ -34,8 +35,10 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
     column-gap: 24px;
     flex-wrap: wrap;
   }
+
   .calendar-button {
     flex-grow: 1;
+
     .item-inner {
       display: flex;
       border: 1px solid $navbar-background;
@@ -43,11 +46,13 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
       padding-right: 18px;
       font-weight: bold;
       white-space: nowrap;
+
       .item-title {
         background-color: $navbar-background;
         color: white;
         padding: 8px;
       }
+
       .item-after {
         min-width: 2em;
         padding: 8px;
@@ -56,16 +61,20 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
         text-align: center;
       }
     }
+
     &.date-choice-go-container {
       flex-grow: 0;
       margin: auto;
+
       .item-content {
         border-radius: 15px;
         overflow: hidden;
+
         .item-inner {
           border-color: $inline-link-text-color;
           background: $triangle-right no-repeat calc(100% - 6px) 50%,
             $inline-link-text-color;
+
           .item-title {
             background-color: $inline-link-text-color;
             width: 100%;
@@ -137,7 +146,7 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
       .item-text {
         max-height: inherit;
         max-width: 60%;
-  line-clamp: inherit;
+        line-clamp: inherit;
         -webkit-line-clamp: inherit;
       }
     }
@@ -148,11 +157,11 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
     clear: both;
   }
 
-  #results-list > li {
+  #results-list>li {
     display: none;
   }
 
-  #results-list > li.available {
+  #results-list>li.available {
     display: inherit;
   }
 
@@ -169,34 +178,37 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
 }
 
 #app .pregnancy-calculator {
-  .toolbar {
-    font-size: 18px;
-
-    .toolbar-inner {
-      justify-content: space-around;
-    }
-
-    .calendar-month-selector {
-      justify-content: space-between;
-      width: 100%;
-      max-width: inherit;
-
-      .icon-next,
-      .icon-prev {
-        width: 34px;
-        height: 34px;
-      }
-    }
-
-    .calendar-year-selector {
-      display: none;
-    }
-  }
 
   .gestcalc-container {
     border-width: 0px 1px 1px 1px;
     border-style: solid;
     border-color: $tool-internal-header-background-color;
+
+    .toolbar {
+      top: 0;
+      font-size: 18px;
+
+      .toolbar-inner {
+        padding: 0;
+        justify-content: space-around;
+      }
+
+      .calendar-month-selector {
+        justify-content: space-between;
+        width: 100%;
+        max-width: inherit;
+
+        .icon-next,
+        .icon-prev {
+          width: 34px;
+          height: 34px;
+        }
+      }
+
+      .calendar-year-selector {
+        display: none;
+      }
+    }
 
     .calendar-day.calendar-day-selected,
     .calendar-day.calendar-day-was-selected {
@@ -204,6 +216,7 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
         background: $tool-internal-header-background-color;
         color: #fff;
       }
+
     }
 
     .calendar-day.calendar-day-today .calendar-day-number {
@@ -253,6 +266,7 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
 }
 
 .calendar-jq {
+
   .calendars-month-row.calendar-months,
   .calendars-month.calendar-months {
     display: flex;

@@ -117,9 +117,8 @@ cordova-install: $(CORDOVA_CONFIG) webpack
 
 
 
-.PHONY: libsync
-libsync:
-	rsync -avu --delete --exclude=node_modules --exclude=.git ../hesperian-mobile/ ./node_modules/hesperian-mobile; chmod +x ./node_modules/.bin/*
+.PHONY: link
+link:
 	@cd ./node_modules/hesperian-mobile && npm link
 	@npm link hesperian-mobile
 
