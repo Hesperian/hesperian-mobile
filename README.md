@@ -165,3 +165,61 @@ OS X Mac Silicon:
 ### Pushing lib code
 
 rsync -avu --delete --exclude=node_modules --exclude=.git ./ ../hesperian-mobile-XXX/node_modules/hesperian-mobile
+
+## Accessibility Testing
+
+The library includes automated accessibility testing using [axe-core](https://github.com/dequelabs/axe-core) and [Playwright](https://playwright.dev/).
+
+### Setup
+
+Apps using this library need to:
+
+1. Install dependencies in `package.json`:
+```json
+"devDependencies": {
+  "playwright": "^1.49.0",
+  "@axe-core/playwright": "^4.10.0"
+}
+```
+
+2. Add scripts to `package.json`:
+```json
+"scripts": {
+  "test:a11y": "node scripts/test-accessibility.js",
+  "test:a11y:all": "node scripts/test-accessibility.js --locale=all"
+}
+```
+
+3. Copy the test script from `hesperian-mobile` to your app's `scripts/` directory
+4. Install Chromium for Playwright: `npx playwright install chromium`
+
+### Usage
+
+The shared makefile provides two targets:
+
+```bash
+# Test English locale only (default)
+make test-a11y
+
+# Test all locales
+make test-a11y-all
+```
+
+Or run the script directly with options:
+
+```bash
+# Test specific pages
+node scripts/test-accessibility.js --pages=calculator,FAQ
+
+# Test specific locale
+node scripts/test-accessibility.js --locale=es
+
+# Test specific pages in Spanish
+node scripts/test-accessibility.js --locale=es --pages=calculator
+```
+
+Reports are generated in `build/reports/accessibility/`:
+- `accessibility-report.html` - Human-readable report
+- `accessibility-results.json` - Machine-readable results
+
+See the app's documentation for more details on accessibility testing.
