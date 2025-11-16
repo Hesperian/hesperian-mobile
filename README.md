@@ -174,7 +174,7 @@ The library includes automated accessibility testing using [axe-core](https://gi
 
 Apps using this library need to:
 
-1. Install dependencies in `package.json`:
+1. Install test dependencies in `package.json`:
 ```json
 "devDependencies": {
   "playwright": "^1.49.0",
@@ -182,44 +182,39 @@ Apps using this library need to:
 }
 ```
 
-2. Add scripts to `package.json`:
-```json
-"scripts": {
-  "test:a11y": "node scripts/test-accessibility.js",
-  "test:a11y:all": "node scripts/test-accessibility.js --locale=all"
-}
-```
+2. Install Chromium for Playwright: `npx playwright install chromium`
 
-3. Copy the test script from `hesperian-mobile` to your app's `scripts/` directory
-4. Install Chromium for Playwright: `npx playwright install chromium`
+3. Run `make libsync` to sync the library (which includes the test script)
+
+That's it! No app-specific scripts or package.json scripts needed.
 
 ### Usage
 
 The shared makefile provides two targets:
 
 ```bash
-# Test English locale only (default)
+# Test English locale, all pages
 make test-a11y
 
-# Test all locales
+# Test all locales, all pages
 make test-a11y-all
 ```
 
-Or run the script directly with options:
+You can also run the script directly with custom options:
 
 ```bash
 # Test specific pages
-node scripts/test-accessibility.js --pages=calculator,FAQ
+hesperian-test-accessibility --pages=calculator,FAQ
 
 # Test specific locale
-node scripts/test-accessibility.js --locale=es
+hesperian-test-accessibility --locale=es
 
-# Test specific pages in Spanish
-node scripts/test-accessibility.js --locale=es --pages=calculator
+# Combine options
+hesperian-test-accessibility --locale=es --pages=calculator
 ```
 
-Reports are generated in `build/reports/accessibility/`:
-- `accessibility-report.html` - Human-readable report
-- `accessibility-results.json` - Machine-readable results
+### Output
 
-See the app's documentation for more details on accessibility testing.
+Tests generate two reports in `build/reports/accessibility/`:
+- `accessibility-results.json` - Detailed JSON results
+- `accessibility-report.html` - Human-readable HTML report

@@ -120,6 +120,8 @@ cordova-install: $(CORDOVA_CONFIG) webpack
 .PHONY: libsync
 libsync:
 	rsync -avu --delete --exclude=node_modules --exclude=.git ../hesperian-mobile/ ./node_modules/hesperian-mobile; chmod +x ./node_modules/.bin/*
+	@cd ./node_modules/hesperian-mobile && npm link
+	@npm link hesperian-mobile
 
 .PHONY: example-libsync
 example-libsync:
@@ -136,7 +138,7 @@ test-a11y:
 	@npx http-server ./dist-web -p 8080 -c-1 > /dev/null 2>&1 & echo $$! > .server.pid
 	@sleep 2
 	@echo "Running accessibility tests (English locale, all pages)..."
-	@npm run test:a11y || (kill `cat .server.pid` 2>/dev/null; rm -f .server.pid; exit 1)
+	@$(NODE_BIN)/hesperian-test-accessibility || (kill `cat .server.pid` 2>/dev/null; rm -f .server.pid; exit 1)
 	@kill `cat .server.pid` 2>/dev/null || true
 	@rm -f .server.pid
 	@echo "✅ Accessibility tests complete"
@@ -147,7 +149,7 @@ test-a11y-all:
 	@npx http-server ./dist-web -p 8080 -c-1 > /dev/null 2>&1 & echo $$! > .server.pid
 	@sleep 2
 	@echo "Running accessibility tests (all locales, all pages)..."
-	@npm run test:a11y:all || (kill `cat .server.pid` 2>/dev/null; rm -f .server.pid; exit 1)
+	@$(NODE_BIN)/hesperian-test-accessibility --locale=all || (kill `cat .server.pid` 2>/dev/null; rm -f .server.pid; exit 1)
 	@kill `cat .server.pid` 2>/dev/null || true
 	@rm -f .server.pid
 	@echo "✅ Accessibility tests complete"
