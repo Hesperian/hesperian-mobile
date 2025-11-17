@@ -83,7 +83,12 @@
   border-color: #efeff4;
   border-style: solid;
   border-width: 8px 8px 0px 8px;
-  background-color: var(--f7-navbar-bg-color);
+  background-color: var(--hm-top-safe-area-color);
+
+  .navbar-inner {
+    background-color: var(--f7-navbar-bg-color);
+    background-clip: content-box;
+  }
 }
 
 .secondary-navbar>.subnavbar-inner {

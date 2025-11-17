@@ -10,6 +10,9 @@ $page-navigaton-height: 56px + 48px;
 $page-horizontal-margin: 11px;
 
 // Colors
+:root {
+  --hm-top-safe-area-color: black;
+}
 
 $navbar-background: #fd298f;
 $navbar-background-hex: fd298f;
