@@ -144,7 +144,7 @@ function createConfig(spec) {
 
   const targets = buildStaticTargets(root, libraryRoot, additionalAssets);
 
-  return defineConfig({
+  return defineConfig(({ mode }) => ({
     root,
     base: "./",
     publicDir: false,
@@ -174,7 +174,8 @@ function createConfig(spec) {
       outDir,
       emptyOutDir: true,
       target: "es2017",
-      sourcemap: false,
+      minify: mode === 'production',
+      sourcemap: mode === 'development',
       assetsDir: ".",
       cssCodeSplit: false,
       rollupOptions: {
@@ -195,7 +196,7 @@ function createConfig(spec) {
       },
     },
     plugins: [copyStaticAssetsPlugin(targets, outDir), debugBundlePlugin(process.env.VITE_DEBUG_BUNDLE === "1")],
-  });
+  }));
 }
 
 module.exports = {
