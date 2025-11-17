@@ -10,6 +10,7 @@
   --f7-navbar-height: 64px;
   --f7-subnavbar-height: 48px;
   --f7-toolbar-height: 48px;
+  --f7-navbar-bg-color: #{$navbar-background};
 }
 
 #app .toolbar {
@@ -20,7 +21,6 @@
 
 
 #app .navbar {
-  background-color: $navbar-background;
   color: $navbar-textcolor;
   border: 0px;
 }
@@ -79,12 +79,11 @@
   height: 100%;
 }
 
-/* Navbar 44px with 8px top margin */
 .navbar {
   border-color: #efeff4;
   border-style: solid;
   border-width: 8px 8px 0px 8px;
-  background-color: #0071b7;
+  background-color: var(--f7-navbar-bg-color);
 }
 
 .secondary-navbar>.subnavbar-inner {
