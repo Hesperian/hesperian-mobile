@@ -2,14 +2,11 @@
 #
 
 NODE_BIN := $(CURDIR)/node_modules/.bin
-DOCKER_NODE_BIN := $(NODE_BIN)
 BUILDDIR=cordova
 
 VITE=$(NODE_BIN)/vite
 #VITE_MODE:=production
 VITE_MODE:=development
-BABELNODE=$(DOCKER_NODE_BIN)/babel-node
-HTMLPDF=$(DOCKER_NODE_BIN)/html-pdf
 CORDOVA=$(NODE_BIN)/cordova
 MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
 MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
@@ -25,7 +22,7 @@ CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
 
 CURRENT_DIR=$(shell pwd)
 
-.PHONY: build clean webpack watch dist help site web docker-web docker-watch docker-site
+.PHONY: build clean bundle watch dist help site web
 
 help:
 	@echo "Common make targets:"
@@ -35,7 +32,7 @@ help:
 	@echo "\tmake test-a11y\t\t run accessibility tests (English locale)"
 	@echo "\tmake test-a11y-all\t run accessibility tests (all locales)"
 
-webpack:
+bundle:
 	rm -rf dist
 	$(VITE) build --mode=${VITE_MODE}
 	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
@@ -53,7 +50,7 @@ site:
 	mkdir -p ${OUTPUT_DIR}
 	(cd ${WEBAPP_DIR}; zip -r ../${OUTPUT_DIR}/app-${VERSION}.zip .)
 
-dist: webpack $(CORDOVA_CONFIG)
+dist: bundle $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 
@@ -82,7 +79,7 @@ extract_apk:
 	@echo "Universal APK created: ${OUTPUT_DIR}/${OUTPUT_NAME}.apk"
 
 .PHONY: build
-build: app docker-site
+build: app site
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
 	(cd ${BUILDDIR}; rm -rf resources-tmp; ${MAKE_CONFIG} ../app-config.json)
@@ -105,7 +102,7 @@ distclean:
 install:
 	npm install
 	
-cordova-install: $(CORDOVA_CONFIG) webpack
+cordova-install: $(CORDOVA_CONFIG) bundle
 	(${CD_BUILDDIR}; npm ci)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
