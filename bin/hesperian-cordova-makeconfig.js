@@ -136,6 +136,9 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     <!-- Localization -->
     <!-- iOS -->
     <platform name="ios">
+        <config-file parent="ITSAppUsesNonExemptEncryption" target="*-Info.plist">
+            <false />
+        </config-file>
         <config-file platform="ios" target="*-Info.plist" parent="CFBundleLocalizations">
             <array>
             {{#each localizations}}

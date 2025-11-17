@@ -217,6 +217,9 @@ body {
 
 #app .page {
   background-color: $page-background;
+  &[aria-hidden="true"] {
+    display: none;
+  }
 }
 
 .page-content {
