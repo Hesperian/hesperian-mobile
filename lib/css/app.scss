@@ -40,6 +40,7 @@ $breakpoint-small-large: 390px;
   font-weight: bold;
   color: $inline-link-text-color;
 }
+
 #app .subtitle {
   font-weight: bold;
   color: $inline-link-text-color;
@@ -119,8 +120,12 @@ body {
 
 #app .list {
   font-size: inherit; // skip f7 size change
-  .item-media::after {
+  .item-content::after {
     @include hairline;
+  }
+  .item-media {
+    min-width: 40px;
+    height: 100%;
   }
 }
 
@@ -207,7 +212,7 @@ body {
   line-height: 28px;
 }
 
-.page-header + .list-block {
+.page-header+.list-block {
   margin-top: 15px;
 }
 
@@ -217,6 +222,7 @@ body {
 
 #app .page {
   background-color: $page-background;
+
   &[aria-hidden="true"] {
     display: none;
   }
@@ -253,12 +259,13 @@ i.app-gear {
     margin-top: 15px;
     margin-bottom: 10px;
 
-    & > li {
+    &>li {
       margin-bottom: 6px;
     }
   }
 
   .list {
+
     .item-inner:after,
     ul:after {
       background-color: $list-divider-color;
@@ -301,7 +308,7 @@ img.center {
     background-color: $toggle-no-primary;
   }
 
-  .toggle input[type="checkbox"]:checked + .toggle-icon:after {
+  .toggle input[type="checkbox"]:checked+.toggle-icon:after {
     background-color: $toggle-yes-primary;
   }
 
@@ -309,7 +316,7 @@ img.center {
     background-color: $toggle-no-secondary;
   }
 
-  .toggle input[type="checkbox"]:checked + .toggle-icon {
+  .toggle input[type="checkbox"]:checked+.toggle-icon {
     background-color: $toggle-yes-secondary;
   }
 }
@@ -330,7 +337,7 @@ $howto-padding: 8px;
     .howto-section {
       border-top: 1px solid black;
 
-      & > * {
+      &>* {
         padding: $howto-padding;
       }
 
@@ -355,12 +362,12 @@ $howto-padding: 8px;
 }
 
 .float-block,
-.accordion-item-content > .block {
-  & > p:before {
+.accordion-item-content>.block {
+  &>p:before {
     @extend %float-block-item;
   }
 
-  & > ul:before {
+  &>ul:before {
     @extend %float-block-item;
   }
 }
@@ -406,6 +413,7 @@ figure {
   img {
     max-width: 100%;
   }
+
   figcaption {
     text-align: center;
   }
