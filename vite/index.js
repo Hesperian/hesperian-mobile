@@ -172,7 +172,7 @@ function createConfig(spec) {
     },
     build: {
       outDir,
-      emptyOutDir: true,
+      emptyOutDir: mode === "production",
       target: "es2017",
       minify: mode === 'production',
       sourcemap: mode === 'development',

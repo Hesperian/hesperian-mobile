@@ -73,13 +73,13 @@ let context = {
 };
 
 const appHtml = `
-<div id="app">
+<main id="app">
     <div class="statusbar"></div>
 
     <div class="panel panel-left panel-reveal theme-light">
     <div class="view">
         <div class="page">
-        <div id="sidelinks" class="page-content"></div>
+        <nav id="sidelinks" class="page-content" data-aria-label="landmarks.mainmenu"></nav>
         </div>
     </div>
     </div>
@@ -87,7 +87,7 @@ const appHtml = `
     <div class="panel panel-right panel-reveal theme-light">
     <div class="view">
         <div class="page">
-        <div id="settings" class="page-content"></div>
+        <nav id="settings" class="page-content"  data-aria-label="landmarks.settings"></nav>
         </div>
     </div>
     </div>
@@ -97,7 +97,7 @@ const appHtml = `
         <div class="searchbar-backdrop"></div>
     </div>
     </div>
-</div>
+</main>
 `;
 
 const index = `

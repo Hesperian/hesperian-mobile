@@ -38,6 +38,7 @@ bundle:
 	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 
 watch:
+	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
 	$(VITE) build --mode=development --watch
 
 site:
