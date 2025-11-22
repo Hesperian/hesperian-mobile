@@ -130,9 +130,9 @@ validate:
 
 # Accessibility Testing
 .PHONY: test-a11y
-test-a11y:
+test-a11y: bundle
 	@echo "Starting local web server..."
-	@npx http-server ./dist-web -p 8080 -c-1 > /dev/null 2>&1 & echo $$! > .server.pid
+	@npx http-server ./dist -p 8080 -c-1 > /dev/null 2>&1 & echo $$! > .server.pid
 	@sleep 2
 	@echo "Running accessibility tests (English locale, all pages)..."
 	@$(NODE_BIN)/hesperian-test-accessibility || (kill `cat .server.pid` 2>/dev/null; rm -f .server.pid; exit 1)
@@ -141,9 +141,9 @@ test-a11y:
 	@echo "✅ Accessibility tests complete"
 
 .PHONY: test-a11y-all
-test-a11y-all:
+test-a11y-all: bundle
 	@echo "Starting local web server..."
-	@npx http-server ./dist-web -p 8080 -c-1 > /dev/null 2>&1 & echo $$! > .server.pid
+	@npx http-server ./dist -p 8080 -c-1 > /dev/null 2>&1 & echo $$! > .server.pid
 	@sleep 2
 	@echo "Running accessibility tests (all locales, all pages)..."
 	@$(NODE_BIN)/hesperian-test-accessibility --locale=all || (kill `cat .server.pid` 2>/dev/null; rm -f .server.pid; exit 1)
