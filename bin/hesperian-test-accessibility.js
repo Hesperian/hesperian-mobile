@@ -53,7 +53,11 @@ console.log(`  Base URL: ${options.baseUrl}`);
 console.log('');
 
 // Browser-side event tracking monitor injected before the app boots.
-const AppEventMonitorScript = require('./app-event-monitor');
+const {
+    script: AppEventMonitorScript,
+    getEventCount: getMonitorEventCount,
+    waitForEvent: waitForMonitorEvent,
+} = require('./app-event-monitor');
 
 /**
  * Extract pageResources by scanning www directory
@@ -164,42 +168,13 @@ function getPageUrls(pageResources) {
     return urls;
 }
 
-async function getEventCount(page, eventName) {
-    return page.evaluate((name) => {
-        const monitor = globalThis.__hesperianAppEventMonitor;
-        if (!monitor || typeof monitor.getEventCount !== 'function') {
-            return 0;
-        }
-        return monitor.getEventCount(name);
-    }, eventName);
-}
-
 async function waitForEvent(page, eventName, contextLabel, timeout = 30000, baselineCount = null, targetCount = null) {
-    const description = contextLabel ? ` (${contextLabel})` : '';
-    const initialBaseline = baselineCount ?? (await getEventCount(page, eventName));
-    const desiredCount = typeof targetCount === 'number' ? targetCount : initialBaseline + 1;
-
-    if (initialBaseline >= desiredCount) {
-        return initialBaseline;
-    }
-
-    const waitPromise = page.evaluate(({ name, count }) => {
-        const monitor = globalThis.__hesperianAppEventMonitor;
-        if (!monitor || typeof monitor.waitForEvent !== 'function') {
-            throw new Error('AppEventMonitor is not available in the browser context');
-        }
-        return monitor.waitForEvent(name, count);
-    }, { name: eventName, count: desiredCount }).then((count) => ({ count }));
-
-    const timeoutPromise = page.waitForTimeout(timeout).then(() => ({ timeout: true }));
-
-    const result = await Promise.race([waitPromise, timeoutPromise]);
-
-    if (result && result.timeout) {
-        throw new Error(`Timed out waiting for ${eventName}${description}: exceeded ${timeout}ms`);
-    }
-
-    return result && typeof result.count === 'number' ? result.count : desiredCount;
+    return waitForMonitorEvent(page, eventName, {
+        contextLabel,
+        timeout,
+        baselineCount,
+        targetCount,
+    });
 }
 
 async function waitForAppInit(page, contextLabel, timeout = 30000, baselineCount = null) {
@@ -262,7 +237,7 @@ async function navigateToRoute(page, route) {
         return;
     }
 
-    const baseline = await getEventCount(page, 'page:afterin');
+    const baseline = await getMonitorEventCount(page, 'page:afterin');
 
     const navigationSucceeded = await page.evaluate((targetRoute) => {
         const viewEl = document.querySelector('.view-main');
@@ -283,8 +258,8 @@ async function navigateToRoute(page, route) {
 
 async function waitForInitialPage(page, options, timeout = 30000) {
     // Launch the app shell and wait for Framework7 to finish its initial routing.
-    const appInitBaseline = await getEventCount(page, 'appInit');
-    const initialPageBaseline = await getEventCount(page, 'page:afterin');
+    const appInitBaseline = await getMonitorEventCount(page, 'appInit');
+    const initialPageBaseline = await getMonitorEventCount(page, 'page:afterin');
 
     await page.goto(options.baseUrl, {
         waitUntil: 'domcontentloaded',

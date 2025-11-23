@@ -1,5 +1,10 @@
+const SUPPORTED_EVENTS = ['appInit', 'page:afterin'];
+
 function appEventMonitorScript(eventNames) {
-  const events = ['appInit', 'page:afterin'];
+  const defaultEvents = ['appInit', 'page:afterin'];
+  const events = Array.isArray(eventNames) && eventNames.length
+    ? Array.from(new Set(eventNames))
+    : defaultEvents;
 
   const globalRef = globalThis;
   globalRef.__hesperianAutomation = true;
@@ -92,4 +97,52 @@ function appEventMonitorScript(eventNames) {
   globalRef.__hesperianAppEventMonitor = AppEventMonitor;
 }
 
-module.exports = appEventMonitorScript;
+async function getEventCount(page, eventName) {
+  return page.evaluate((name) => {
+    const monitor = globalThis.__hesperianAppEventMonitor;
+    if (!monitor || typeof monitor.getEventCount !== 'function') {
+      return 0;
+    }
+    return monitor.getEventCount(name);
+  }, eventName);
+}
+
+async function waitForEvent(page, eventName, {
+  contextLabel = '',
+  timeout = 30000,
+  baselineCount = null,
+  targetCount = null,
+} = {}) {
+  const description = contextLabel ? ` (${contextLabel})` : '';
+  const initialBaseline = baselineCount ?? (await getEventCount(page, eventName));
+  const desiredCount = typeof targetCount === 'number' ? targetCount : initialBaseline + 1;
+
+  if (initialBaseline >= desiredCount) {
+    return initialBaseline;
+  }
+
+  const waitPromise = page.evaluate(({ name, count }) => {
+    const monitor = globalThis.__hesperianAppEventMonitor;
+    if (!monitor || typeof monitor.waitForEvent !== 'function') {
+      throw new Error('AppEventMonitor is not available in the browser context');
+    }
+    return monitor.waitForEvent(name, count);
+  }, { name: eventName, count: desiredCount }).then((count) => ({ count }));
+
+  const timeoutPromise = page.waitForTimeout(timeout).then(() => ({ timeout: true }));
+
+  const result = await Promise.race([waitPromise, timeoutPromise]);
+
+  if (result && result.timeout) {
+    throw new Error(`Timed out waiting for ${eventName}${description}: exceeded ${timeout}ms`);
+  }
+
+  return result && typeof result.count === 'number' ? result.count : desiredCount;
+}
+
+module.exports = {
+  script: appEventMonitorScript,
+  getEventCount,
+  waitForEvent,
+  SUPPORTED_EVENTS,
+};
