@@ -27,23 +27,23 @@ const AxeBuilder = requireFromApp('@axe-core/playwright').default;
 // Parse command line arguments
 const args = process.argv.slice(2);
 const options = {
-  baseUrl: 'http://localhost:8080',
-  locale: 'en', // Default to English only
-  pages: null, // null means all pages, otherwise array of page IDs
-  distDir: path.join(appRoot, 'dist'),
-  outputDir: path.join(appRoot, 'build', 'reports', 'accessibility'),
-  headless: true,
+    baseUrl: 'http://localhost:8080',
+    locale: 'en', // Default to English only
+    pages: null, // null means all pages, otherwise array of page IDs
+    distDir: path.join(appRoot, 'dist'),
+    outputDir: path.join(appRoot, 'build', 'reports', 'accessibility'),
+    headless: true,
 };
 
 args.forEach(arg => {
-  const match = arg.match(/--(\w+)=(.+)/);
-  if (match) {
-    const [, key, value] = match;
-    if (key === 'baseUrl') options.baseUrl = value;
-    if (key === 'locale') options.locale = value;
-    if (key === 'pages') options.pages = value.split(',').map(p => p.trim());
-    if (key === 'headless') options.headless = value !== 'false';
-  }
+    const match = arg.match(/--(\w+)=(.+)/);
+    if (match) {
+        const [, key, value] = match;
+        if (key === 'baseUrl') options.baseUrl = value;
+        if (key === 'locale') options.locale = value;
+        if (key === 'pages') options.pages = value.split(',').map(p => p.trim());
+        if (key === 'headless') options.headless = value !== 'false';
+    }
 });
 
 console.log('🔧 Configuration:');
@@ -55,54 +55,35 @@ console.log('');
 // Browser-side event tracking monitor injected before the app boots.
 const AppEventMonitorScript = require('./app-event-monitor');
 
-const MONITOR_EVENTS = {
-  appInit: {
-    waitMethod: 'waitForAppInit',
-    getCountMethod: 'getAppInitCount',
-  },
-  'page:afterin': {
-    waitMethod: 'waitForPageAfterIn',
-    getCountMethod: 'getPageAfterInCount',
-  },
-};
-
-function getMonitorEventMeta(eventName) {
-  const meta = MONITOR_EVENTS[eventName];
-  if (!meta) {
-    throw new Error(`Unsupported monitor event: ${eventName}`);
-  }
-  return meta;
-}
-
 /**
  * Extract pageResources by scanning www directory
  * This is the most reliable approach since the minified build is hard to parse
  */
 function extractPageResources() {
-  const wwwDir = path.join(appRoot, 'www', 'locales');
-  
-  if (!fs.existsSync(wwwDir)) {
-    console.error(`Error: www/locales directory not found at ${wwwDir}`);
-    console.error('Please ensure the source files exist.');
-    process.exit(1);
-  }
+    const wwwDir = path.join(appRoot, 'www', 'locales');
 
-  const pageResources = {};
-  const locales = fs.readdirSync(wwwDir).filter(f => {
-    const stat = fs.statSync(path.join(wwwDir, f));
-    return stat.isDirectory() && !f.startsWith('.');
-  });
+    if (!fs.existsSync(wwwDir)) {
+        console.error(`Error: www/locales directory not found at ${wwwDir}`);
+        console.error('Please ensure the source files exist.');
+        process.exit(1);
+    }
 
-  locales.forEach(locale => {
-    pageResources[locale] = buildPageResourcesForLocale(locale);
-  });
+    const pageResources = {};
+    const locales = fs.readdirSync(wwwDir).filter(f => {
+        const stat = fs.statSync(path.join(wwwDir, f));
+        return stat.isDirectory() && !f.startsWith('.');
+    });
 
-  if (Object.keys(pageResources).length === 0) {
-    console.error('Error: No locales found in www/locales directory');
-    process.exit(1);
-  }
+    locales.forEach(locale => {
+        pageResources[locale] = buildPageResourcesForLocale(locale);
+    });
 
-  return pageResources;
+    if (Object.keys(pageResources).length === 0) {
+        console.error('Error: No locales found in www/locales directory');
+        process.exit(1);
+    }
+
+    return pageResources;
 }
 
 /**
@@ -110,286 +91,264 @@ function extractPageResources() {
  * This reconstructs what webpack.preprocess.js does
  */
 function buildPageResourcesForLocale(locale) {
-  const wwwLocaleDir = path.join(appRoot, 'www', 'locales', locale);
-  const pages = {};
-  
-  if (!fs.existsSync(wwwLocaleDir)) {
-    return pages;
-  }
+    const wwwLocaleDir = path.join(appRoot, 'www', 'locales', locale);
+    const pages = {};
 
-  const files = fs.readdirSync(wwwLocaleDir);
-  
-  files.forEach(file => {
-    const match = file.match(/^(.*)\.html$/);
-    if (match) {
-      const pageId = match[1];
-      pages[pageId] = {
-        route: `/pages/${pageId}`,
-        title: pageId.replace(/[_-]/g, ' ').replace(/^([A-Z])(\d+)/, '$1$2: '),
-        // We can add more by parsing the HTML if needed
-      };
+    if (!fs.existsSync(wwwLocaleDir)) {
+        return pages;
     }
-  });
 
-  return pages;
+    const files = fs.readdirSync(wwwLocaleDir);
+
+    files.forEach(file => {
+        const match = file.match(/^(.*)\.html$/);
+        if (match) {
+            const pageId = match[1];
+            pages[pageId] = {
+                route: `/pages/${pageId}`,
+                title: pageId.replace(/[_-]/g, ' ').replace(/^([A-Z])(\d+)/, '$1$2: '),
+                // We can add more by parsing the HTML if needed
+            };
+        }
+    });
+
+    return pages;
 }
 
 /**
  * Get list of all pages to test
  */
 function getPageUrls(pageResources) {
-  const urls = [];
-  
-  for (const locale in pageResources) {
-    // Skip if testing specific locale (and locale is not 'all')
-    if (options.locale !== 'all' && locale !== options.locale) {
-      continue;
-    }
-    
-    const pages = pageResources[locale];
-    for (const pageId in pages) {
-      // Skip if testing specific pages and this page is not in the list
-      if (options.pages && !options.pages.includes(pageId)) {
-        continue;
-      }
-      
-      const page = pages[pageId];
-      if (page.route) {
-        urls.push({
-          locale,
-          pageId,
-          route: page.route,
-          title: page.title || pageId,
-        });
-        
-        // Add section routes if they exist
-        if (page.sections && Array.isArray(page.sections)) {
-          page.sections.forEach(section => {
-            if (section.route) {
-              urls.push({
-                locale,
-                pageId,
-                sectionId: section.sectionId,
-                route: section.route,
-                title: `${page.title || pageId} - ${section.title || section.sectionId}`,
-              });
-            }
-          });
+    const urls = [];
+
+    for (const locale in pageResources) {
+        // Skip if testing specific locale (and locale is not 'all')
+        if (options.locale !== 'all' && locale !== options.locale) {
+            continue;
         }
-      }
+
+        const pages = pageResources[locale];
+        for (const pageId in pages) {
+            // Skip if testing specific pages and this page is not in the list
+            if (options.pages && !options.pages.includes(pageId)) {
+                continue;
+            }
+
+            const page = pages[pageId];
+            if (page.route) {
+                urls.push({
+                    locale,
+                    pageId,
+                    route: page.route,
+                    title: page.title || pageId,
+                });
+
+                // Add section routes if they exist
+                if (page.sections && Array.isArray(page.sections)) {
+                    page.sections.forEach(section => {
+                        if (section.route) {
+                            urls.push({
+                                locale,
+                                pageId,
+                                sectionId: section.sectionId,
+                                route: section.route,
+                                title: `${page.title || pageId} - ${section.title || section.sectionId}`,
+                            });
+                        }
+                    });
+                }
+            }
+        }
     }
-  }
-  
-  return urls;
+
+    return urls;
 }
 
-async function getEventCount(page, eventName, meta = getMonitorEventMeta(eventName)) {
-  const { getCountMethod } = meta;
-  return page.evaluate(({ method }) => {
-    const monitor = globalThis.__hesperianAppEventMonitor;
-    if (!monitor || typeof monitor[method] !== 'function') {
-      return 0;
-    }
-    return monitor[method]();
-  }, { method: getCountMethod });
-}
-
-async function waitForMonitorEvent(page, {
-  waitMethod,
-  eventLabel,
-  contextLabel,
-  timeout,
-  baselineCount,
-  getCount,
-  targetCount,
-}) {
-  const description = contextLabel ? ` (${contextLabel})` : '';
-  const initialBaseline = baselineCount ?? (await getCount(page));
-  const desiredCount = typeof targetCount === 'number' ? targetCount : initialBaseline + 1;
-
-  if (initialBaseline >= desiredCount) {
-    return initialBaseline;
-  }
-
-  const waitPromise = page.evaluate(({ method, count }) => {
-    const monitor = globalThis.__hesperianAppEventMonitor;
-    if (!monitor || typeof monitor[method] !== 'function') {
-      throw new Error('AppEventMonitor is not available in the browser context');
-    }
-    return monitor[method](count);
-  }, { method: waitMethod, count: desiredCount }).then((count) => ({ count }));
-
-  const timeoutPromise = page.waitForTimeout(timeout).then(() => ({ timeout: true }));
-
-  const result = await Promise.race([waitPromise, timeoutPromise]);
-
-  if (result && result.timeout) {
-    throw new Error(`Timed out waiting for ${eventLabel}${description}: exceeded ${timeout}ms`);
-  }
-
-  return result && typeof result.count === 'number' ? result.count : desiredCount;
+async function getEventCount(page, eventName) {
+    return page.evaluate((name) => {
+        const monitor = globalThis.__hesperianAppEventMonitor;
+        if (!monitor || typeof monitor.getEventCount !== 'function') {
+            return 0;
+        }
+        return monitor.getEventCount(name);
+    }, eventName);
 }
 
 async function waitForEvent(page, eventName, contextLabel, timeout = 30000, baselineCount = null, targetCount = null) {
-  const meta = getMonitorEventMeta(eventName);
-  await waitForMonitorEvent(page, {
-    waitMethod: meta.waitMethod,
-    eventLabel: eventName,
-    contextLabel,
-    timeout,
-    baselineCount,
-    getCount: (pg) => getEventCount(pg, eventName, meta),
-    targetCount,
-  });
+    const description = contextLabel ? ` (${contextLabel})` : '';
+    const initialBaseline = baselineCount ?? (await getEventCount(page, eventName));
+    const desiredCount = typeof targetCount === 'number' ? targetCount : initialBaseline + 1;
+
+    if (initialBaseline >= desiredCount) {
+        return initialBaseline;
+    }
+
+    const waitPromise = page.evaluate(({ name, count }) => {
+        const monitor = globalThis.__hesperianAppEventMonitor;
+        if (!monitor || typeof monitor.waitForEvent !== 'function') {
+            throw new Error('AppEventMonitor is not available in the browser context');
+        }
+        return monitor.waitForEvent(name, count);
+    }, { name: eventName, count: desiredCount }).then((count) => ({ count }));
+
+    const timeoutPromise = page.waitForTimeout(timeout).then(() => ({ timeout: true }));
+
+    const result = await Promise.race([waitPromise, timeoutPromise]);
+
+    if (result && result.timeout) {
+        throw new Error(`Timed out waiting for ${eventName}${description}: exceeded ${timeout}ms`);
+    }
+
+    return result && typeof result.count === 'number' ? result.count : desiredCount;
 }
 
 async function waitForAppInit(page, contextLabel, timeout = 30000, baselineCount = null) {
-  await waitForEvent(page, 'appInit', contextLabel, timeout, baselineCount, 1);
+    await waitForEvent(page, 'appInit', contextLabel, timeout, baselineCount, 1);
 }
 
 async function isRouteActive(page, route) {
-  if (!route) {
-    return false;
-  }
-
-  return page.evaluate((targetRoute) => {
-    const normalize = (value) => {
-      if (!value) return '';
-      return value
-        .replace(/^#/, '')
-        .replace(/^\//, '')
-        .replace(/\/$/, '');
-    };
-
-    const viewEl = document.querySelector('.view-main');
-    const router = viewEl && viewEl.f7View && viewEl.f7View.router;
-    if (!router || !router.currentRoute) {
-      return false;
+    if (!route) {
+        return false;
     }
 
-    const normalizedTarget = normalize(targetRoute);
-    if (!normalizedTarget) {
-      return false;
-    }
+    return page.evaluate((targetRoute) => {
+        const normalize = (value) => {
+            if (!value) return '';
+            return value
+                .replace(/^#/, '')
+                .replace(/^\//, '')
+                .replace(/\/$/, '');
+        };
 
-    const currentPath = normalize(router.currentRoute.path);
-    const currentUrl = normalize(router.currentRoute.url);
-    const currentRoutePath = normalize(router.currentRoute.route?.path);
+        const viewEl = document.querySelector('.view-main');
+        const router = viewEl && viewEl.f7View && viewEl.f7View.router;
+        if (!router || !router.currentRoute) {
+            return false;
+        }
 
-    return (
-      currentPath === normalizedTarget ||
-      currentUrl === normalizedTarget ||
-      currentRoutePath === normalizedTarget
-    );
-  }, route);
+        const normalizedTarget = normalize(targetRoute);
+        if (!normalizedTarget) {
+            return false;
+        }
+
+        const currentPath = normalize(router.currentRoute.path);
+        const currentUrl = normalize(router.currentRoute.url);
+        const currentRoutePath = normalize(router.currentRoute.route?.path);
+
+        return (
+            currentPath === normalizedTarget ||
+            currentUrl === normalizedTarget ||
+            currentRoutePath === normalizedTarget
+        );
+    }, route);
 }
 
 async function waitForMainView(page, timeout = 30000) {
-  await page.waitForFunction(
-    () => Boolean(document.querySelector('.view-main')?.f7View?.router),
-    { timeout },
-  ).catch((error) => {
-    throw new Error(`Framework7 main view did not become ready: ${error.message}`);
-  });
+    await page.waitForFunction(
+        () => Boolean(document.querySelector('.view-main')?.f7View?.router),
+        { timeout },
+    ).catch((error) => {
+        throw new Error(`Framework7 main view did not become ready: ${error.message}`);
+    });
 }
 
 async function navigateToRoute(page, route) {
-  if (!route || route === '/') {
-    return;
-  }
-
-  const alreadyActive = await isRouteActive(page, route);
-  if (alreadyActive) {
-    return;
-  }
-
-  const baseline = await getEventCount(page, 'page:afterin');
-
-  const navigationSucceeded = await page.evaluate((targetRoute) => {
-    const viewEl = document.querySelector('.view-main');
-    const view = viewEl && viewEl.f7View;
-    if (!view || !view.router) {
-      return false;
+    if (!route || route === '/') {
+        return;
     }
-    view.router.navigate(targetRoute);
-    return true;
-  }, route);
 
-  if (!navigationSucceeded) {
-    throw new Error('Framework7 main view not ready for navigation');
-  }
+    const alreadyActive = await isRouteActive(page, route);
+    if (alreadyActive) {
+        return;
+    }
 
-  await waitForEvent(page, 'page:afterin', `router.navigate to ${route}`, 30000, baseline);
+    const baseline = await getEventCount(page, 'page:afterin');
+
+    const navigationSucceeded = await page.evaluate((targetRoute) => {
+        const viewEl = document.querySelector('.view-main');
+        const view = viewEl && viewEl.f7View;
+        if (!view || !view.router) {
+            return false;
+        }
+        view.router.navigate(targetRoute);
+        return true;
+    }, route);
+
+    if (!navigationSucceeded) {
+        throw new Error('Framework7 main view not ready for navigation');
+    }
+
+    await waitForEvent(page, 'page:afterin', `router.navigate to ${route}`, 30000, baseline);
 }
 
 async function waitForInitialPage(page, options, timeout = 30000) {
-  // Launch the app shell and wait for Framework7 to finish its initial routing.
-  const appInitBaseline = await getEventCount(page, 'appInit');
-  const initialPageBaseline = await getEventCount(page, 'page:afterin');
+    // Launch the app shell and wait for Framework7 to finish its initial routing.
+    const appInitBaseline = await getEventCount(page, 'appInit');
+    const initialPageBaseline = await getEventCount(page, 'page:afterin');
 
-  await page.goto(options.baseUrl, {
-    waitUntil: 'domcontentloaded',
-    timeout,
-  });
+    await page.goto(options.baseUrl, {
+        waitUntil: 'domcontentloaded',
+        timeout,
+    });
 
-  await waitForAppInit(page, 'initial app load', timeout, appInitBaseline);
-  await waitForEvent(page, 'page:afterin', 'initial page load', timeout, initialPageBaseline);
+    await waitForAppInit(page, 'initial app load', timeout, appInitBaseline);
+    await waitForEvent(page, 'page:afterin', 'initial page load', timeout, initialPageBaseline);
 }
 
 /**
  * Test a single page for accessibility
  */
 async function testPage(page, pageInfo, options) {
-  try {
-    await waitForMainView(page);
-    await navigateToRoute(page, pageInfo.route);
-    
-    // Wait for Framework7 page to be current
-    // This ensures the page is fully initialized and rendered
-    await page.waitForSelector('.page-current', { 
-      timeout: 15000,
-      state: 'attached'
-    });
-    
-    // Brief pause to allow any animations to settle
-    await page.waitForTimeout(500);
-    
-    // Run axe accessibility tests
-    const results = await new AxeBuilder({ page })
-      .analyze();
-    
-    return {
-      ...pageInfo,
-      url: `${options.baseUrl}#${pageInfo.route}`,
-      violations: results.violations,
-      passes: results.passes.length,
-      incomplete: results.incomplete,
-      inapplicable: results.inapplicable.length,
-      timestamp: new Date().toISOString(),
-    };
-  } catch (error) {
-    return {
-      ...pageInfo,
-      url: `${options.baseUrl}#${pageInfo.route}`,
-      error: error.message,
-      timestamp: new Date().toISOString(),
-    };
-  }
+    try {
+        await waitForMainView(page);
+        await navigateToRoute(page, pageInfo.route);
+
+        // Wait for Framework7 page to be current
+        // This ensures the page is fully initialized and rendered
+        await page.waitForSelector('.page-current', {
+            timeout: 15000,
+            state: 'attached'
+        });
+
+        // Brief pause to allow any animations to settle
+        await page.waitForTimeout(500);
+
+        // Run axe accessibility tests
+        const results = await new AxeBuilder({ page })
+            .analyze();
+
+        return {
+            ...pageInfo,
+            url: `${options.baseUrl}#${pageInfo.route}`,
+            violations: results.violations,
+            passes: results.passes.length,
+            incomplete: results.incomplete,
+            inapplicable: results.inapplicable.length,
+            timestamp: new Date().toISOString(),
+        };
+    } catch (error) {
+        return {
+            ...pageInfo,
+            url: `${options.baseUrl}#${pageInfo.route}`,
+            error: error.message,
+            timestamp: new Date().toISOString(),
+        };
+    }
 }
 
 /**
  * Generate HTML report
  */
 function generateHtmlReport(results, outputPath) {
-  const totalViolations = results.reduce((sum, r) => sum + (r.violations?.length || 0), 0);
-  const totalPages = results.length;
-  const pagesWithViolations = results.filter(r => r.violations?.length > 0).length;
-  const pagesWithErrors = results.filter(r => r.error).length;
-  
-  const localeLabel = options.locale === 'all' ? 'All locales' : options.locale;
-  const pagesLabel = options.pages ? `${options.pages.length} selected page(s)` : 'All pages';
-  
-  const html = `<!DOCTYPE html>
+    const totalViolations = results.reduce((sum, r) => sum + (r.violations?.length || 0), 0);
+    const totalPages = results.length;
+    const pagesWithViolations = results.filter(r => r.violations?.length > 0).length;
+    const pagesWithErrors = results.filter(r => r.error).length;
+
+    const localeLabel = options.locale === 'all' ? 'All locales' : options.locale;
+    const pagesLabel = options.pages ? `${options.pages.length} selected page(s)` : 'All pages';
+
+    const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -459,11 +418,11 @@ function generateHtmlReport(results, outputPath) {
   </div>
 
   ${results.map(result => {
-    const hasViolations = result.violations?.length > 0;
-    const hasError = !!result.error;
-    const cssClass = hasError ? 'has-error' : hasViolations ? 'has-violations' : 'clean';
-    
-    return `
+        const hasViolations = result.violations?.length > 0;
+        const hasError = !!result.error;
+        const cssClass = hasError ? 'has-error' : hasViolations ? 'has-violations' : 'clean';
+
+        return `
     <div class="page-result ${cssClass}">
       <h2 class="page-title">${result.title}</h2>
       <div class="page-meta">
@@ -485,23 +444,23 @@ function generateHtmlReport(results, outputPath) {
       ` : ''}
       
       ${result.violations?.map(violation => {
-        const impactClass = `impact-${violation.impact}`;
-        const violationClass = violation.impact === 'critical' || violation.impact === 'serious' 
-          ? 'violation-critical' 
-          : violation.impact === 'moderate' 
-            ? 'violation-moderate' 
-            : 'violation-minor';
-        
-        // Build nodes HTML with proper escaping
-        let nodesHtml = '';
-        violation.nodes.forEach(node => {
-          const escapedHtml = node.html
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
-          
-          nodesHtml += `
+            const impactClass = `impact-${violation.impact}`;
+            const violationClass = violation.impact === 'critical' || violation.impact === 'serious'
+                ? 'violation-critical'
+                : violation.impact === 'moderate'
+                    ? 'violation-moderate'
+                    : 'violation-minor';
+
+            // Build nodes HTML with proper escaping
+            let nodesHtml = '';
+            violation.nodes.forEach(node => {
+                const escapedHtml = node.html
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+
+                nodesHtml += `
               <div class="violation-node">
                 <strong>Element:</strong><br>
                 <code style="display: block; white-space: pre-wrap; word-break: break-all; margin: 8px 0; padding: 8px; background: #f5f5f5; border-radius: 4px;">${escapedHtml}</code>
@@ -509,9 +468,9 @@ function generateHtmlReport(results, outputPath) {
                 ${node.failureSummary ? `<strong>Issue:</strong> ${node.failureSummary}<br>` : ''}
               </div>
             `;
-        });
-        
-        return `
+            });
+
+            return `
         <div class="violation ${violationClass}">
           <h4>
             <span class="violation-impact ${impactClass}">${violation.impact.toUpperCase()}</span>
@@ -528,10 +487,10 @@ function generateHtmlReport(results, outputPath) {
           <p><strong>Learn more:</strong> <a href="${violation.helpUrl}" target="_blank">${violation.helpUrl}</a></p>
         </div>
         `;
-      }).join('') || ''}
+        }).join('') || ''}
     </div>
     `;
-  }).join('')}
+    }).join('')}
   
   <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 14px;">
     Generated on ${new Date().toLocaleString()} using axe-core
@@ -539,122 +498,122 @@ function generateHtmlReport(results, outputPath) {
 </body>
 </html>`;
 
-  fs.writeFileSync(outputPath, html);
-  console.log(`\n📄 HTML report saved to: ${outputPath}`);
+    fs.writeFileSync(outputPath, html);
+    console.log(`\n📄 HTML report saved to: ${outputPath}`);
 }
 
 /**
  * Main test execution
  */
 async function runTests() {
-  console.log('🔍 Accessibility Testing\n');
-  console.log(`Base URL: ${options.baseUrl}`);
-  console.log(`Locale filter: ${options.locale || 'all'}`);
-  console.log(`Headless: ${options.headless}\n`);
+    console.log('🔍 Accessibility Testing\n');
+    console.log(`Base URL: ${options.baseUrl}`);
+    console.log(`Locale filter: ${options.locale || 'all'}`);
+    console.log(`Headless: ${options.headless}\n`);
 
-  // Ensure output directory exists
-  if (!fs.existsSync(options.outputDir)) {
-    fs.mkdirSync(options.outputDir, { recursive: true });
-  }
-
-  // Extract page data from build
-  console.log('📦 Extracting page data from build...');
-  const pageResources = extractPageResources();
-  const pageUrls = getPageUrls(pageResources);
-  console.log(`✅ Found ${pageUrls.length} pages to test\n`);
-
-  if (pageUrls.length === 0) {
-    console.error('No pages found to test!');
-    process.exit(1);
-  }
-
-  // Launch browser
-  console.log('🚀 Launching browser...');
-  const browser = await chromium.launch({ 
-    headless: options.headless,
-  });
-  const context = await browser.newContext();
-  const page = await context.newPage();
-
-  page.on('console', (msg) => {
-    // Surface browser console messages to the Node console for debugging
-    // eslint-disable-next-line no-console
-    console.log(`[browser:${msg.type()}] ${msg.text()}`);
-  });
-
-  page.on('requestfailed', (request) => {
-    const failure = request.failure();
-    const failureText = failure ? `${failure.errorText}` : 'unknown reason';
-    console.log(`[browser:requestfailed] ${request.method()} ${request.url()} --> ${failureText}`);
-  });
-
-  await page.addInitScript(AppEventMonitorScript);
-
-  // Ensure the app shell has finished its initial load before routing to specific pages.
-  await waitForInitialPage(page, options);
-
-  // Run tests
-  const results = [];
-  let testCount = 0;
-  
-  for (let i = 0; i < pageUrls.length; i++) {
-    const pageInfo = pageUrls[i];
-    testCount++;
-    const progress = `[${testCount}/${pageUrls.length}]`;
-    console.log(`${progress} Testing: ${pageInfo.title} (${pageInfo.locale})`);
-    
-    const result = await testPage(page, pageInfo, options);
-    results.push(result);
-    
-    if (result.error) {
-      console.log(`  ❌ Error: ${result.error}`);
-    } else if (result.violations.length > 0) {
-      console.log(`  ⚠️  ${result.violations.length} violation(s) found`);
-    } else {
-      console.log(`  ✅ No violations`);
+    // Ensure output directory exists
+    if (!fs.existsSync(options.outputDir)) {
+        fs.mkdirSync(options.outputDir, { recursive: true });
     }
-  }
 
-  await browser.close();
+    // Extract page data from build
+    console.log('📦 Extracting page data from build...');
+    const pageResources = extractPageResources();
+    const pageUrls = getPageUrls(pageResources);
+    console.log(`✅ Found ${pageUrls.length} pages to test\n`);
 
-  // Generate reports
-  console.log('\n📊 Generating reports...');
-  
-  // JSON report
-  const jsonPath = path.join(options.outputDir, 'accessibility-results.json');
-  fs.writeFileSync(jsonPath, JSON.stringify(results, null, 2));
-  console.log(`📄 JSON report saved to: ${jsonPath}`);
-  
-  // HTML report
-  const htmlPath = path.join(options.outputDir, 'accessibility-report.html');
-  generateHtmlReport(results, htmlPath);
+    if (pageUrls.length === 0) {
+        console.error('No pages found to test!');
+        process.exit(1);
+    }
 
-  // Summary
-  const totalViolations = results.reduce((sum, r) => sum + (r.violations?.length || 0), 0);
-  const pagesWithViolations = results.filter(r => r.violations?.length > 0).length;
-  const pagesWithErrors = results.filter(r => r.error).length;
-  
-  console.log('\n' + '='.repeat(60));
-  console.log('📈 Test Summary');
-  console.log('='.repeat(60));
-  console.log(`Total pages tested: ${results.length}`);
-  console.log(`Pages with violations: ${pagesWithViolations}`);
-  console.log(`Total violations: ${totalViolations}`);
-  console.log(`Pages with errors: ${pagesWithErrors}`);
-  console.log('='.repeat(60));
+    // Launch browser
+    console.log('🚀 Launching browser...');
+    const browser = await chromium.launch({
+        headless: options.headless,
+    });
+    const context = await browser.newContext();
+    const page = await context.newPage();
 
-  // Exit with error code if violations found
-  if (totalViolations > 0 || pagesWithErrors > 0) {
-    console.log('\n❌ Accessibility tests failed');
-    process.exit(1);
-  } else {
-    console.log('\n✅ All accessibility tests passed!');
-    process.exit(0);
-  }
+    page.on('console', (msg) => {
+        // Surface browser console messages to the Node console for debugging
+        // eslint-disable-next-line no-console
+        console.log(`[browser:${msg.type()}] ${msg.text()}`);
+    });
+
+    page.on('requestfailed', (request) => {
+        const failure = request.failure();
+        const failureText = failure ? `${failure.errorText}` : 'unknown reason';
+        console.log(`[browser:requestfailed] ${request.method()} ${request.url()} --> ${failureText}`);
+    });
+
+    await page.addInitScript(AppEventMonitorScript);
+
+    // Ensure the app shell has finished its initial load before routing to specific pages.
+    await waitForInitialPage(page, options);
+
+    // Run tests
+    const results = [];
+    let testCount = 0;
+
+    for (let i = 0; i < pageUrls.length; i++) {
+        const pageInfo = pageUrls[i];
+        testCount++;
+        const progress = `[${testCount}/${pageUrls.length}]`;
+        console.log(`${progress} Testing: ${pageInfo.title} (${pageInfo.locale})`);
+
+        const result = await testPage(page, pageInfo, options);
+        results.push(result);
+
+        if (result.error) {
+            console.log(`  ❌ Error: ${result.error}`);
+        } else if (result.violations.length > 0) {
+            console.log(`  ⚠️  ${result.violations.length} violation(s) found`);
+        } else {
+            console.log(`  ✅ No violations`);
+        }
+    }
+
+    await browser.close();
+
+    // Generate reports
+    console.log('\n📊 Generating reports...');
+
+    // JSON report
+    const jsonPath = path.join(options.outputDir, 'accessibility-results.json');
+    fs.writeFileSync(jsonPath, JSON.stringify(results, null, 2));
+    console.log(`📄 JSON report saved to: ${jsonPath}`);
+
+    // HTML report
+    const htmlPath = path.join(options.outputDir, 'accessibility-report.html');
+    generateHtmlReport(results, htmlPath);
+
+    // Summary
+    const totalViolations = results.reduce((sum, r) => sum + (r.violations?.length || 0), 0);
+    const pagesWithViolations = results.filter(r => r.violations?.length > 0).length;
+    const pagesWithErrors = results.filter(r => r.error).length;
+
+    console.log('\n' + '='.repeat(60));
+    console.log('📈 Test Summary');
+    console.log('='.repeat(60));
+    console.log(`Total pages tested: ${results.length}`);
+    console.log(`Pages with violations: ${pagesWithViolations}`);
+    console.log(`Total violations: ${totalViolations}`);
+    console.log(`Pages with errors: ${pagesWithErrors}`);
+    console.log('='.repeat(60));
+
+    // Exit with error code if violations found
+    if (totalViolations > 0 || pagesWithErrors > 0) {
+        console.log('\n❌ Accessibility tests failed');
+        process.exit(1);
+    } else {
+        console.log('\n✅ All accessibility tests passed!');
+        process.exit(0);
+    }
 }
 
 // Run tests
 runTests().catch(err => {
-  console.error('Fatal error:', err);
-  process.exit(1);
+    console.error('Fatal error:', err);
+    process.exit(1);
 });

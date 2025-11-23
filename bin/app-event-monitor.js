@@ -1,22 +1,28 @@
-function appEventMonitorScript() {
+function appEventMonitorScript(eventNames) {
+  const events = ['appInit', 'page:afterin'];
+
   const globalRef = globalThis;
   globalRef.__hesperianAutomation = true;
 
   if (globalRef.__hesperianAppEventMonitor) {
-    globalRef.__hesperianAppEventMonitor.init();
+    globalRef.__hesperianAppEventMonitor.init(events);
     return;
   }
 
-  const EVENTS = [
-    { name: 'appInit', methodSuffix: 'AppInit' },
-    { name: 'page:afterin', methodSuffix: 'PageAfterIn' },
-  ];
-
   const state = {
-    initialized: false,
+    initializedEvents: new Set(),
     counts: Object.create(null),
     waiters: Object.create(null),
   };
+
+  function ensureEventStorage(name) {
+    if (!(name in state.counts)) {
+      state.counts[name] = 0;
+    }
+    if (!Array.isArray(state.waiters[name])) {
+      state.waiters[name] = [];
+    }
+  }
 
   function resolveWaiters(eventName, count) {
     const queue = state.waiters[eventName];
@@ -33,52 +39,56 @@ function appEventMonitorScript() {
     });
   }
 
+  function registerEvent(name) {
+    if (state.initializedEvents.has(name)) {
+      return;
+    }
+
+    ensureEventStorage(name);
+    document.addEventListener(name, () => {
+      state.counts[name] += 1;
+      resolveWaiters(name, state.counts[name]);
+    });
+    state.initializedEvents.add(name);
+  }
+
   const AppEventMonitor = {
-    init() {
-      if (state.initialized) {
-        return;
+    init(eventList) {
+      const list = Array.isArray(eventList) && eventList.length ? eventList : events;
+      list.forEach(registerEvent);
+    },
+
+    waitForEvent(eventName, targetCount) {
+      if (!state.initializedEvents.has(eventName)) {
+        registerEvent(eventName);
       }
 
-      state.initialized = true;
-
-      EVENTS.forEach(({ name }) => {
-        state.counts[name] = 0;
-        state.waiters[name] = [];
-      });
-
-      EVENTS.forEach(({ name }) => {
-        document.addEventListener(name, () => {
-          state.counts[name] += 1;
-          resolveWaiters(name, state.counts[name]);
-        });
-      });
-    },
-  };
-
-  EVENTS.forEach(({ name, methodSuffix }) => {
-    const waitKey = `waitFor${methodSuffix}`;
-    const getCountKey = `get${methodSuffix}Count`;
-
-    AppEventMonitor[waitKey] = (targetCount) => {
       const desired = typeof targetCount === 'number'
         ? targetCount
-        : state.counts[name] + 1;
+        : state.counts[eventName] + 1;
 
-      if (state.counts[name] >= desired) {
-        return Promise.resolve(state.counts[name]);
+      if (state.counts[eventName] >= desired) {
+        return Promise.resolve(state.counts[eventName]);
       }
 
       return new Promise((resolve) => {
-        state.waiters[name].push({ targetCount: desired, resolve });
+        state.waiters[eventName].push({ targetCount: desired, resolve });
       });
-    };
+    },
 
-    AppEventMonitor[getCountKey] = () => {
-      return state.counts[name];
-    };
-  });
+    getEventCount(eventName) {
+      if (!(eventName in state.counts)) {
+        return 0;
+      }
+      return state.counts[eventName];
+    },
 
-  AppEventMonitor.init();
+    getSupportedEvents() {
+      return Array.from(state.initializedEvents);
+    },
+  };
+
+  AppEventMonitor.init(events);
   globalRef.__hesperianAppEventMonitor = AppEventMonitor;
 }
 
