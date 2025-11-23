@@ -131,23 +131,27 @@ validate:
 # Accessibility Testing
 .PHONY: test-a11y
 test-a11y: bundle
-	@echo "Starting local web server..."
-	@npx http-server ./dist -p 8080 -c-1 > /dev/null 2>&1 & echo $$! > .server.pid
-	@sleep 2
-	@echo "Running accessibility tests (English locale, all pages)..."
-	@$(NODE_BIN)/hesperian-test-accessibility || (kill `cat .server.pid` 2>/dev/null; rm -f .server.pid; exit 1)
-	@kill `cat .server.pid` 2>/dev/null || true
-	@rm -f .server.pid
+	@( \
+		set -e; \
+		trap 'kill 0 2>/dev/null' EXIT; \
+		echo "Starting local web server..."; \
+		npx http-server ./dist -p 8080 -c-1 > /dev/null 2>&1 & \
+		sleep 2; \
+		echo "Running accessibility tests (English locale, all pages)..."; \
+		$(NODE_BIN)/hesperian-test-accessibility; \
+	)
 	@echo "✅ Accessibility tests complete"
 
 .PHONY: test-a11y-all
 test-a11y-all: bundle
-	@echo "Starting local web server..."
-	@npx http-server ./dist -p 8080 -c-1 > /dev/null 2>&1 & echo $$! > .server.pid
-	@sleep 2
-	@echo "Running accessibility tests (all locales, all pages)..."
-	@$(NODE_BIN)/hesperian-test-accessibility --locale=all || (kill `cat .server.pid` 2>/dev/null; rm -f .server.pid; exit 1)
-	@kill `cat .server.pid` 2>/dev/null || true
-	@rm -f .server.pid
+	@( \
+		set -e; \
+		trap 'kill 0 2>/dev/null' EXIT; \
+		echo "Starting local web server..."; \
+		npx http-server ./dist -p 8080 -c-1 > /dev/null 2>&1 & \
+		sleep 2; \
+		echo "Running accessibility tests (all locales, all pages)..."; \
+		$(NODE_BIN)/hesperian-test-accessibility --locale=all; \
+	)
 	@echo "✅ Accessibility tests complete"
 
