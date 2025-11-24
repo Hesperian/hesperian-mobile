@@ -120,9 +120,11 @@ body {
 
 #app .list {
   font-size: inherit; // skip f7 size change
+
   .item-content::after {
     @include hairline;
   }
+
   .item-media {
     min-width: 40px;
     height: 100%;
@@ -274,6 +276,15 @@ i.app-gear {
 }
 
 /* Utility classes */
+
+.sr-only {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 
 .space-around {
   display: flex;
