@@ -21,7 +21,7 @@ const { createRequire } = require('module');
 const appRoot = process.cwd();
 const requireFromApp = createRequire(path.join(appRoot, 'package.json'));
 
-const { chromium } = requireFromApp('playwright');
+const { chromium, devices } = requireFromApp('playwright');
 const AxeBuilder = requireFromApp('@axe-core/playwright').default;
 
 // Parse command line arguments
@@ -168,6 +168,14 @@ function getPageUrls(pageResources) {
     return urls;
 }
 
+function sanitizeForFilename(value) {
+    return value
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        || 'page';
+    }
+
 async function waitForEvent(page, eventName, contextLabel, timeout = 30000, baselineCount = null, targetCount = null) {
     return waitForMonitorEvent(page, eventName, {
         contextLabel,
@@ -274,6 +282,18 @@ async function waitForInitialPage(page, options, timeout = 30000) {
  * Test a single page for accessibility
  */
 async function testPage(page, pageInfo, options) {
+    const screenshotParts = [
+        pageInfo.locale,
+        pageInfo.pageId || pageInfo.route,
+        pageInfo.sectionId,
+    ].filter(Boolean).map((part) => sanitizeForFilename(String(part)));
+    const screenshotBase = screenshotParts.length > 0
+        ? screenshotParts.join('__')
+        : sanitizeForFilename(pageInfo.route || 'page');
+    const screenshotPath = path.join(options.screenshotDir, `${screenshotBase}.png`);
+    const screenshotRelativePath = path.relative(options.outputDir, screenshotPath).replace(/\\/g, '/');
+    let screenshotCaptured = false;
+
     try {
         await waitForMainView(page);
         await navigateToRoute(page, pageInfo.route);
@@ -288,11 +308,21 @@ async function testPage(page, pageInfo, options) {
         // Brief pause to allow any animations to settle
         await page.waitForTimeout(500);
 
+        try {
+            await page.screenshot({
+                path: screenshotPath,
+                fullPage: true,
+            });
+            screenshotCaptured = true;
+        } catch (screenshotError) {
+            console.log(`  ⚠️  Screenshot capture failed: ${screenshotError.message}`);
+        }
+
         // Run axe accessibility tests
         const results = await new AxeBuilder({ page })
             .analyze();
 
-        return {
+        const successResult = {
             ...pageInfo,
             url: `${options.baseUrl}#${pageInfo.route}`,
             violations: results.violations,
@@ -301,13 +331,33 @@ async function testPage(page, pageInfo, options) {
             inapplicable: results.inapplicable.length,
             timestamp: new Date().toISOString(),
         };
+        if (screenshotCaptured) {
+            successResult.screenshot = screenshotRelativePath;
+        }
+        return successResult;
     } catch (error) {
-        return {
+        if (!screenshotCaptured) {
+            try {
+                await page.screenshot({
+                    path: screenshotPath,
+                    fullPage: true,
+                });
+                screenshotCaptured = true;
+            } catch (screenshotError) {
+                console.log(`  ⚠️  Screenshot capture failed after error: ${screenshotError.message}`);
+            }
+        }
+
+        const errorResult = {
             ...pageInfo,
             url: `${options.baseUrl}#${pageInfo.route}`,
             error: error.message,
             timestamp: new Date().toISOString(),
         };
+        if (screenshotCaptured) {
+            errorResult.screenshot = screenshotRelativePath;
+        }
+        return errorResult;
     }
 }
 
@@ -360,6 +410,8 @@ function generateHtmlReport(results, outputPath) {
     .impact-minor { background: #17a2b8; color: white; }
     .violation-nodes { margin-top: 10px; font-family: monospace; font-size: 12px; }
     .violation-node { background: #f8f9fa; padding: 8px; margin: 5px 0; border-radius: 3px; }
+        .page-screenshot { margin: 20px 0; }
+        .page-screenshot img { width: 100%; max-width: 320px; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
     pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
   </style>
 </head>
@@ -412,6 +464,13 @@ function generateHtmlReport(results, outputPath) {
           <p>${result.error}</p>
         </div>
       ` : ''}
+      
+            ${result.screenshot ? `
+                <div class="page-screenshot">
+                    <strong>Screenshot:</strong><br>
+                    <img src="${result.screenshot}" alt="Screenshot of ${result.title}">
+                </div>
+            ` : ''}
       
       ${!result.error && result.violations?.length === 0 ? `
         <p style="color: #28a745; font-weight: bold;">✅ No accessibility violations found!</p>
@@ -491,6 +550,12 @@ async function runTests() {
         fs.mkdirSync(options.outputDir, { recursive: true });
     }
 
+    const screenshotDir = path.join(options.outputDir, 'screenshots');
+    options.screenshotDir = screenshotDir;
+    if (!fs.existsSync(screenshotDir)) {
+        fs.mkdirSync(screenshotDir, { recursive: true });
+    }
+
     // Extract page data from build
     console.log('📦 Extracting page data from build...');
     const pageResources = extractPageResources();
@@ -507,7 +572,11 @@ async function runTests() {
     const browser = await chromium.launch({
         headless: options.headless,
     });
-    const context = await browser.newContext();
+    const mobileDevice = devices['iPhone 12'];
+    const context = await browser.newContext({
+        ...(mobileDevice || {}),
+        viewport: (mobileDevice && mobileDevice.viewport) || { width: 390, height: 844 },
+    });
     const page = await context.newPage();
 
     page.on('console', (msg) => {
