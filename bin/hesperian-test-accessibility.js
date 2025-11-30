@@ -703,7 +703,7 @@ function generateHtmlReport(results, outputPath) {
     .error { border-left-color: #dc3545; }
     .warning { border-left-color: #ffc107; }
     .success { border-left-color: #28a745; }
-    .page-result { margin: 20px 0; padding: 20px; background: white; border: 1px solid #ddd; border-radius: 4px; }
+    .page-result { margin: 20px 0; padding: 20px; background: white; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; }
     .page-result.has-violations { border-left: 4px solid #dc3545; }
     .page-result.has-error { border-left: 4px solid #ffc107; }
     .page-result.clean { border-left: 4px solid #28a745; }
@@ -721,8 +721,8 @@ function generateHtmlReport(results, outputPath) {
     .impact-minor { background: #17a2b8; color: white; }
     .violation-nodes { margin-top: 10px; font-family: monospace; font-size: 12px; }
     .violation-node { background: #f8f9fa; padding: 8px; margin: 5px 0; border-radius: 3px; }
-        .page-screenshot { margin: 20px 0; }
-        .page-screenshot img { width: 100%; max-width: 320px; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .page-screenshot { float: left; margin: 0 20px 20px 0; max-width: 320px; }
+        .page-screenshot img { width: 100%; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
     pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
   </style>
 </head>
