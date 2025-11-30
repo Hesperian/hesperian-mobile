@@ -76,7 +76,7 @@ const appHtml = `
 <main id="app">
     <div class="statusbar"></div>
 
-    <div class="panel panel-left panel-reveal theme-light">
+    <div class="panel panel-left panel-reveal theme-light panel-init">
     <div class="view">
         <div class="page">
         <nav id="sidelinks" class="page-content" data-aria-label="landmarks.mainmenu"></nav>
@@ -84,7 +84,7 @@ const appHtml = `
     </div>
     </div>
 
-    <div class="panel panel-right panel-reveal theme-light">
+    <div class="panel panel-right panel-reveal theme-light panel-init">
     <div class="view">
         <div class="page">
         <nav id="settings" class="page-content"  data-aria-label="landmarks.settings"></nav>
