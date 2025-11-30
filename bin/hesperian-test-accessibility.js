@@ -33,6 +33,7 @@ const options = {
     distDir: path.join(appRoot, 'dist'),
     outputDir: path.join(appRoot, 'build', 'reports', 'accessibility'),
     headless: true,
+    tourMode: false,
 };
 
 args.forEach(arg => {
@@ -43,13 +44,38 @@ args.forEach(arg => {
         if (key === 'locale') options.locale = value;
         if (key === 'pages') options.pages = value.split(',').map(p => p.trim());
         if (key === 'headless') options.headless = value !== 'false';
+        if (key === 'tour') options.tourMode = value !== 'false';
     }
 });
+
+function ensureLaunchUrl(baseUrl, tourEnabled) {
+    const desiredValue = tourEnabled ? 'true' : 'false';
+
+    if (!baseUrl) {
+        return `http://localhost:8080?tour=${desiredValue}`;
+    }
+
+    try {
+        const parsed = new URL(baseUrl);
+        parsed.searchParams.set('tour', desiredValue);
+        return parsed.toString();
+    } catch (_err) {
+        // Fallback for non-URL strings
+        if (baseUrl.includes('tour=')) {
+            return baseUrl.replace(/tour=[^&#]*/g, `tour=${desiredValue}`);
+        }
+        const separator = baseUrl.includes('?') ? '&' : '?';
+        return `${baseUrl}${separator}tour=${desiredValue}`;
+    }
+}
+
+options.launchUrl = ensureLaunchUrl(options.baseUrl, options.tourMode);
 
 console.log('🔧 Configuration:');
 console.log(`  Locale: ${options.locale === 'all' ? 'All locales' : options.locale}`);
 console.log(`  Pages: ${options.pages ? options.pages.join(', ') : 'All pages'}`);
 console.log(`  Base URL: ${options.baseUrl}`);
+console.log(`  Tour mode: ${options.tourMode ? 'enabled' : 'disabled'}`);
 console.log('');
 
 // Browser-side event tracking monitor injected before the app boots.
@@ -269,13 +295,290 @@ async function waitForInitialPage(page, options, timeout = 30000) {
     const appInitBaseline = await getMonitorEventCount(page, 'appInit');
     const initialPageBaseline = await getMonitorEventCount(page, 'page:afterin');
 
-    await page.goto(`${options.baseUrl}?tour=false`, {
+    await page.goto(options.launchUrl, {
         waitUntil: 'domcontentloaded',
         timeout,
     });
 
     await waitForAppInit(page, 'initial app load', timeout, appInitBaseline);
     await waitForEvent(page, 'page:afterin', 'initial page load', timeout, initialPageBaseline);
+}
+
+async function analyzeCurrentState(page, title, identifier, options) {
+    const screenshotBase = sanitizeForFilename(identifier || title || 'tour-step');
+    const screenshotPath = path.join(options.screenshotDir, `${screenshotBase}.png`);
+    const screenshotRelativePath = path.relative(options.outputDir, screenshotPath).replace(/\\/g, '/');
+    let screenshotCaptured = false;
+
+    try {
+        await page.waitForTimeout(300);
+        await page.screenshot({
+            path: screenshotPath,
+            fullPage: true,
+        });
+        screenshotCaptured = true;
+    } catch (screenshotError) {
+        console.log(`  ⚠️  Screenshot capture failed: ${screenshotError.message}`);
+    }
+
+    let axeResults;
+    try {
+        axeResults = await new AxeBuilder({ page }).analyze();
+    } catch (error) {
+        const errorResult = {
+            locale: options.locale,
+            pageId: identifier || title,
+            route: 'tour',
+            title,
+            url: options.launchUrl,
+            error: error.message,
+            timestamp: new Date().toISOString(),
+        };
+
+        if (screenshotCaptured) {
+            errorResult.screenshot = screenshotRelativePath;
+        }
+
+        return errorResult;
+    }
+
+    const result = {
+        locale: options.locale,
+        pageId: identifier || title,
+        route: 'tour',
+        title,
+        url: options.launchUrl,
+        violations: axeResults.violations,
+        passes: axeResults.passes.length,
+        incomplete: axeResults.incomplete,
+        inapplicable: axeResults.inapplicable.length,
+        timestamp: new Date().toISOString(),
+    };
+
+    if (screenshotCaptured) {
+        result.screenshot = screenshotRelativePath;
+    }
+
+    return result;
+}
+
+async function advanceTourStep(page, previousStepId) {
+    return page.evaluate(async ({ previousStepId }) => {
+        const tour = window.__hesperianIntroTour;
+
+        if (!tour) {
+            return { status: 'missing' };
+        }
+
+        const currentId = tour.currentStep && tour.currentStep.id ? tour.currentStep.id : null;
+        if (currentId && previousStepId && currentId !== previousStepId) {
+            return { status: 'advanced', currentId };
+        }
+
+        return new Promise((resolve) => {
+            let resolved = false;
+
+            const finalize = (payload) => {
+                if (resolved) {
+                    return;
+                }
+                resolved = true;
+                cleanup();
+                resolve(payload);
+            };
+
+            const cleanup = () => {
+                if (typeof tour.off === 'function') {
+                    tour.off('show', onShow);
+                    tour.off('complete', onComplete);
+                    tour.off('cancel', onCancel);
+                }
+            };
+
+            const onShow = () => {
+                const activeId = tour.currentStep && tour.currentStep.id ? tour.currentStep.id : null;
+                finalize({ status: 'advanced', currentId: activeId });
+            };
+
+            const onComplete = () => finalize({ status: 'finished' });
+            const onCancel = () => finalize({ status: 'finished' });
+
+            if (typeof tour.on === 'function') {
+                tour.on('show', onShow);
+                tour.on('complete', onComplete);
+                tour.on('cancel', onCancel);
+            }
+
+            const attemptAdvance = () => {
+                try {
+                    const result = tour.next();
+                    if (result && typeof result.then === 'function') {
+                        result.catch((error) => {
+                            finalize({
+                                status: 'error',
+                                message: error && error.message ? error.message : String(error),
+                            });
+                        });
+                    }
+                } catch (error) {
+                    finalize({
+                        status: 'error',
+                        message: error && error.message ? error.message : String(error),
+                    });
+                    return;
+                }
+
+                setTimeout(() => {
+                    if (resolved) {
+                        return;
+                    }
+
+                    const nextId = tour.currentStep && tour.currentStep.id ? tour.currentStep.id : null;
+                    if (nextId && nextId !== previousStepId) {
+                        finalize({ status: 'advanced', currentId: nextId });
+                        return;
+                    }
+
+                    if (typeof tour.isActive === 'function' && !tour.isActive()) {
+                        finalize({ status: 'finished' });
+                        return;
+                    }
+
+                    finalize({ status: 'stalled', currentId: nextId });
+                }, 1500);
+            };
+
+            attemptAdvance();
+        });
+    }, { previousStepId });
+}
+
+async function runTourFlow(page, options) {
+    const results = [];
+    const seenSteps = new Set();
+
+    const languageDialogSelector = '.hm-choose-language';
+    const chooseLanguageVisible = await page.locator(languageDialogSelector).isVisible();
+    if (chooseLanguageVisible) {
+        console.log('  🗣️  Found choose language dialog');
+        results.push(await analyzeCurrentState(page, 'Tour: Choose Language Dialog', 'tour-choose-language', options));
+
+        const languageNextButton = page.locator(`${languageDialogSelector} .dialog-button`).first();
+        if ((await languageNextButton.count()) === 0) {
+            throw new Error('Choose language dialog next button not found');
+        }
+        await languageNextButton.click();
+        await page.waitForSelector(languageDialogSelector, { state: 'detached', timeout: 5000 }).catch(() => {});
+    }
+
+    const maxSteps = 20;
+    const stepSelector = '.shepherd-element[data-shepherd-step-id]:not([aria-hidden="true"])';
+    const noStepSentinel = '__NO_VISIBLE_SHEPHERD_STEP__';
+    for (let stepIndex = 1; stepIndex <= maxSteps; stepIndex++) {
+        try {
+            await page.waitForFunction((selector) => {
+                return Boolean(document.querySelector(selector));
+            }, stepSelector, {
+                timeout: 20000,
+            });
+        } catch (_err) {
+            console.log('  ✅ Tour finished (no more steps)');
+            break;
+        }
+
+        let stepHandle = page.locator(stepSelector).first();
+
+        let stepId = await stepHandle.evaluate((el) =>
+            el.getAttribute('data-shepherd-step-id') || ''
+        );
+        let identifier = stepId ? `tour-step-${stepId}` : `tour-step-${stepIndex}`;
+        let title = stepId ? `Tour Step ${stepIndex}: ${stepId}` : `Tour Step ${stepIndex}`;
+
+        if (stepId && seenSteps.has(stepId)) {
+            let nextId;
+            try {
+                nextId = await page.waitForFunction((selector, previousId, sentinel) => {
+                    const el = document.querySelector(selector);
+                    if (!el) {
+                        return sentinel;
+                    }
+                    const currentId = el.getAttribute('data-shepherd-step-id') || '';
+                    if (!currentId || currentId === previousId) {
+                        return false;
+                    }
+                    return currentId;
+                }, stepSelector, stepId, noStepSentinel, {
+                    timeout: 5000,
+                });
+            } catch (_err) {
+                nextId = null;
+            }
+
+            if (nextId === noStepSentinel) {
+                console.log('  ✅ Tour finished (no more steps)');
+                break;
+            }
+
+            if (!nextId || nextId === stepId || seenSteps.has(nextId)) {
+                console.log(`  🔁 Encountered previously seen step ${stepId}, stopping to avoid loop`);
+                break;
+            }
+
+            await page.waitForSelector(`${stepSelector}[data-shepherd-step-id="${nextId}"]`, {
+                timeout: 5000,
+            }).catch(() => {});
+
+            const replacementHandle = page.locator(`${stepSelector}[data-shepherd-step-id="${nextId}"]`).first();
+            if (await replacementHandle.count() > 0) {
+                stepHandle = replacementHandle;
+                stepId = nextId;
+                identifier = `tour-step-${stepId}`;
+                title = `Tour Step ${stepIndex}: ${stepId}`;
+            }
+        }
+
+        if (stepId && seenSteps.has(stepId)) {
+            console.log(`  🔁 Encountered previously seen step ${stepId}, stopping to avoid loop`);
+            break;
+        }
+        if (stepId) {
+            seenSteps.add(stepId);
+        }
+
+        results.push(await analyzeCurrentState(page, title, identifier, options));
+
+        const advanceOutcome = await advanceTourStep(page, stepId);
+
+        if (advanceOutcome?.status === 'advanced') {
+            await page.waitForTimeout(200);
+            continue;
+        }
+
+        if (advanceOutcome?.status === 'finished') {
+            console.log('  ✅ Tour finished');
+            break;
+        }
+
+        if (advanceOutcome?.status === 'missing') {
+            console.log('  ⚠️  Tour instance not available on window, stopping progression');
+            break;
+        }
+
+        if (advanceOutcome?.status === 'stalled') {
+            console.log(`  ⚠️  Tour stalled on ${advanceOutcome.currentId || 'unknown'}, stopping progression`);
+            break;
+        }
+
+        if (advanceOutcome?.status === 'error') {
+            console.log(`  ⚠️  Error advancing tour: ${advanceOutcome.message || 'unknown error'}`);
+            break;
+        }
+
+        console.log('  ⚠️  Unexpected tour advance state, stopping progression');
+        break;
+    }
+
+    return results;
 }
 
 /**
@@ -324,7 +627,7 @@ async function testPage(page, pageInfo, options) {
 
         const successResult = {
             ...pageInfo,
-            url: `${options.baseUrl}#${pageInfo.route}`,
+            url: `${options.launchUrl}#${pageInfo.route}`,
             violations: results.violations,
             passes: results.passes.length,
             incomplete: results.incomplete,
@@ -350,7 +653,7 @@ async function testPage(page, pageInfo, options) {
 
         const errorResult = {
             ...pageInfo,
-            url: `${options.baseUrl}#${pageInfo.route}`,
+            url: `${options.launchUrl}#${pageInfo.route}`,
             error: error.message,
             timestamp: new Date().toISOString(),
         };
@@ -370,8 +673,16 @@ function generateHtmlReport(results, outputPath) {
     const pagesWithViolations = results.filter(r => r.violations?.length > 0).length;
     const pagesWithErrors = results.filter(r => r.error).length;
 
-    const localeLabel = options.locale === 'all' ? 'All locales' : options.locale;
-    const pagesLabel = options.pages ? `${options.pages.length} selected page(s)` : 'All pages';
+    const localeLabel = options.tourMode
+        ? 'Tour sequence'
+        : options.locale === 'all'
+            ? 'All locales'
+            : options.locale;
+    const pagesLabel = options.tourMode
+        ? 'Tour steps'
+        : options.pages
+            ? `${options.pages.length} selected page(s)`
+            : 'All pages';
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -556,15 +867,19 @@ async function runTests() {
         fs.mkdirSync(screenshotDir, { recursive: true });
     }
 
-    // Extract page data from build
-    console.log('📦 Extracting page data from build...');
-    const pageResources = extractPageResources();
-    const pageUrls = getPageUrls(pageResources);
-    console.log(`✅ Found ${pageUrls.length} pages to test\n`);
+    let pageUrls = [];
+    if (!options.tourMode) {
+        console.log('📦 Extracting page data from build...');
+        const pageResources = extractPageResources();
+        pageUrls = getPageUrls(pageResources);
+        console.log(`✅ Found ${pageUrls.length} pages to test\n`);
 
-    if (pageUrls.length === 0) {
-        console.error('No pages found to test!');
-        process.exit(1);
+        if (pageUrls.length === 0) {
+            console.error('No pages found to test!');
+            process.exit(1);
+        }
+    } else {
+        console.log('🚶 Tour testing mode enabled — skipping page enumeration\n');
     }
 
     // Launch browser
@@ -597,24 +912,30 @@ async function runTests() {
     await waitForInitialPage(page, options);
 
     // Run tests
-    const results = [];
-    let testCount = 0;
+    let results = [];
+    if (options.tourMode) {
+        console.log('🧭 Running tour sequence...');
+        results = await runTourFlow(page, options);
+    } else {
+        results = [];
+        let testCount = 0;
 
-    for (let i = 0; i < pageUrls.length; i++) {
-        const pageInfo = pageUrls[i];
-        testCount++;
-        const progress = `[${testCount}/${pageUrls.length}]`;
-        console.log(`${progress} Testing: ${pageInfo.title} (${pageInfo.locale})`);
+        for (let i = 0; i < pageUrls.length; i++) {
+            const pageInfo = pageUrls[i];
+            testCount++;
+            const progress = `[${testCount}/${pageUrls.length}]`;
+            console.log(`${progress} Testing: ${pageInfo.title} (${pageInfo.locale})`);
 
-        const result = await testPage(page, pageInfo, options);
-        results.push(result);
+            const result = await testPage(page, pageInfo, options);
+            results.push(result);
 
-        if (result.error) {
-            console.log(`  ❌ Error: ${result.error}`);
-        } else if (result.violations.length > 0) {
-            console.log(`  ⚠️  ${result.violations.length} violation(s) found`);
-        } else {
-            console.log(`  ✅ No violations`);
+            if (result.error) {
+                console.log(`  ❌ Error: ${result.error}`);
+            } else if (result.violations.length > 0) {
+                console.log(`  ⚠️  ${result.violations.length} violation(s) found`);
+            } else {
+                console.log(`  ✅ No violations`);
+            }
         }
     }
 
