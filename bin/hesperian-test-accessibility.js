@@ -269,7 +269,7 @@ async function waitForInitialPage(page, options, timeout = 30000) {
     const appInitBaseline = await getMonitorEventCount(page, 'appInit');
     const initialPageBaseline = await getMonitorEventCount(page, 'page:afterin');
 
-    await page.goto(options.baseUrl, {
+    await page.goto(`${options.baseUrl}?tour=false`, {
         waitUntil: 'domcontentloaded',
         timeout,
     });
