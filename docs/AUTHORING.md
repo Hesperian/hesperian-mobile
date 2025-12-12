@@ -42,6 +42,47 @@ And responsive array of buttons - links with image and caption. Structure:
 </div>
 ```
 
+### Instruction Lists
+
+Instruction cards share a common structure so the accordion styles in `www/css/styles.scss` can lay out the content consistently. Use the pattern below when authoring new instruction blocks (for example, on G pages that describe pill regimens):
+
+```html
+<div class="instructions-heading">Instructions</div>
+<ol class="step-card-steps">
+    <li class="step-card-step">
+        <div class="card step-card">
+            <div class="step-card-image-wrapper">
+                <img class="step-card-image" src="..." alt="...">
+            </div>
+            <div class="card-header">
+                <span class="step-card-title">Step 1</span>
+            </div>
+            <div class="card-content card-content-padding">
+                <div class="step-card-body">
+                    <div class="step-card-text">
+                        <p>Step description text.</p>
+                    </div>
+                    <div class="step-card-important">
+                        <p><strong>Important:</strong></p>
+                        <ul class="step-card-list">
+                            <li>Supporting detail or warning.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ol>
+```
+
+Key points:
+
+- Wrap the entire sequence in `<ol class="step-card-steps">` so the outer list controls spacing and numbering.
+- Each step lives in `<li class="step-card-step">` and wraps a `.card.step-card` element.
+- Optional media or illustrations live inside `.step-card-image-wrapper` with an `.step-card-image` `<img>`.
+- Use `.step-card-important` for Important/Note callouts; place bullet lists inside `.step-card-list`, and numbered sub-steps inside `.step-card-list.step-list`.
+- Keep headings in `.instructions-heading` directly before the ordered list so the styling applies.
+
 
 ## Special Pages
 

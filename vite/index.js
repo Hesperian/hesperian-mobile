@@ -102,6 +102,11 @@ function copyStaticAssetsPlugin(targets, outDir) {
   return {
     name: "hesperian-copy-static-assets",
     apply: "build",
+    buildStart() {
+      for (const target of targets) {
+        this.addWatchFile(target.src);
+      }
+    },
     async writeBundle() {
       for (const target of targets) {
         const destRoot = path.resolve(outDir, target.dest);
