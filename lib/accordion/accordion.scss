@@ -18,7 +18,7 @@
   @include hairline;
 }
 
-#app .accordion-item-opened > .accordion-item-content {
+#app .accordion-item-opened>.accordion-item-content {
   padding-bottom: 20px;
   padding-top: 12px;
 }
@@ -28,11 +28,13 @@
     color: $accordion-item-content-color;
     font-weight: bold;
   }
+
   .item-title {
     color: $accordion-item-content-color;
     font-weight: bold;
     font-size: 110%;
   }
+
   .item-media img {
     max-height: 2em;
   }
@@ -58,6 +60,157 @@
 
     .item-title {
       color: black;
+    }
+  }
+}
+
+#app .sources-link {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#app .pink-accordion {
+  --f7-accordion-chevron-icon-down: 'arrowtriangle_down_fill';
+  --f7-accordion-chevron-icon-up: 'arrowtriangle_up_fill';
+  --f7-list-chevron-icon-color: #D6508A;
+  --step-card-heading-color: #a31e98;
+  --step-card-note-background-color: #F3E9F3;
+
+  .accordion-item {
+    .item-content {
+      background-color: transparent;
+      margin-bottom: 1px;
+
+      .item-title {
+        color: var(--f7-list-chevron-icon-color);
+      }
+
+      .item-inner::before {
+        font-family: "Framework7 Icons";
+      }
+
+      &::after {
+        background-color: var(--f7-list-chevron-icon-color);
+      }
+    }
+  }
+
+  .accordion-item-opened {
+    .item-content {
+      opacity: 0.9;
+      margin-bottom: inherit;
+    }
+  }
+
+  .instructions-heading {
+    display: inline-block;
+    margin: 12px 0 4px;
+    padding: 4px 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: var(--step-card-heading-color);
+    color: white;
+    border-radius: 10px;
+  }
+
+  .step-card-steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .step-card-step {
+      margin-bottom: 12px;
+    }
+  }
+
+  .step-card {
+    border: 2px solid var(--f7-list-chevron-icon-color);
+    border-radius: 14px;
+    margin: 0;
+    background-color: #fff;
+    overflow: hidden;
+
+    p {
+      margin: 0;
+    }
+
+    .step-card-image-wrapper {
+      float: right;
+      padding: 16px;
+    }
+
+    .card-header {
+      color: var(--step-card-heading-color);
+      font-weight: bold;
+      font-size: 150%;
+      text-transform: uppercase;
+      padding-bottom: 0;
+    }
+
+    .step-card-body {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .step-card-media {
+      flex: 0 0 120px;
+      text-align: center;
+    }
+
+    .step-card-image {
+      max-width: 120px;
+      width: 100%;
+      height: auto;
+    }
+
+    .step-card-subheading {
+      margin-top: 18px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: var(--f7-list-chevron-icon-color);
+    }
+
+    .step-card-list {
+      margin: 0 0 0 1.2em;
+      padding: 0;
+      list-style-position: outside;
+    }
+
+    .step-card-important,
+    .step-card-note {
+      margin-top: 18px;
+      clear: both;
+
+      p {
+        margin: 0 0 8px;
+
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .step-card-note {
+      background-color: var(--step-card-note-background-color);
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .step-list {
+      margin: 0 0 0 1.2em;
+      padding: 0;
+      list-style: decimal;
+      list-style-position: outside;
+    }
+
+    .image-row {
+      margin-top: 16px;
+      margin-bottom: 16px;
+      gap: 12px;
     }
   }
 }
