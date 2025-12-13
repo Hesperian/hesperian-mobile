@@ -254,6 +254,10 @@ i.app-gear {
 
 /* Custom list styles */
 
+.list > ul > li:first-child {
+  border-top: 1px solid var(--f7-list-border-color, #c6c6c6);
+}
+
 #app {
   ul.bullet-list {
     list-style-type: disc;
