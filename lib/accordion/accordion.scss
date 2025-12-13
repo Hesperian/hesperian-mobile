@@ -75,6 +75,7 @@
   --f7-list-chevron-icon-color: #D6508A;
   --step-card-heading-color: #a31e98;
   --step-card-note-background-color: #F3E9F3;
+  --step-card-important-background-color: #DF8444;
 
   .accordion-item {
     .item-content {
@@ -105,13 +106,13 @@
   .instructions-heading {
     display: inline-block;
     margin: 12px 0 4px;
-    padding: 4px 8px;
+    padding: 4px 24px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     background-color: var(--step-card-heading-color);
     color: white;
-    border-radius: 10px;
+    border-radius: 50rem;
   }
 
   .step-card-steps {
@@ -142,7 +143,7 @@
 
     .card-header {
       color: var(--step-card-heading-color);
-      font-weight: bold;
+      font-weight: 900;
       font-size: 150%;
       text-transform: uppercase;
       padding-bottom: 0;
@@ -192,6 +193,11 @@
       p:last-child {
         margin-bottom: 0;
       }
+
+      .important-title {
+        color: var(--step-card-important-background-color);
+        text-transform: uppercase;
+      }
     }
 
     .step-card-note {
@@ -205,6 +211,9 @@
       padding: 0;
       list-style: decimal;
       list-style-position: outside;
+      li::marker {
+        font-weight: bold;
+      }
     }
 
     .image-row {
