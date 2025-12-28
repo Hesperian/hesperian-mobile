@@ -55,6 +55,9 @@ dist: bundle $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 
+cordova-build-android:
+	@(cd ${BUILDDIR}; cordova build android --device --release --verbose -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
+
 cordova-build: dist
 	@(cd ${BUILDDIR}; fnm use v22.3.0; cordova build --device --release --verbose -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
 
