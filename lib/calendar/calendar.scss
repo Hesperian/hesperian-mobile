@@ -4,6 +4,32 @@
   display: none;
 }
 
+// Visually hidden class for screen readers only
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Accessible status region styling
+.date-selection-status {
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #333;
+  
+  &:empty {
+    padding: 0;
+    margin: 0;
+  }
+}
+
 #app .gestcalc-results .chooser-display {
   display: none;
 }

@@ -1,9 +1,29 @@
+@use "./f7.scss" as *;
 @use "./theme.scss" as *;
 @use "./navbar.scss";
 @use "./buttons.scss";
 @use "./captions.scss";
 @use "./navigation.scss";
 @use "./util.scss" as *;
+
+/* Global focus styles for keyboard accessibility debugging */
+*:focus {
+  outline: 3px solid #ff7606 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 5px rgba(255, 118, 6, 0.3) !important;
+}
+
+/* Enhanced focus for keyboard-only (not mouse) - modern browsers */
+*:focus:not(:focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+*:focus-visible {
+  outline: 3px solid #ff7606 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 5px rgba(255, 118, 6, 0.3) !important;
+}
 
 html.md body,
 html.ios body {
