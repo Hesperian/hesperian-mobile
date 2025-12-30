@@ -13,7 +13,7 @@
   box-shadow: 0 0 0 5px rgba(255, 118, 6, 0.3) !important;
 }
 
-/* Enhanced focus for keyboard-only (not mouse) - modern browsers */
+/* Enhanced focus for keyboard-only (not mouse) - modern browsers
 *:focus:not(:focus-visible) {
   outline: none !important;
   box-shadow: none !important;
@@ -25,14 +25,14 @@
   box-shadow: 0 0 0 5px rgba(255, 118, 6, 0.3) !important;
 }
 
-/* Fix for Framework7 list items where overflow:hidden cuts off the outline */
+   */
+
+
+/* Fix for Framework7 list items where overflow:hidden cuts off the outline 
 .item-link:focus, .item-link:focus-visible {
   outline: none !important;
-  .item-inner {
-    box-shadow: 0 0 0 3px var(--hm-focus-color) !important;
-    border-color: var(--hm-focus-color) !important;
-  }
 }
+*/
 
 html.md body,
 html.ios body {
