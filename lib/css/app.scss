@@ -7,32 +7,11 @@
 @use "./util.scss" as *;
 
 /* Global focus styles for keyboard accessibility debugging */
-.item-input-focused, .input-focused, *:focus {
+.item-input-focused:focus-visible, .input-focused, *:focus-visible {
   outline: 3px solid var(--hm-focus-color) !important;
   outline-offset: 2px !important;
-  box-shadow: 0 0 0 5px rgba(255, 118, 6, 0.3) !important;
 }
 
-/* Enhanced focus for keyboard-only (not mouse) - modern browsers
-*:focus:not(:focus-visible) {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-*:focus-visible {
-  outline: 3px solid var(--hm-focus-color) !important;
-  outline-offset: 2px !important;
-  box-shadow: 0 0 0 5px rgba(255, 118, 6, 0.3) !important;
-}
-
-   */
-
-
-/* Fix for Framework7 list items where overflow:hidden cuts off the outline 
-.item-link:focus, .item-link:focus-visible {
-  outline: none !important;
-}
-*/
 
 html.md body,
 html.ios body {
