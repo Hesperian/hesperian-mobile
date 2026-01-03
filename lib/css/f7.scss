@@ -1,0 +1,17 @@
+/*
+    Framework7 customizations
+*/
+
+// accessible chevron icons for lists
+.list .item-link .item-inner:before,
+.links-list a:before,
+.media-list .item-link .item-title-row:before,
+li.media-item .item-link .item-title-row:before,
+.media-list.chevron-center .item-link .item-inner:before,
+.media-list .chevron-center .item-link .item-inner:before,
+.media-list .item-link.chevron-center .item-inner:before,
+li.media-item.chevron-center .item-link .item-inner:before,
+li.media-item .chevron-center .item-link .item-inner:before,
+li.media-item .item-link.chevron-center .item-inner:before {
+    content: var(--f7-list-chevron-icon-right) / "";
+}
