@@ -10,7 +10,7 @@ Hesperian Mobile applications are html/javascript applications packaged as mobil
 
 #### Custom Events
 
-Cusom attributes must be configured in Firebase Analytics "Custom Definitions"
+Custom attributes must be configured in Firebase Analytics "Custom Definitions"
 
 Common attributes for all events:
 * `locale` - current language
