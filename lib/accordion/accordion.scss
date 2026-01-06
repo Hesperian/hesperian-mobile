@@ -93,6 +93,10 @@
   }
 
   .accordion-item-opened {
+    &::after {
+      background-color: var(--f7-list-chevron-icon-color);
+    }
+
     .item-content {
       opacity: 0.9;
       margin-bottom: inherit;
