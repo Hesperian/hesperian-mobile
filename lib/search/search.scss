@@ -24,6 +24,63 @@ md .searchbar .input-clear-button:after {
   --f7-searchbar-search-icon-color: white; 
 }
 
+// Global navbar searchbar - pill-shaped white input
+.navbar .subnavbar .searchbar {
+  flex-grow: 1;
+  
+  .searchbar-inner {
+    padding: var(--hm-searchbar-inset, 3px) 8px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .searchbar-input-wrap {
+    background-color: var(--hm-searchbar-input-background, white);
+    border-radius: 20px;
+    padding: 4px 16px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: calc(100% - 2 * var(--hm-searchbar-inset, 3px));
+    
+    input[type="search"] {
+      color: var(--hm-searchbar-input-text-color, black);
+      background: transparent;
+      line-height: 24px;
+      height: 24px;
+      order: 2;
+      flex: 1;
+      
+      &::placeholder {
+        color: var(--hm-searchbar-input-text-color, black);
+      }
+    }
+    
+    .searchbar-icon,
+    .input-clear-button {
+      position: static;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      
+      &:after {
+        color: var(--hm-searchbar-input-text-color, black);
+        line-height: 24px;
+      }
+    }
+    
+    .searchbar-icon {
+      margin-right: 8px;
+      order: 1;
+    }
+    
+    .input-clear-button {
+      margin-left: 8px;
+      order: 3;
+    }
+  }
+}
+
 .inline-icons {
   .f7-icons {
     font-size: 24px;
