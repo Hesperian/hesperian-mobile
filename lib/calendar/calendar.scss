@@ -50,7 +50,7 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
 
 #app .calendar-date-select-container {
   margin-bottom: 16px;
-  overflow: hidden;
+  overflow: visible;
   max-width: 30em;
 
   .calendar-date-select {
@@ -64,6 +64,18 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
 
   .calendar-button {
     flex-grow: 1;
+
+    // Focus styles for Month and Day selector buttons
+    .select-month,
+    .select-day {
+      &:focus,
+      &:focus-visible {
+        .item-inner {
+          outline: 3px solid var(--hm-focus-color, #fd298f) !important;
+          outline-offset: 2px;
+        }
+      }
+    }
 
     .item-inner {
       display: flex;
@@ -91,6 +103,28 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
     &.date-choice-go-container {
       flex-grow: 0;
       margin: auto;
+
+      // Focus styles for Go button
+      .date-choice-go {
+        &:focus,
+        &:focus-visible {
+          .item-content {
+            outline: 3px solid var(--hm-focus-color, #fd298f) !important;
+            outline-offset: 2px;
+          }
+        }
+
+        // Disabled state should not show focus outline
+        &.disabled,
+        &[aria-disabled="true"] {
+          &:focus,
+          &:focus-visible {
+            .item-content {
+              outline: none !important;
+            }
+          }
+        }
+      }
 
       .item-content {
         border-radius: 15px;
