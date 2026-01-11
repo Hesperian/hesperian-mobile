@@ -29,9 +29,14 @@ md .searchbar .input-clear-button:after {
   flex-grow: 1;
   
   .searchbar-inner {
-    padding: var(--hm-searchbar-inset, 3px) 8px;
+    padding: var(--hm-searchbar-inset, 3px) 20%;
     display: flex;
     align-items: center;
+    transition: padding 0.3s ease;
+  }
+  
+  &.searchbar-focused .searchbar-inner {
+    padding: var(--hm-searchbar-inset, 3px) 8px;
   }
   
   .searchbar-input-wrap {
@@ -50,9 +55,11 @@ md .searchbar .input-clear-button:after {
       height: 24px;
       order: 2;
       flex: 1;
+      text-align: left;
       
       &::placeholder {
         color: var(--hm-searchbar-input-text-color, black);
+        text-align: center;
       }
     }
     
@@ -62,6 +69,10 @@ md .searchbar .input-clear-button:after {
       width: 24px;
       height: 24px;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0;
       
       &:after {
         color: var(--hm-searchbar-input-text-color, black);
