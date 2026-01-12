@@ -13,16 +13,23 @@ $page-horizontal-margin: 11px;
 :root {
   --hm-top-safe-area-color: black;
   --f7-dialog-bg-color: white;
-  --hm-focus-color: #fd298f;
+
+}
+
+$navbar-background: #e42581;
+$navbar-background-hex: e42581;
+
+
+// hm- variables
+#app {
+  --hm-focus-color: #{$navbar-background};
   --hm-searchbar-input-background: white;
   --hm-searchbar-input-text-color: black;
   --hm-searchbar-inset: 3px;
 }
 
-$navbar-background: #fd298f;
-$navbar-background-hex: fd298f;
-$subnavbar-background: #ff7606;
-$subnavbar-background-hex: ff7606;
+$subnavbar-background: #e66905;
+$subnavbar-background-hex: e66905;
 $navbar-textcolor: white;
 $page-background: #fafafa;
 $panel-background: #fafafa;
@@ -42,7 +49,7 @@ $favorite-icon-outline-color: $heading-border-color;
 $favorite-list-background-color: white;
 $tile-background: white;
 $tile-border-style: solid;
-$tile-border-color: #ff7606;
+$tile-border-color: $subnavbar-background;
 $tile-border-width: thin;
 $tile-image-background: transparent;
 $tile-text-color: $inline-link-text-color;

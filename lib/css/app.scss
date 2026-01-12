@@ -415,7 +415,7 @@ $howto-padding: 8px;
   height: auto;
   width: inherit;
   height: fit-content;
-  color: #ff7606;
+  color: $subnavbar-background;
   background-color: transparent;
   border: 1px solid gainsboro;
   border-radius: 10px;
@@ -425,7 +425,7 @@ $howto-padding: 8px;
 }
 
 .choose-language:disabled {
-  background-color: #ff7606;
+  background-color: $subnavbar-background;
   color: white;
 
   pointer-events: none;
