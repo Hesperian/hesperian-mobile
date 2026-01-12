@@ -29,7 +29,7 @@ md .searchbar .input-clear-button:after {
   flex-grow: 1;
   
   .searchbar-inner {
-    padding: var(--hm-searchbar-inset, 3px) 20%;
+    padding: var(--hm-searchbar-inset, 3px) 10%;
     display: flex;
     align-items: center;
     transition: padding 0.3s ease;
@@ -55,12 +55,22 @@ md .searchbar .input-clear-button:after {
       height: 24px;
       order: 2;
       flex: 1;
-      text-align: left;
+      text-align: start;
+      // Reset F7 padding - we handle icon positioning with flexbox order
+      padding-inline-start: 0;
+      // Add padding-end to balance the search icon (24px + 8px margin) for centered placeholder
+      // Use smaller value to avoid clipping text on narrow screens
+      padding-inline-end: 16px;
+      
+      &:focus {
+        padding-inline-end: 0;
+      }
       
       &::placeholder {
         color: var(--hm-searchbar-input-text-color, black);
         text-align: center;
       }
+   
     }
     
     .searchbar-icon,
