@@ -28,6 +28,7 @@ help:
 	@echo "Common make targets:"
 	@echo "\tmake watch\t\t vite watch build in the dist directory"
 	@echo "\tmake build\t\t full cordova release build created in ./output"
+	@echo "\tmake ios-sync\t\t sync bundle to iOS for manual Xcode builds"
 	@echo "\tmake extract_apk\t extract universal APK from AAB for emulator testing"
 	@echo "\tmake test-a11y\t\t run accessibility tests (English locale)"
 	@echo "\tmake test-a11y-all\t run accessibility tests (all locales)"
@@ -84,6 +85,19 @@ extract_apk:
 
 .PHONY: build
 build: app site
+
+# Sync bundle to iOS platform for manual Xcode builds
+# Preserves cordova.js and plugin files in platforms/ios/www
+.PHONY: ios-sync
+ios-sync: bundle
+	rm -rf ${BUILDDIR}/www
+	cp -R dist ${BUILDDIR}/www
+	rsync -av --delete \
+		--exclude='cordova.js' \
+		--exclude='cordova_plugins.js' \
+		--exclude='plugins/' \
+		dist/ ${BUILDDIR}/platforms/ios/www/
+	@echo "✅ iOS www synced. Open ${BUILDDIR}/platforms/ios/*.xcworkspace in Xcode to build."
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
 	(cd ${BUILDDIR}; rm -rf resources-tmp; ${MAKE_CONFIG} ../app-config.json)
