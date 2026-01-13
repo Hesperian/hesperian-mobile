@@ -62,6 +62,15 @@
 
   // Focus style for Hesperian logo link
   a:has(.hesperian-logo-image) {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    padding-bottom: 4px;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+
     &:focus,
     &:focus-visible {
       outline: 3px solid var(--hm-focus-color, white) !important;
@@ -70,8 +79,9 @@
   }
 }
 
-.navbar .title>img {
+.navbar .title .hesperian-logo-image {
   height: 45px;
+  align-self: center;
 }
 
 /* Disable f7 horizontal rules */
