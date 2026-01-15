@@ -48,16 +48,24 @@ args.forEach(arg => {
     }
 });
 
-function ensureLaunchUrl(baseUrl, tourEnabled) {
+function ensureLaunchUrl(baseUrl, tourEnabled, locale) {
     const desiredValue = tourEnabled ? 'true' : 'false';
 
     if (!baseUrl) {
-        return `http://localhost:8080?tour=${desiredValue}`;
+        let url = `http://localhost:8080?tour=${desiredValue}`;
+        if (!tourEnabled && locale) {
+            url += `&lang=${locale}`;
+        }
+        return url;
     }
 
     try {
         const parsed = new URL(baseUrl);
         parsed.searchParams.set('tour', desiredValue);
+        // When tour is disabled, also set the lang param to skip language chooser
+        if (!tourEnabled && locale) {
+            parsed.searchParams.set('lang', locale);
+        }
         return parsed.toString();
     } catch (_err) {
         // Fallback for non-URL strings
@@ -69,7 +77,7 @@ function ensureLaunchUrl(baseUrl, tourEnabled) {
     }
 }
 
-options.launchUrl = ensureLaunchUrl(options.baseUrl, options.tourMode);
+options.launchUrl = ensureLaunchUrl(options.baseUrl, options.tourMode, options.locale);
 
 console.log('🔧 Configuration:');
 console.log(`  Locale: ${options.locale === 'all' ? 'All locales' : options.locale}`);
