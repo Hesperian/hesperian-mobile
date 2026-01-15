@@ -13,6 +13,18 @@
   --f7-navbar-bg-color: #{$navbar-background};
 }
 
+// Fix for toolbar at bottom of DOM (after page-content) for accessibility
+// Framework7's .toolbar-bottom ~ * selector only works when toolbar precedes siblings
+// Use :has() to set the offset when page contains a bottom toolbar
+.page:has(.toolbar-bottom-md.app-toolbar) {
+  --f7-page-toolbar-bottom-offset: var(--f7-toolbar-height);
+}
+
+// Also handle safe-area-inset-bottom for the toolbar itself when at bottom
+.toolbar-bottom-md.app-toolbar {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 #app .toolbar {
   .button {
     border: none;
