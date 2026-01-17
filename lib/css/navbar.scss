@@ -35,7 +35,7 @@
 #app .navbar {
   color: $navbar-textcolor;
   border: 0px;
-  --hm-focus-color: white;
+  --hm-focus-color: #{$subnavbar-background};
 }
 
 #app .navbar a,
@@ -45,13 +45,24 @@
   padding-right: 16px;
 }
 
-#app .navbar .subnavbar,
-.navbar .searchbar {
-  background-color: $subnavbar-background;
-  border-color: $subnavbar-background;
+#app .navbar .subnavbar {
+  border-bottom: 2px solid $subnavbar-background;
+
+  a {
+    color: $navbar-textcolor;
+  }
 }
 
-.back > i {
+#app .navbar .subnavbar,
+.navbar .searchbar {
+  background-color: white;
+
+  .searchbar-input-wrap {
+    border: 2px solid $subnavbar-background;
+  }
+}
+
+.back>i {
   font-weight: bolder;
 }
 
@@ -150,12 +161,10 @@ $navbar-icon-edge-spacing: 8px;
   color: white;
 }
 
-/* Navbar dropdown icons with white circular background */
+/* Navbar dropdown icons */
 .navbar .top-left-menu .icon,
 .navbar .top-right-menu .icon {
-  background-color: white;
-  color: $navbar-background;
-  border-radius: 50%;
+  background-color: $navbar-background;
   width: 36px;
   height: 36px;
   min-width: 36px;
@@ -164,7 +173,7 @@ $navbar-icon-edge-spacing: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 32px;
   font-weight: bold;
 }
 

@@ -1,6 +1,6 @@
 @use "../css/theme.scss" as *;
 
-$seachbar-icon-color: ffffff;
+$seachbar-icon-color: $subnavbar-background-hex;
 $seachbar-icon-color-preview: 000000;
 $searchbar-icon: url("data:image/svg+xml;charset=utf-8,%3Csvg%20fill%3D'%23#{$seachbar-icon-color}'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%20width%3D'24'%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%3E%3Cpath%20d%3D'M15.5%2014h-.79l-.28-.27C15.41%2012.59%2016%2011.11%2016%209.5%2016%205.91%2013.09%203%209.5%203S3%205.91%203%209.5%205.91%2016%209.5%2016c1.61%200%203.09-.59%204.23-1.57l.27.28v.79l5%204.99L20.49%2019l-4.99-5zm-6%200C7.01%2014%205%2011.99%205%209.5S7.01%205%209.5%205%2014%207.01%2014%209.5%2011.99%2014%209.5%2014z'%2F%3E%3Cpath%20d%3D'M0%200h24v24H0z'%20fill%3D'none'%2F%3E%3C%2Fsvg%3E");
 $input-clear-button: url("data:image/svg+xml;charset=utf-8,%3Csvg%20fill%3D'%23#{$seachbar-icon-color}'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%20width%3D'24'%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%3E%3Cpath%20d%3D'M19%206.41L17.59%205%2012%2010.59%206.41%205%205%206.41%2010.59%2012%205%2017.59%206.41%2019%2012%2013.41%2017.59%2019%2019%2017.59%2013.41%2012z'%2F%3E%3Cpath%20d%3D'M0%200h24v24H0z'%20fill%3D'none'%2F%3E%3C%2Fsvg%3E");
@@ -19,13 +19,13 @@ md .searchbar .input-clear-button:after {
   --f7-searchbar-input-border-radius: 0;
   --f7-searchbar-input-border-width: 0;
   --f7-searchbar-bg-color: transparent;
-  --f7-searchbar-inner-padding-left: 0; 
+  --f7-searchbar-inner-padding-left: 0;
   --f7-searchbar-inner-padding-right: 0;
-  --f7-searchbar-search-icon-color: white; 
+  --f7-searchbar-search-icon-color: white;
 }
 
 // Global navbar searchbar - pill-shaped white input
-.navbar .subnavbar .searchbar {
+#app .navbar .subnavbar .searchbar {
   flex-grow: 1;
   
   .searchbar-inner {
@@ -34,11 +34,11 @@ md .searchbar .input-clear-button:after {
     align-items: center;
     transition: padding 0.3s ease;
   }
-  
+
   &.searchbar-focused .searchbar-inner {
     padding: var(--hm-searchbar-inset, 3px) 8px;
   }
-  
+
   .searchbar-input-wrap {
     background-color: var(--hm-searchbar-input-background, white);
     border-radius: 20px;
@@ -61,18 +61,18 @@ md .searchbar .input-clear-button:after {
       // Add padding-end to balance the search icon (24px + 8px margin) for centered placeholder
       // Use smaller value to avoid clipping text on narrow screens
       padding-inline-end: 16px;
-      
+
       &:focus {
         padding-inline-end: 0;
       }
-      
+
       &::placeholder {
         color: var(--hm-searchbar-input-text-color, black);
         text-align: center;
       }
-   
+
     }
-    
+
     .searchbar-icon,
     .input-clear-button {
       position: static;
@@ -83,18 +83,18 @@ md .searchbar .input-clear-button:after {
       align-items: center;
       justify-content: center;
       margin-top: 0;
-      
+
       &:after {
-        color: var(--hm-searchbar-input-text-color, black);
+        color: $subnavbar-background;
         line-height: 24px;
       }
     }
-    
+
     .searchbar-icon {
       margin-right: 8px;
       order: 1;
     }
-    
+
     .input-clear-button {
       margin-left: 8px;
       order: 3;
@@ -109,7 +109,7 @@ md .searchbar .input-clear-button:after {
 }
 
 #app .searchbar .input-clear-button:after {
-    content: "delete_md";
+  content: "delete_md";
 }
 
 #app .searchbar input[type="search"]::placeholder {
@@ -140,7 +140,7 @@ md .searchbar .input-clear-button:after {
   display: none;
 }
 
-#app.local-search-enabled .searchbar .search-disable-button  {
+#app.local-search-enabled .searchbar .search-disable-button {
   display: inherit;
 }
 

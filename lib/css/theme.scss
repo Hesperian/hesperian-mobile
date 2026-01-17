@@ -28,9 +28,9 @@ $navbar-background-hex: e42581;
   --hm-searchbar-inset: 3px;
 }
 
-$subnavbar-background: #e66905;
-$subnavbar-background-hex: e66905;
-$navbar-textcolor: white;
+$subnavbar-background: #be5804;
+$subnavbar-background-hex: be5804;
+$navbar-textcolor: $subnavbar-background;
 $page-background: #fafafa;
 $panel-background: #fafafa;
 $heading-background-color: $page-background;
@@ -64,7 +64,7 @@ $toggle-yes-secondary: #d4f9d4;
 $toggle-no-primary: #ececec;
 $toggle-no-secondary: #d3d3d3;
 
-$tool-internal-header-background-color: #d5562b;
+$tool-internal-header-background-color: $subnavbar-background;
 $tool-internal-header-color: white;
 $tool-internal-header-contrast-color: black;
 
