@@ -10,15 +10,36 @@ $page-navigaton-height: 56px + 48px;
 $page-horizontal-margin: 11px;
 
 // Colors
-:root {
-  --hm-top-safe-area-color: black;
-  --f7-dialog-bg-color: white;
-
-}
 
 $navbar-background: #e42581;
 $navbar-background-hex: e42581;
+$subnavbar-background: #be5804;
+$subnavbar-background-hex: be5804;
+$page-background: #fafafa;
+$panel-background: #fafafa;
+$content-block-text-color: #36363b;
+$inline-link-text-color: #138f9b;
+$list-divider-color: rgba(0, 0, 0, 0.25);
+$favorite-icon-color: #ffed10;
+$heading-text-color: black;
+$button-link-text-color: white;
+$favorite-list-background-color: white;
+$tile-background: white;
+$toggle-yes-primary: #00b202;
+$toggle-no-primary: #ececec;
+$toggle-yes-secondary: #d4f9d4;
+$toggle-no-secondary: #d3d3d3;
+$tool-internal-header-color: white;
+$tool-internal-header-contrast-color: black;
+$subheading-background-color: lightgray;
+$caption-color: #138f9b;
+$accordion-active-background-color: #f5f5f5;
 
+
+:root {
+  --hm-top-safe-area-color: black;
+  --f7-dialog-bg-color: white;
+}
 
 // hm- variables
 #app {
@@ -28,26 +49,16 @@ $navbar-background-hex: e42581;
   --hm-searchbar-inset: 3px;
 }
 
-$subnavbar-background: #be5804;
-$subnavbar-background-hex: be5804;
+// Derived colors and other variables
 $navbar-textcolor: $subnavbar-background;
-$page-background: #fafafa;
-$panel-background: #fafafa;
+
 $heading-background-color: $page-background;
 $heading-border-color: $navbar-background;
-$heading-text-color: black;
-$content-block-text-color: #36363b;
-$inline-link-text-color: #138f9b;
 $accordion-item-content-color: $inline-link-text-color;
 $link-border-color: $inline-link-text-color;
 $button-link-background-color: $link-border-color;
-$button-link-text-color: white;
-$list-divider-color: rgba(0, 0, 0, 0.25);
-
-$favorite-icon-color: #ffed10;
 $favorite-icon-outline-color: $heading-border-color;
-$favorite-list-background-color: white;
-$tile-background: white;
+
 $tile-border-style: solid;
 $tile-border-color: $subnavbar-background;
 $tile-border-width: thin;
@@ -59,25 +70,7 @@ $font-size-normal: 100%;
 $font-size-medium: 121%;
 $font-size-large: 171%;
 
-$toggle-yes-primary: #00b202;
-$toggle-yes-secondary: #d4f9d4;
-$toggle-no-primary: #ececec;
-$toggle-no-secondary: #d3d3d3;
-
 $tool-internal-header-background-color: $subnavbar-background;
-$tool-internal-header-color: white;
-$tool-internal-header-contrast-color: black;
-
-$subheading-background-color: lightgray;
-
-$toggle-yes-primary: #00b202;
-$toggle-yes-secondary: #d4f9d4;
-$toggle-no-primary: #ececec;
-$toggle-no-secondary: #d3d3d3;
-
-$caption-color: #138f9b;
-
-$accordion-active-background-color: #f5f5f5;
 
 %f7-icon {
   font-family: "Framework7 Icons";
