@@ -71,8 +71,9 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
       &:focus,
       &:focus-visible {
         .item-inner {
-          outline: 3px solid var(--hm-focus-color, #fd298f) !important;
-          outline-offset: 2px;
+          outline: 2px solid var(--hm-focus-color-secondary) !important;
+          outline-offset: 0 !important;
+          box-shadow: 0 0 0 4px var(--hm-focus-color) !important;
         }
       }
     }
@@ -109,8 +110,9 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
         &:focus,
         &:focus-visible {
           .item-content {
-            outline: 3px solid var(--hm-focus-color, #fd298f) !important;
-            outline-offset: 2px;
+            outline: 2px solid var(--hm-focus-color-secondary) !important;
+            outline-offset: 0 !important;
+            box-shadow: 0 0 0 4px var(--hm-focus-color) !important;
           }
         }
 
@@ -121,6 +123,7 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
           &:focus-visible {
             .item-content {
               outline: none !important;
+              box-shadow: none !important;
             }
           }
         }

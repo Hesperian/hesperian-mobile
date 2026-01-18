@@ -35,7 +35,6 @@
 #app .navbar {
   color: $navbar-textcolor;
   border: 0px;
-  --hm-focus-color: white;
 }
 
 #app .navbar a,
@@ -96,8 +95,9 @@
 
     &:focus,
     &:focus-visible {
-      outline: 3px solid var(--hm-focus-color, white) !important;
-      outline-offset: 2px;
+      outline: 2px solid var(--hm-focus-color-secondary) !important;
+      outline-offset: 0 !important;
+      box-shadow: 0 0 0 4px var(--hm-focus-color) !important;
     }
   }
 }

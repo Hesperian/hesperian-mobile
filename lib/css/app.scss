@@ -6,17 +6,20 @@
 @use "./navigation.scss";
 @use "./util.scss" as *;
 
-/* Global focus styles for keyboard accessibility debugging */
+/* Global focus styles using two-color technique (WCAG C40)
+   Two contrasting colors ensure visibility on any background */
 .item-input-focused:focus-visible, .input-focused, *:focus-visible {
-  outline: 3px solid var(--hm-focus-color) !important;
-  outline-offset: 2px !important;
+  outline: 2px solid var(--hm-focus-color-secondary) !important;
+  outline-offset: 0 !important;
+  box-shadow: 0 0 0 4px var(--hm-focus-color) !important;
 }
 
 /* Focus style for checkboxes - the input is hidden, so target the visible icon */
 .toggle input[type="checkbox"]:focus-visible + .toggle-icon,
 .checkbox input[type="checkbox"]:focus-visible + .icon-checkbox {
-  outline: 3px solid var(--hm-focus-color) !important;
-  outline-offset: 2px !important;
+  outline: 2px solid var(--hm-focus-color-secondary) !important;
+  outline-offset: 0 !important;
+  box-shadow: 0 0 0 4px var(--hm-focus-color) !important;
 }
 
 
