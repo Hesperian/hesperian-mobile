@@ -155,6 +155,12 @@ $navbar-icon-edge-spacing: 8px;
   padding-right: 0px;
 }
 
+// Add margin to back button in secondary navbar for focus indicator visibility
+.secondary-navbar>.back-button {
+  margin-left: $navbar-icon-edge-spacing;
+  margin-right: $navbar-icon-edge-spacing;
+}
+
 /* Navbar Back and Menu buttons */
 .navbar-f7-icons {
   font-weight: bold;
