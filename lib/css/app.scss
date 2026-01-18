@@ -12,6 +12,13 @@
   outline-offset: 2px !important;
 }
 
+/* Focus style for checkboxes - the input is hidden, so target the visible icon */
+.toggle input[type="checkbox"]:focus-visible + .toggle-icon,
+.checkbox input[type="checkbox"]:focus-visible + .icon-checkbox {
+  outline: 3px solid var(--hm-focus-color) !important;
+  outline-offset: 2px !important;
+}
+
 
 html.md body,
 html.ios body {
