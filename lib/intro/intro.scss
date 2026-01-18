@@ -30,6 +30,19 @@ body.shepherd-enabled #app>.sheet-backdrop {
     padding-top: 0;
   }
 
+  // Position checkbox at bottom left of dialog
+  // It's in .shepherd-text for tab order but positioned absolutely
+  .shepherd-content {
+    position: relative;
+    padding-bottom: 40px; // Make room for absolutely positioned checkbox
+  }
+
+  .shepherd-text .dontaskcontainer {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+  }
+
   .shepherd-footer {
     padding-bottom: 4px;
   }
@@ -58,7 +71,21 @@ body.shepherd-enabled #app>.sheet-backdrop {
       padding-right: 8px;
     }
 
-    margin: 0 10px 10px 10px;
+    // Override F7's display:none with accessible hiding so checkbox is focusable
+    .checkbox {
+      position: relative;
+
+      input[type='checkbox'] {
+        display: block;
+        position: absolute;
+        opacity: 0;
+        width: var(--f7-checkbox-size, 22px);
+        height: var(--f7-checkbox-size, 22px);
+        margin: 0;
+        z-index: 1;
+        cursor: pointer;
+      }
+    }
   }
 }
 
