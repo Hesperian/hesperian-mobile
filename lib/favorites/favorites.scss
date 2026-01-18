@@ -24,9 +24,6 @@
   justify-content: flex-end;
 }
 
-.checkbox-favorites:focus {
-  outline: 0;
-}
 
 .page[data-page="toc"] .checkbox-favorites {
   display: flex;
@@ -42,7 +39,24 @@
 
 .checkbox-favorites {
   input {
-    display: none !important;
+    // Visually hidden but still focusable for keyboard users
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  // Focus styles for when hidden input receives focus
+  input:focus-visible + label {
+    outline: 2px solid var(--hm-focus-color-secondary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px var(--hm-focus-color);
+    border-radius: 4px;
   }
 
   .checked {
