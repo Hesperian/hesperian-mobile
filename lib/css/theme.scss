@@ -43,7 +43,7 @@ $accordion-active-background-color: #f5f5f5;
 }
 
 // hm- variables
-#app {
+:root {
   --hm-focus-color: #{$navbar-background};
   --hm-searchbar-input-background: white;
   --hm-searchbar-input-text-color: black;
