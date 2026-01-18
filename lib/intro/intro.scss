@@ -1,6 +1,6 @@
 @use "../css/theme.scss" as *;
 
-body.shepherd-enabled #app > .sheet-backdrop {
+body.shepherd-enabled #app>.sheet-backdrop {
   opacity: 0;
 }
 
@@ -8,6 +8,7 @@ body.shepherd-enabled #app > .sheet-backdrop {
   0% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -21,6 +22,7 @@ body.shepherd-enabled #app > .sheet-backdrop {
     .shepherd-cancel-icon {
       font-size: 1.5em;
     }
+
     padding-top: 5px;
   }
 
@@ -40,6 +42,7 @@ body.shepherd-enabled #app > .sheet-backdrop {
     background-color: $button-link-background-color;
     border-radius: 10%;
     color: $button-link-text-color;
+
     &.shepherd-button-secondary {
       color: $inline-link-text-color;
       border: 1px solid $inline-link-text-color;
@@ -50,9 +53,11 @@ body.shepherd-enabled #app > .sheet-backdrop {
   .dontaskcontainer {
     display: flex;
     align-items: center;
+
     label {
       padding-right: 8px;
     }
+
     margin: 0 10px 10px 10px;
   }
 }
@@ -62,48 +67,93 @@ body.shepherd-enabled #app > .sheet-backdrop {
   max-width: fit-content;
   right: 0;
   left: unset;
+
   .dialog-inner {
     padding: 0;
   }
+
   .dialog-title {
     background-color: $navbar-background;
     color: $navbar-textcolor;
     padding: 10px;
   }
+
   .dialog-buttons {
     justify-content: flex-start;
+    display: block;
     margin-top: 10px;
     margin-bottom: 5px;
-    .dialog-button {
-      text-transform: inherit;
-      background-color: $button-link-background-color;
-      color: $button-link-text-color;
-      i {
-        padding-left: 10px;
-      }
+
+    .language-dialog-button  {
+      color: $inline-link-text-color
     }
   }
 
   .languageslist {
     margin: 0;
     margin-top: 12px;
-    li {
-      height: inherit;
-      line-height: inherit;
-      font-size: 120%;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      color: $subnavbar-background;
-    }
-    li.current {
-      font-weight: bold;
-      text-decoration: underline;
-      color: black;
-    }
-    li::after {
-      left: 0px;
+
+    ul {
+      padding-inline-start: 18px;
+
+      li {
+        height: inherit;
+        line-height: inherit;
+        font-size: 120%;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        color: $subnavbar-background;
+        // Remove list-style for clarity
+        list-style: none;
+        // Remove default padding for list
+        padding-left: 0;
+
+        // Button reset styles
+        button.language-btn {
+          background: none;
+          border: none;
+          outline: none;
+          box-shadow: none;
+          color: inherit;
+          font: inherit;
+          font-size: inherit;
+          padding: 0;
+          margin: 0;
+          cursor: pointer;
+          text-align: left;
+          width: 100%;
+
+          // Remove focus outline
+          &:focus {
+            outline: none;
+            box-shadow: none;
+          }
+
+          // Disabled state for current
+          &:disabled {
+            cursor: default;
+          }
+        }
+      }
+
+      li.current {
+        font-weight: bold;
+        text-decoration: underline;
+        color: black;
+
+        button.language-btn {
+          font-weight: bold;
+          text-decoration: underline;
+          color: black;
+        }
+      }
+
+      li::after {
+        left: 0px;
+      }
     }
   }
+
   .choose-language {
     display: block;
   }
