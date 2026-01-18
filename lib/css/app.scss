@@ -32,12 +32,6 @@ html.ios body {
   background: #000000;
 }
 
-html.device-android {
-  .back-button {
-    display: none;
-  }
-}
-
 $breakpoint-small-large: 390px;
 
 // width < breakpoint
