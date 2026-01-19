@@ -134,7 +134,7 @@ cordova-install: $(CORDOVA_CONFIG) bundle
 
 .PHONY: link
 link:
-	@cd ./node_modules/hesperian-mobile && npm link
+	@cd ../hesperian-mobile && npm link
 	@npm link hesperian-mobile
 
 .PHONY: example-libsync
