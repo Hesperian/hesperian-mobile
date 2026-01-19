@@ -17,8 +17,12 @@ $page-horizontal-margin: 11px;
 
 // Colors
 
+// Theme base colors
 $theme-content-background: #fdfdfd;
+$theme-active-content-background: #f5f5f5;
 $theme-dark-header-background: #a31e98;
+
+// Specific colors
 
 $navbar-background: #de1878;
 $navbar-background-hex: color-to-hex($navbar-background);
@@ -40,7 +44,7 @@ $toggle-no-secondary: #d3d3d3;
 $tool-internal-header-color: white;
 $tool-internal-header-contrast-color: black;
 $subheading-background-color: lightgray;
-$accordion-active-background-color: #f5f5f5;
+$accordion-active-background-color: $theme-active-content-background;
 
 
 :root {
