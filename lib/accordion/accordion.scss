@@ -67,10 +67,10 @@
 #app .pink-accordion {
   --f7-accordion-chevron-icon-down: 'arrowtriangle_down_fill';
   --f7-accordion-chevron-icon-up: 'arrowtriangle_up_fill';
-  --f7-list-chevron-icon-color: #D6508A;
-  --step-card-heading-color: #a31e98;
-  --step-card-note-background-color: #F3E9F3;
-  --step-card-important-background-color: #DF8444;
+  --f7-list-chevron-icon-color: #{$navbar-background};
+  --step-card-heading-color: #{$theme-dark-header-background};
+  --step-card-note-background-color: #{$theme-content-background};
+  --step-card-important-background-color: #{$subnavbar-background};
   --f7-list-border-color: var(--f7-list-chevron-icon-color);
   
   .accordion-item {
