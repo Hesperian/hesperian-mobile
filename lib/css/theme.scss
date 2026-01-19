@@ -3,6 +3,12 @@
  *  theme variables
  */
 
+@use "sass:string";
+
+// Utility function to extract hex value without # prefix (for use in SVG data URIs)
+@function color-to-hex($color) {
+  @return string.slice(#{$color}, 2);
+}
 
 // Layout constants
 
@@ -12,9 +18,9 @@ $page-horizontal-margin: 11px;
 // Colors
 
 $navbar-background: #de1878;
-$navbar-background-hex: de1878;
+$navbar-background-hex: color-to-hex($navbar-background);
 $subnavbar-background: #d8400e;
-$subnavbar-background-hex: d8400e;
+$subnavbar-background-hex: color-to-hex($subnavbar-background);
 $page-background: #fafafa;
 $panel-background: #fafafa;
 $content-block-text-color: #36363b;
