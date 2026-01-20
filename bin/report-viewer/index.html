@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Test Report</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1>Accessibility Test Report</h1>
+
+  <div id="loading" class="loading">Loading accessibility results...</div>
+
+  <div id="error" class="error-message" style="display: none;"></div>
+
+  <div id="report-content" style="display: none;">
+    <div id="test-config" class="test-config"></div>
+
+    <div class="summary">
+      <div class="summary-grid">
+        <div class="summary-item" id="summary-total">
+          <h3>Total Pages Tested</h3>
+          <div class="value">-</div>
+        </div>
+        <div class="summary-item" id="summary-violations">
+          <h3>Total Violations</h3>
+          <div class="value">-</div>
+        </div>
+        <div class="summary-item" id="summary-pages-violations">
+          <h3>Pages with Violations</h3>
+          <div class="value">-</div>
+        </div>
+        <div class="summary-item" id="summary-errors">
+          <h3>Pages with Errors</h3>
+          <div class="value">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="results-container"></div>
+  </div>
+
+  <footer id="report-footer" style="display: none;">
+    Generated using axe-core
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
