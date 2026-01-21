@@ -21,6 +21,194 @@
     }
 
     /**
+     * Get CSS class for role badge based on role type
+     */
+    function getRoleBadgeClass(role) {
+        const interactiveRoles = [
+            'button', 'link', 'textbox', 'checkbox', 'radio', 'combobox',
+            'listbox', 'menu', 'menuitem', 'menuitemcheckbox', 'menuitemradio',
+            'option', 'slider', 'spinbutton', 'switch', 'tab', 'searchbox',
+            'scrollbar', 'progressbar'
+        ];
+        const landmarkRoles = [
+            'navigation', 'main', 'banner', 'contentinfo', 'complementary',
+            'region', 'search', 'form', 'application'
+        ];
+        const structureRoles = [
+            'heading', 'list', 'listitem', 'table', 'row', 'cell', 'rowheader',
+            'columnheader', 'grid', 'gridcell', 'treegrid', 'tree', 'treeitem',
+            'article', 'document', 'group', 'img', 'figure', 'separator',
+            'toolbar', 'tablist', 'tabpanel', 'definition', 'term', 'directory'
+        ];
+
+        const lowerRole = role.toLowerCase();
+        if (interactiveRoles.includes(lowerRole)) return 'role-interactive';
+        if (landmarkRoles.includes(lowerRole)) return 'role-landmark';
+        if (structureRoles.includes(lowerRole)) return 'role-structure';
+        return 'role-generic';
+    }
+
+    /**
+     * Render property badges for a node
+     */
+    function renderNodeProperties(node) {
+        const props = [];
+
+        // Boolean properties
+        const boolProps = ['disabled', 'focused', 'focusable', 'expanded', 'selected', 'required', 'readonly', 'checked', 'pressed'];
+        for (const prop of boolProps) {
+            if (node[prop] === true) {
+                props.push(`<span class="a11y-prop prop-${prop}">${prop}</span>`);
+            }
+        }
+
+        // Value properties
+        if (node.level !== undefined) {
+            props.push(`<span class="a11y-prop prop-level">level: ${escapeHtml(String(node.level))}</span>`);
+        }
+        if (node.value !== undefined && node.value !== '') {
+            const displayValue = String(node.value).length > 30
+                ? String(node.value).substring(0, 30) + '...'
+                : String(node.value);
+            props.push(`<span class="a11y-prop prop-value">value: ${escapeHtml(displayValue)}</span>`);
+        }
+        if (node.haspopup) {
+            props.push(`<span class="a11y-prop prop-haspopup">haspopup: ${escapeHtml(String(node.haspopup))}</span>`);
+        }
+
+        return props.length > 0 ? `<span class="a11y-props">${props.join('')}</span>` : '';
+    }
+
+    /**
+     * Render a single accessibility tree node recursively
+     */
+    function renderA11yNode(node, depth = 0) {
+        const hasChildren = node.children && node.children.length > 0;
+        const roleClass = getRoleBadgeClass(node.role);
+        const toggleClass = hasChildren ? '' : 'empty';
+
+        // Truncate name to 100 chars
+        let displayName = '';
+        if (node.name) {
+            displayName = node.name.length > 100
+                ? node.name.substring(0, 100) + '...'
+                : node.name;
+        }
+
+        const propsHtml = renderNodeProperties(node);
+
+        let childrenHtml = '';
+        if (hasChildren) {
+            const childNodes = node.children.map(child => renderA11yNode(child, depth + 1)).join('');
+            // Start expanded by default (no 'collapsed' class)
+            childrenHtml = `<div class="a11y-node-children">${childNodes}</div>`;
+        }
+
+        return `
+            <div class="a11y-node">
+                <div class="a11y-node-header" onclick="window.toggleA11yNode(this)">
+                    <span class="a11y-node-toggle ${toggleClass}">${hasChildren ? '&#9660;' : ''}</span>
+                    <span class="a11y-role ${roleClass}">${escapeHtml(node.role)}</span>
+                    ${displayName ? `<span class="a11y-node-name">${escapeHtml(displayName)}</span>` : ''}
+                    ${propsHtml}
+                </div>
+                ${childrenHtml}
+            </div>
+        `;
+    }
+
+    /**
+     * Render the full accessibility tree section
+     */
+    function renderAccessibilityTree(tree, pageId) {
+        if (!tree) {
+            return '';
+        }
+
+        const treeId = `a11y-tree-${pageId}`;
+        const treeHtml = renderA11yNode(tree);
+
+        return `
+            <div class="a11y-tree-section">
+                <div class="a11y-tree-header" onclick="window.toggleTreeSection('${treeId}')">
+                    <h4>Accessibility Tree</h4>
+                    <span class="a11y-tree-toggle" id="${treeId}-toggle">Click to expand</span>
+                </div>
+                <div class="a11y-tree-container collapsed" id="${treeId}">
+                    <div class="a11y-tree-controls">
+                        <button onclick="event.stopPropagation(); window.expandAllNodes('${treeId}')">Expand All</button>
+                        <button onclick="event.stopPropagation(); window.collapseAllNodes('${treeId}')">Collapse All</button>
+                    </div>
+                    ${treeHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Toggle a single accessibility tree node
+     */
+    window.toggleA11yNode = function(headerElement) {
+        const nodeEl = headerElement.parentElement;
+        const childrenEl = nodeEl.querySelector(':scope > .a11y-node-children');
+        const toggleEl = headerElement.querySelector('.a11y-node-toggle');
+
+        if (childrenEl) {
+            const isCollapsed = childrenEl.classList.contains('collapsed');
+            childrenEl.classList.toggle('collapsed');
+            toggleEl.innerHTML = isCollapsed ? '&#9660;' : '&#9654;';
+        }
+    };
+
+    /**
+     * Toggle the entire tree section visibility
+     */
+    window.toggleTreeSection = function(treeId) {
+        const container = document.getElementById(treeId);
+        const toggleText = document.getElementById(treeId + '-toggle');
+
+        if (container) {
+            const isCollapsed = container.classList.contains('collapsed');
+            container.classList.toggle('collapsed');
+            toggleText.textContent = isCollapsed ? 'Click to collapse' : 'Click to expand';
+        }
+    };
+
+    /**
+     * Expand all nodes in a tree
+     */
+    window.expandAllNodes = function(treeId) {
+        const container = document.getElementById(treeId);
+        if (container) {
+            container.querySelectorAll('.a11y-node-children').forEach(el => {
+                el.classList.remove('collapsed');
+            });
+            container.querySelectorAll('.a11y-node-toggle').forEach(el => {
+                if (!el.classList.contains('empty')) {
+                    el.innerHTML = '&#9660;';
+                }
+            });
+        }
+    };
+
+    /**
+     * Collapse all nodes in a tree
+     */
+    window.collapseAllNodes = function(treeId) {
+        const container = document.getElementById(treeId);
+        if (container) {
+            container.querySelectorAll('.a11y-node-children').forEach(el => {
+                el.classList.add('collapsed');
+            });
+            container.querySelectorAll('.a11y-node-toggle').forEach(el => {
+                if (!el.classList.contains('empty')) {
+                    el.innerHTML = '&#9654;';
+                }
+            });
+        }
+    };
+
+    /**
      * Calculate summary statistics from results
      */
     function calculateSummary(results) {
@@ -130,6 +318,12 @@
         const hasError = !!result.error;
         const cssClass = hasError ? 'has-error' : hasViolations ? 'has-violations' : 'clean';
 
+        // Create a safe page ID for the accessibility tree section
+        const safePageId = (result.locale + '-' + (result.pageId || result.route || 'page'))
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+
         let errorHtml = '';
         if (result.error) {
             errorHtml = `
@@ -163,6 +357,9 @@
             violationsHtml = result.violations.map(renderViolation).join('');
         }
 
+        // Render accessibility tree section
+        const accessibilityTreeHtml = renderAccessibilityTree(result.accessibilityTree, safePageId);
+
         return `
             <div class="page-result ${cssClass}">
                 <h2 class="page-title">${escapeHtml(result.title)}</h2>
@@ -175,6 +372,7 @@
                 ${screenshotHtml}
                 ${successHtml}
                 ${violationsHtml}
+                ${accessibilityTreeHtml}
             </div>
         `;
     }

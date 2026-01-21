@@ -308,6 +308,92 @@ async function waitForInitialPage(page, options, timeout = 30000) {
 }
 
 /**
+ * Extract accessibility tree using Chrome DevTools Protocol
+ * This is the non-deprecated way to get the accessibility tree
+ */
+async function getAccessibilityTree(page) {
+    const cdpSession = await page.context().newCDPSession(page);
+    try {
+        const { nodes } = await cdpSession.send('Accessibility.getFullAXTree');
+
+        // Build a map of nodeId -> node for quick lookup
+        const nodeMap = new Map();
+        for (const node of nodes) {
+            nodeMap.set(node.nodeId, node);
+        }
+
+        // Convert CDP node to our simplified tree format
+        function convertNode(cdpNode) {
+            const result = {
+                role: cdpNode.role?.value || 'unknown',
+            };
+
+            // Add name if present
+            if (cdpNode.name?.value) {
+                result.name = cdpNode.name.value;
+            }
+
+            // Add description if present
+            if (cdpNode.description?.value) {
+                result.description = cdpNode.description.value;
+            }
+
+            // Add value if present
+            if (cdpNode.value?.value !== undefined) {
+                result.value = cdpNode.value.value;
+            }
+
+            // Convert properties array to object properties
+            if (cdpNode.properties) {
+                for (const prop of cdpNode.properties) {
+                    const name = prop.name;
+                    const value = prop.value?.value;
+                    if (value !== undefined) {
+                        result[name] = value;
+                    }
+                }
+            }
+
+            // Recursively process children
+            if (cdpNode.childIds && cdpNode.childIds.length > 0) {
+                result.children = [];
+                for (const childId of cdpNode.childIds) {
+                    const childNode = nodeMap.get(childId);
+                    if (childNode && !childNode.ignored?.value) {
+                        const convertedChild = convertNode(childNode);
+                        // Filter out generic/container nodes with no semantic value
+                        if (convertedChild.role !== 'generic' &&
+                            convertedChild.role !== 'none' &&
+                            convertedChild.role !== 'InlineTextBox') {
+                            result.children.push(convertedChild);
+                        } else if (convertedChild.children?.length > 0) {
+                            // Promote children of filtered nodes
+                            result.children.push(...convertedChild.children);
+                        }
+                    }
+                }
+                if (result.children.length === 0) {
+                    delete result.children;
+                }
+            }
+
+            return result;
+        }
+
+        // Find root node (usually first node with role "RootWebArea" or "WebArea")
+        const rootNode = nodes.find(n =>
+            n.role?.value === 'RootWebArea' ||
+            n.role?.value === 'WebArea'
+        ) || nodes[0];
+
+        return rootNode ? convertNode(rootNode) : null;
+
+    } finally {
+        await cdpSession.detach();
+    }
+}
+
+/**
  * Test a single page for accessibility
  */
 async function testPage(page, pageInfo, options) {
@@ -351,6 +437,14 @@ async function testPage(page, pageInfo, options) {
         const results = await new AxeBuilder({ page })
             .analyze();
 
+        // Capture accessibility tree using CDP
+        let accessibilityTree = null;
+        try {
+            accessibilityTree = await getAccessibilityTree(page);
+        } catch (treeError) {
+            console.log(`  Warning: Accessibility tree capture failed: ${treeError.message}`);
+        }
+
         const successResult = {
             ...pageInfo,
             url: `${options.launchUrl}#${pageInfo.route}`,
@@ -362,6 +456,9 @@ async function testPage(page, pageInfo, options) {
         };
         if (screenshotCaptured) {
             successResult.screenshot = screenshotRelativePath;
+        }
+        if (accessibilityTree) {
+            successResult.accessibilityTree = accessibilityTree;
         }
         return successResult;
     } catch (error) {
@@ -377,6 +474,14 @@ async function testPage(page, pageInfo, options) {
             }
         }
 
+        // Try to capture accessibility tree even on error
+        let accessibilityTree = null;
+        try {
+            accessibilityTree = await getAccessibilityTree(page);
+        } catch (treeError) {
+            // Silently ignore tree capture errors in error path
+        }
+
         const errorResult = {
             ...pageInfo,
             url: `${options.launchUrl}#${pageInfo.route}`,
@@ -385,6 +490,9 @@ async function testPage(page, pageInfo, options) {
         };
         if (screenshotCaptured) {
             errorResult.screenshot = screenshotRelativePath;
+        }
+        if (accessibilityTree) {
+            errorResult.accessibilityTree = accessibilityTree;
         }
         return errorResult;
     }
