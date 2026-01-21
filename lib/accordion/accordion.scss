@@ -40,6 +40,59 @@
   }
 }
 
+// Accessible accordion chevron icon
+// Hide the CSS ::before pseudo-element (which screen readers announce)
+// and use a real DOM element with aria-hidden="true" instead
+.list .accordion-item .item-inner::before {
+  content: none !important;
+}
+
+// Style the injected accessible chevron icon
+.accordion-chevron {
+  font-family: 'framework7-core-icons';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+  text-align: center;
+  display: block;
+  position: absolute;
+  top: 50%;
+  font-size: var(--f7-list-chevron-icon-font-size);
+  color: var(--f7-list-chevron-icon-color);
+  pointer-events: none;
+  right: calc(var(--f7-list-item-padding-horizontal) + var(--f7-safe-area-right));
+  width: 14px;
+  height: 8px;
+  margin-top: -4px;
+  line-height: 8px;
+
+  // Show down chevron by default (closed state)
+  &::before {
+    content: var(--f7-accordion-chevron-icon-down);
+  }
+
+  // Show up chevron when opened
+  .accordion-item-opened & {
+    &::before {
+      content: var(--f7-accordion-chevron-icon-up);
+    }
+  }
+}
+
+// Support for pink-accordion variant which uses Framework7 Icons font
+#app .pink-accordion .accordion-chevron {
+  font-family: "Framework7 Icons";
+}
+
 #app .page.accordion-faq {
   .list.accordion-list {
     .accordion-item {
@@ -80,10 +133,6 @@
 
       .item-title {
         color: var(--f7-list-chevron-icon-color);
-      }
-
-      .item-inner::before {
-        font-family: "Framework7 Icons";
       }
 
       &::after {
