@@ -15,7 +15,8 @@
     "hesperian-cordova-makeconfig": "./bin/hesperian-cordova-makeconfig.js",
     "hesperian-web-makeindex": "./bin/hesperian-web-makeindex.js",
     "hesperian-validate": "./bin/hesperian-validate.js",
-    "hesperian-test-accessibility": "./bin/hesperian-test-accessibility.js"
+    "hesperian-test-accessibility": "./bin/hesperian-test-accessibility.js",
+    "hesperian-check-resources": "./bin/hesperian-check-resources.js"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.md",

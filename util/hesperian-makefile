@@ -11,6 +11,7 @@ CORDOVA=$(NODE_BIN)/cordova
 MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
 MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
 MAKE_VALIDATE=$(NODE_BIN)/hesperian-validate
+MAKE_CHECK_RESOURCES=$(NODE_BIN)/hesperian-check-resources
 CORDOVA_CONFIG=$(BUILDDIR)/config.xml
 VERSION := $(shell node -p "require('./app-config.json').version")
 APPNAME := $(shell node -p "require('./app-config.json').name")
@@ -32,6 +33,7 @@ help:
 	@echo "\tmake extract_apk\t extract universal APK from AAB for emulator testing"
 	@echo "\tmake test-a11y\t\t run accessibility tests (English locale, report in build/reports/accessibility/)"
 	@echo "\tmake test-a11y-all\t run accessibility tests (all locales)"
+	@echo "\tmake check-resources\t check for missing resource translations"
 
 bundle:
 	rm -rf dist
@@ -144,6 +146,10 @@ example-libsync:
 .PHONY: validate
 validate:
 	${MAKE_VALIDATE}
+
+.PHONY: check-resources
+check-resources:
+	${MAKE_CHECK_RESOURCES}
 
 # Accessibility Testing
 .PHONY: test-a11y
