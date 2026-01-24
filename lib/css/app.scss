@@ -22,6 +22,10 @@
   box-shadow: 0 0 0 4px var(--hm-focus-color) !important;
 }
 
+html {
+   -webkit-text-size-adjust: 100%;
+   text-size-adjust: 100%;
+}
 
 html.md body,
 html.ios body {
@@ -243,6 +247,7 @@ body {
 }
 
 .page-content {
+  overflow-x: hidden; // ios webview bug workaround
   padding-right: $page-horizontal-margin;
   padding-left: $page-horizontal-margin;
 }

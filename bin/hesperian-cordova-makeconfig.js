@@ -51,6 +51,7 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
         <resource-file src="private/GoogleService-Info.plist" />
         <preference name="scheme" value="app" />
         <preference name="hostname" value="localhost" />
+        <preference name="DisallowOverscroll" value="true"/>
     </platform>
     <plugin name="cordova-plugin-tts-advanced" spec="git+https://github.com/Hesperian/cordova-plugin-tts-advanced.git/#hesperian" />
 
