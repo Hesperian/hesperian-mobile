@@ -383,6 +383,25 @@
     function renderResults(results) {
         const container = document.getElementById('results-container');
         container.innerHTML = results.map(renderPageResult).join('');
+
+        // Add filter logic for the checkbox
+        const filterCheckbox = document.getElementById('filter-violations-checkbox');
+
+        filterCheckbox.addEventListener('change', function() {
+            const showOnlyViolations = filterCheckbox.checked;
+            const allPages = container.querySelectorAll('.page-result');
+            allPages.forEach(function(page) {
+                if (showOnlyViolations) {
+                    if (page.classList.contains('clean')) {
+                        page.style.display = 'none';
+                    } else {
+                        page.style.display = '';
+                    }
+                } else {
+                    page.style.display = '';
+                }
+            });
+        });
     }
 
     /**
