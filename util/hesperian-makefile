@@ -154,27 +154,25 @@ check-resources:
 # Accessibility Testing
 .PHONY: test-a11y
 test-a11y: bundle
-	@( \
-		set -e; \
-		trap 'kill 0 2>/dev/null' EXIT; \
-		echo "Starting local web server..."; \
-		npx http-server ./dist -p 8080 -c-1 > /dev/null 2>&1 & \
-		sleep 2; \
-		echo "Running accessibility tests (English locale, all pages)..."; \
-		$(NODE_BIN)/hesperian-test-accessibility; \
-	)
-	@echo "✅ Accessibility tests complete"
+	@echo "Starting local web server..."; \
+	npx http-server ./dist -p 8080 -c-1 > /dev/null 2>&1 & \
+	SERVER_PID=$$!; \
+	sleep 2; \
+	echo "Running accessibility tests (English locale, all pages)..."; \
+	$(NODE_BIN)/hesperian-test-accessibility; \
+	TEST_EXIT=$$?; \
+	kill $$SERVER_PID 2>/dev/null || true; \
+	exit $$TEST_EXIT
 
 .PHONY: test-a11y-all
 test-a11y-all: bundle
-	@( \
-		set -e; \
-		trap 'kill 0 2>/dev/null' EXIT; \
-		echo "Starting local web server..."; \
-		npx http-server ./dist -p 8080 -c-1 > /dev/null 2>&1 & \
-		sleep 2; \
-		echo "Running accessibility tests (all locales, all pages)..."; \
-		$(NODE_BIN)/hesperian-test-accessibility --locale=all; \
-	)
-	@echo "✅ Accessibility tests complete"
+	@echo "Starting local web server..."; \
+	npx http-server ./dist -p 8080 -c-1 > /dev/null 2>&1 & \
+	SERVER_PID=$$!; \
+	sleep 2; \
+	echo "Running accessibility tests (all locales, all pages)..."; \
+	$(NODE_BIN)/hesperian-test-accessibility --locale=all; \
+	TEST_EXIT=$$?; \
+	kill $$SERVER_PID 2>/dev/null || true; \
+	exit $$TEST_EXIT
 

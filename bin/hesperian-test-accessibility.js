@@ -637,14 +637,14 @@ async function runTests() {
     console.log(`Pages with errors: ${pagesWithErrors}`);
     console.log('='.repeat(60));
 
-    // Exit with error code if violations found
+    // Always exit with 0 to allow CI pipelines to continue and process results
+    // Violations are reported in the JSON/HTML reports for downstream processing
     if (totalViolations > 0 || pagesWithErrors > 0) {
         console.log('\n❌ Some accessibility violations or errors were found. Please review the reports.');
-        process.exit(0);
     } else {
         console.log('\n✅ All accessibility tests passed!');
-        process.exit(0);
     }
+    process.exit(0);
 }
 
 // Run tests
