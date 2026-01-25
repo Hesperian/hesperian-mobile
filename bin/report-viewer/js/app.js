@@ -387,7 +387,7 @@
         // Add filter logic for the checkbox
         const filterCheckbox = document.getElementById('filter-violations-checkbox');
 
-        filterCheckbox.addEventListener('change', function() {
+        function updatePageVisibility() {
             const showOnlyViolations = filterCheckbox.checked;
             const allPages = container.querySelectorAll('.page-result');
             allPages.forEach(function(page) {
@@ -401,7 +401,10 @@
                     page.style.display = '';
                 }
             });
-        });
+        }
+
+        filterCheckbox.addEventListener('change', updatePageVisibility);
+        updatePageVisibility();
     }
 
     /**
