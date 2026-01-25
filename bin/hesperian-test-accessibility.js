@@ -48,7 +48,7 @@ args.forEach(arg => {
 
 function buildLaunchUrl(baseUrl, locale) {
     if (!baseUrl) {
-        let url = 'http://localhost:8080?tour=false';
+        let url = 'http://localhost:8080?tour=false&audio=true';
         if (locale) {
             url += `&lang=${locale}`;
         }
@@ -58,6 +58,7 @@ function buildLaunchUrl(baseUrl, locale) {
     try {
         const parsed = new URL(baseUrl);
         parsed.searchParams.set('tour', 'false');
+        parsed.searchParams.set('audio', 'true');
         if (locale) {
             parsed.searchParams.set('lang', locale);
         }
@@ -65,7 +66,7 @@ function buildLaunchUrl(baseUrl, locale) {
     } catch (_err) {
         // Fallback for non-URL strings
         const separator = baseUrl.includes('?') ? '&' : '?';
-        let url = `${baseUrl}${separator}tour=false`;
+        let url = `${baseUrl}${separator}tour=false&audio=true`;
         if (locale) {
             url += `&lang=${locale}`;
         }
