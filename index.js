@@ -3,10 +3,13 @@ import { appConfig } from './lib/appConfig';
 import { resources } from './lib/resources';
 import { logEvent } from './lib/analytics/analytics';
 import {
+  KEYS,
+  isActivationKey,
+  isEscapeKey,
   createSmartSelectAccessibilityHandlers,
   getVisibleFocusableElements,
   createFocusTrapHandler,
-} from './lib/accessibility/smart-select-a11y';
+} from './lib/accessibility/accessibility';
 
 export {
   getApp,
@@ -14,6 +17,9 @@ export {
   appConfig,
   resources,
   logEvent,
+  KEYS,
+  isActivationKey,
+  isEscapeKey,
   createSmartSelectAccessibilityHandlers,
   getVisibleFocusableElements,
   createFocusTrapHandler,
