@@ -296,16 +296,15 @@ async function navigateToRoute(page, route) {
 
 async function waitForInitialPage(page, options, timeout = 30000) {
     // Launch the app shell and wait for Framework7 to finish its initial routing.
-    const appInitBaseline = await getMonitorEventCount(page, 'appInit');
-    const initialPageBaseline = await getMonitorEventCount(page, 'page:afterin');
-
+    // Note: page.goto() replaces the JavaScript context, resetting event counts to 0.
+    // We use absolute target counts (1) rather than baselines since it's a fresh context.
     await page.goto(options.launchUrl, {
         waitUntil: 'domcontentloaded',
         timeout,
     });
 
-    await waitForAppInit(page, 'initial app load', timeout, appInitBaseline);
-    await waitForEvent(page, 'page:afterin', 'initial page load', timeout, initialPageBaseline);
+    await waitForAppInit(page, 'initial app load', timeout, null);
+    await waitForEvent(page, 'page:afterin', 'initial page load', timeout, null, 1);
 }
 
 /**
@@ -587,16 +586,26 @@ async function runTests() {
 
     await page.addInitScript(AppEventMonitorScript);
 
-    // Ensure the app shell has finished its initial load before routing to specific pages.
-    await waitForInitialPage(page, options);
-
     // Run tests
     const results = [];
+    let currentLocale = null;
 
     for (let i = 0; i < pageUrls.length; i++) {
         const pageInfo = pageUrls[i];
         const progress = `[${i + 1}/${pageUrls.length}]`;
         console.log(`${progress} Testing: ${pageInfo.title} (${pageInfo.locale})`);
+
+        // When testing multiple locales, reload the app when switching to a new locale
+        // This ensures the app loads the correct locale-specific resources
+        if (pageInfo.locale !== currentLocale) {
+            currentLocale = pageInfo.locale;
+            const localeOptions = {
+                ...options,
+                launchUrl: buildLaunchUrl(options.baseUrl, currentLocale),
+            };
+            console.log(`  🌐 Switching to locale: ${currentLocale}`);
+            await waitForInitialPage(page, localeOptions);
+        }
 
         const result = await testPage(page, pageInfo, options);
         results.push(result);
