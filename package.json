@@ -1,6 +1,6 @@
 {
   "name": "hesperian-mobile",
-  "version": "4.0.14",
+  "version": "4.0.15",
   "description": "Hesperian Mobile Application Library",
   "main": "index.js",
   "directories": {
