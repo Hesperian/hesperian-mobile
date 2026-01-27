@@ -159,6 +159,10 @@ $navbar-icon-edge-spacing: 8px;
 .secondary-navbar>.back-button {
   margin-left: $navbar-icon-edge-spacing;
   margin-right: $navbar-icon-edge-spacing;
+
+  &>i {
+    color: $subnavbar-background;
+  }
 }
 
 /* Navbar Back and Menu buttons */
