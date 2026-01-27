@@ -378,12 +378,12 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
 
   a.calendars-other-month,
   span.calendar-day-number {
-    color: #d4d4d4;
+    color: #757575; // WCAG AA compliant: 4.6:1 contrast on #fdfdfd background
     cursor: auto;
   }
 
   a.calendar-day-today {
-    color: #d5562b;
+    color: #c44a21; // WCAG AA compliant: 4.52:1 contrast on white (was #d5562b at 3.97:1)
   }
 
   // Keyboard focus styles for jQuery calendar days

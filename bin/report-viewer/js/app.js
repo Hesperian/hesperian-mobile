@@ -146,6 +146,89 @@
     }
 
     /**
+     * Get CSS class for console log type
+     */
+    function getLogTypeClass(type) {
+        switch (type) {
+            case 'error':
+            case 'requestfailed':
+                return 'log-error';
+            case 'warning':
+            case 'warn':
+                return 'log-warning';
+            case 'info':
+                return 'log-info';
+            case 'debug':
+                return 'log-debug';
+            default:
+                return 'log-default';
+        }
+    }
+
+    /**
+     * Render the console logs section
+     */
+    function renderConsoleLogs(logs, pageId) {
+        if (!logs || logs.length === 0) {
+            return '';
+        }
+
+        const logsId = `console-logs-${pageId}`;
+
+        // Count by type for summary
+        const errorCount = logs.filter(l => l.type === 'error' || l.type === 'requestfailed').length;
+        const warningCount = logs.filter(l => l.type === 'warning' || l.type === 'warn').length;
+
+        let summaryText = `${logs.length} message(s)`;
+        if (errorCount > 0) {
+            summaryText += ` (${errorCount} error${errorCount > 1 ? 's' : ''})`;
+        }
+        if (warningCount > 0) {
+            summaryText += ` (${warningCount} warning${warningCount > 1 ? 's' : ''})`;
+        }
+
+        const logsHtml = logs.map(log => {
+            const typeClass = getLogTypeClass(log.type);
+            const typeLabel = log.type.toUpperCase();
+            return `
+                <div class="console-log-entry ${typeClass}">
+                    <span class="console-log-type">[${escapeHtml(typeLabel)}]</span>
+                    <span class="console-log-text">${escapeHtml(log.text)}</span>
+                </div>
+            `;
+        }).join('');
+
+        const headerClass = errorCount > 0 ? 'has-errors' : warningCount > 0 ? 'has-warnings' : '';
+
+        return `
+            <div class="console-logs-section">
+                <div class="console-logs-header ${headerClass}" onclick="window.toggleLogsSection('${logsId}')">
+                    <h4>Console Logs</h4>
+                    <span class="console-logs-summary">${summaryText}</span>
+                    <span class="console-logs-toggle" id="${logsId}-toggle">Click to expand</span>
+                </div>
+                <div class="console-logs-container collapsed" id="${logsId}">
+                    ${logsHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Toggle the console logs section visibility
+     */
+    window.toggleLogsSection = function(logsId) {
+        const container = document.getElementById(logsId);
+        const toggleText = document.getElementById(logsId + '-toggle');
+
+        if (container) {
+            const isCollapsed = container.classList.contains('collapsed');
+            container.classList.toggle('collapsed');
+            toggleText.textContent = isCollapsed ? 'Click to collapse' : 'Click to expand';
+        }
+    };
+
+    /**
      * Toggle a single accessibility tree node
      */
     window.toggleA11yNode = function(headerElement) {
@@ -360,6 +443,9 @@
         // Render accessibility tree section
         const accessibilityTreeHtml = renderAccessibilityTree(result.accessibilityTree, safePageId);
 
+        // Render console logs section
+        const consoleLogsHtml = renderConsoleLogs(result.consoleLogs, safePageId);
+
         return `
             <div class="page-result ${cssClass}">
                 <h2 class="page-title">${escapeHtml(result.title)}</h2>
@@ -372,6 +458,7 @@
                 ${screenshotHtml}
                 ${successHtml}
                 ${violationsHtml}
+                ${consoleLogsHtml}
                 ${accessibilityTreeHtml}
             </div>
         `;

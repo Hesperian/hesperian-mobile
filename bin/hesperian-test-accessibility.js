@@ -572,17 +572,104 @@ async function runTests() {
     });
     const page = await context.newPage();
 
+    // Console log collector for per-page reporting
+    // Filters out cordova.js related messages from CLI output but collects all others
+    let pageConsoleLogs = [];
+    let pendingCordovaErrors = 0; // Track how many cordova 404s we expect to suppress
+
+    function isCordovaRelated(text, url) {
+        if (!text && !url) return false;
+        const combined = `${text || ''} ${url || ''}`.toLowerCase();
+        return combined.includes('cordova.js') || combined.includes('cordova_plugins.js');
+    }
+
+    function isGeneric404Error(text) {
+        if (!text) return false;
+        return text === 'Failed to load resource: the server responded with a status of 404 (Not Found)';
+    }
+
     page.on('console', (msg) => {
-        // Surface browser console messages to the Node console for debugging
+        const msgType = msg.type();
+        const msgText = msg.text();
+
+        // Skip cordova.js related messages entirely
+        if (isCordovaRelated(msgText, null)) {
+            return;
+        }
+
+        // If we have pending cordova errors and this is a generic 404 error,
+        // suppress it (it's the console error for the cordova.js request failure)
+        if (pendingCordovaErrors > 0 && isGeneric404Error(msgText)) {
+            pendingCordovaErrors--;
+            return;
+        }
+
+        // Collect for report
+        pageConsoleLogs.push({
+            type: msgType,
+            text: msgText,
+            timestamp: new Date().toISOString(),
+        });
+
+        // Surface to CLI for debugging
         // eslint-disable-next-line no-console
-        console.log(`[browser:${msg.type()}] ${msg.text()}`);
+        console.log(`[browser:${msgType}] ${msgText}`);
     });
 
+    // Track 404 responses (requestfailed only fires for network errors, not HTTP errors)
+    page.on('response', (response) => {
+        const status = response.status();
+        const url = response.url();
+
+        // Only track failed responses (4xx, 5xx)
+        if (status < 400) {
+            return;
+        }
+
+        // For cordova.js 404s, just track that we expect a console error to suppress
+        if (isCordovaRelated(null, url)) {
+            pendingCordovaErrors++;
+            return;
+        }
+
+        // Log other failed responses
+        const logEntry = `${response.request().method()} ${url} --> HTTP ${status}`;
+        pageConsoleLogs.push({
+            type: 'http-error',
+            text: logEntry,
+            timestamp: new Date().toISOString(),
+        });
+        console.log(`[browser:http-error] ${logEntry}`);
+    });
+
+    // Track actual network failures (timeouts, connection refused, etc.)
     page.on('requestfailed', (request) => {
+        const url = request.url();
+
+        // Skip cordova.js related failures entirely
+        if (isCordovaRelated(null, url)) {
+            return;
+        }
+
         const failure = request.failure();
         const failureText = failure ? `${failure.errorText}` : 'unknown reason';
-        console.log(`[browser:requestfailed] ${request.method()} ${request.url()} --> ${failureText}`);
+        const logEntry = `${request.method()} ${url} --> ${failureText}`;
+
+        pageConsoleLogs.push({
+            type: 'requestfailed',
+            text: logEntry,
+            timestamp: new Date().toISOString(),
+        });
+
+        console.log(`[browser:requestfailed] ${logEntry}`);
     });
+
+    // Function to get and clear collected logs for a page
+    function getAndClearPageLogs() {
+        const logs = pageConsoleLogs;
+        pageConsoleLogs = [];
+        return logs;
+    }
 
     await page.addInitScript(AppEventMonitorScript);
 
@@ -605,9 +692,21 @@ async function runTests() {
             };
             console.log(`  🌐 Switching to locale: ${currentLocale}`);
             await waitForInitialPage(page, localeOptions);
+            // Clear logs generated during locale switch - they don't belong to any specific page
+            getAndClearPageLogs();
         }
 
+        // Clear logs before testing this page
+        getAndClearPageLogs();
+
         const result = await testPage(page, pageInfo, options);
+
+        // Collect console logs for this page and add to result
+        const consoleLogs = getAndClearPageLogs();
+        if (consoleLogs.length > 0) {
+            result.consoleLogs = consoleLogs;
+        }
+
         results.push(result);
 
         if (result.error) {
