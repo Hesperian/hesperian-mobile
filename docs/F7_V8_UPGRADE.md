@@ -1,12 +1,29 @@
 # Framework7 v3.6 → v8.3 Upgrade Guide
 
-This document describes the completed upgrade of the hesperian-mobile library from Framework7 v3.6 to v8.3, including the migration from Webpack to Vite as the build tool.
+This guide provides instructions for upgrading a Hesperian mobile application from Framework7 v3.6 to v8.3, including migration from Webpack to Vite and comprehensive accessibility improvements.
+
+## Directory Structure
+
+This guide assumes the following directory layout:
+
+```
+Hesperian/
+├── hesperian-mobile/           # Library - checkout feat/updatef7 branch
+├── hesperian-mobile-APP/       # Read-only reference of current APP version
+├── hesperian-mobile-APP-f7/    # Your app to upgrade (working directory)
+└── hesperian-mobile-SA-f7/     # Working reference of upgraded SA app
+```
+
+**Reference implementations:**
+- Current working APP: `http://localhost/Hesperian/hesperian-mobile-APP/dist/index.html?lang=en#/`
+- Upgraded SA app: `../hesperian-mobile-SA-f7/` - consult for working examples of all changes
+
+---
 
 ## What Changed
 
 ### Framework7 Version
-- **From**: Framework7 v3.6.x
-- **To**: Framework7 v8.3.4
+- **From**: Framework7 v3.6.x → **To**: Framework7 v8.3.4
 
 ### Key Dependencies Updated
 - `framework7`: `^3.6.X` → `^8.3.4`
@@ -18,248 +35,58 @@ This document describes the completed upgrade of the hesperian-mobile library fr
   - `messageformat`: `^2.0.5`
 
 ### Build System
-- **Bundler**: Webpack 4 → Webpack 5 + Vite 6.4
+- **Bundler**: Webpack 4 → Vite 6.4
 - **Sass**: node-sass → sass (dart-sass) v1.93
-- **Babel**: v7.7 → v7.25
 - Added `core-js@3` for polyfills
-- Primary build tool is now Vite; Webpack 5 maintained for compatibility
 
-### Import Pattern Changes
-
-**Before (v3.6):**
-```javascript
-import Framework7, { Dom7, Template7 } from "framework7/framework7.esm.bundle.js";
-import "framework7-icons";
-```
-
-**After (v8.3):**
-```javascript
-import "framework7/css/bundle";
-import "framework7-icons/css/framework7-icons.css";
-import Framework7, { Dom7 } from "framework7/bundle";
-import Template7 from "template7";
-```
-
-### App Initialization Changes
-
-**Config property renamed:**
-```javascript
-// Before
-const app = new Framework7({
-  root: "#app",
-  data: function() { return config; }
-});
-
-// After
-const app = new Framework7({
-  el: "#app",  // renamed from 'root'
-  store: Framework7.createStore({ state: config })  // replaced 'data'
-});
-```
-
-### Router API Changes
-
-**Route resolution:**
-```javascript
-// Before (v3.6)
-function resolver(routeTo, routeFrom, resolve, reject) {
-  resolve({
-    templateUrl: `./locales/${locale}/${pageId}.html`
-  });
-}
-
-// After (v8.3)
-async function resolver(context) {
-  const { app, to, resolve, reject } = context;
-  const html = await loadLocalizedContent(app, url);
-  const template = Template7.compile(html);
-  const content = template({});
-  resolve({ content });
-}
-```
-
-**Route signature:**
-- Old: `async: function(routeTo, routeFrom, resolve, reject)`
-- New: `async(context)` where context contains `{ app, to, from, resolve, reject }`
-
-### Sass Module System
-
-All Sass files migrated from `@import` to `@use`:
-
-```scss
-// Before
-@import "theme.scss";
-@import "./navbar.scss";
-
-// After
-@use "./theme.scss" as *;
-@use "./navbar.scss";
-```
-
-**Exception**: Framework7 CSS still uses `@import` because the library doesn't support Sass modules:
-```scss
-@import "framework7/css/bundle";  // Required for F7
-```
-
-### CSS Cross-Browser Updates
-
-Added standard properties alongside vendor-prefixed versions:
-```scss
-.item-text {
-  line-clamp: inherit;           // Added
-  -webkit-line-clamp: inherit;   // Existing
-}
-```
-
-### Build Targets
-
-The Makefile now uses Vite by default:
-
-```makefile
-# Before
-webpack:
-	$(WEBPACK) --mode=${WEBPACK_MODE}
-
-watch:
-	$(WEBPACK) --watch
-
-# After
-webpack:
-	$(VITE) build --mode=${VITE_MODE}
-
-watch:
-	$(VITE) build --mode=development --watch
-```
-
-### Module Exports for Browser Code
-
-Created ES module wrappers for browser-side utilities:
-
-**New file**: `lib/util/search-normal-form.js`
-```javascript
-export function searchNormalForm(str) {
-  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-```
-
-**Usage updated** in `lib/search/search.js`:
-```javascript
-// Before
-const util = require("../util/util");
-util.searchNormalForm(q);
-
-// After
-import { searchNormalForm } from "../util/search-normal-form";
-searchNormalForm(q);
-```
-
-**Note**: `lib/util/util.js` still exports CommonJS for build-time preprocessing in `webpack/webpack.preprocess.js`.
-
-## Files Changed
-
-### Core Framework Integration
-- `lib/app.js` - Framework7 initialization, config schema, store setup
-- `lib/routes.js` - Router resolution pattern, Template7 compilation
-- `lib/appConfig.js` - Minor updates for store integration
-
-### Component Updates
-- `lib/search/search.js` - Import pattern, ES module usage
-- `lib/filter/filter.js` - Import updates
-- `lib/favorites/favorites.js` - Import updates
-- `lib/checklist/checklist.js` - Import updates
-- `lib/sidepanels/sidepanels.js` - Import updates
-- `lib/calendar/calendar.js` - Import updates
-- `lib/accordion/accordion.js` - Import updates
-- `lib/intro/intro.js` - Import updates
-- `lib/socialsharing/socialsharing.js` - Import updates
-- `lib/audio-buttons/audio-buttons.js` - Import updates
-- `lib/video/video.js` - Import updates
-- `lib/analytics/analytics.js` - Import updates
-
-### Sass Files (all converted @import → @use)
-- `lib/css/app.scss`
-- `lib/css/buttons.scss`
-- `lib/css/buttons-common.scss`
-- `lib/css/navbar.scss`
-- `lib/css/navigation.scss`
-- `lib/css/captions.scss`
-- `lib/css/util.scss`
-- `lib/accordion/accordion.scss`
-- `lib/audio-buttons/audio.scss`
-- `lib/calendar/calendar.scss`
-- `lib/checklist/checklist.scss`
-- `lib/favorites/favorites.scss`
-- `lib/filter/filter.scss`
-- `lib/intro/intro.scss`
-- `lib/search/search.scss`
-- `lib/sidepanels/sidepanels.scss`
-- `lib/socialsharing/socialsharing.scss`
-
-### Build Configuration
-- `package.json` - Dependencies updated
-- `util/hesperian-makefile` - Vite integration
-- `webpack/index.js` - Webpack 5 updates (compatibility)
-- `vite/index.js` - **New**: Vite config factory
-- `example/vite.config.js` - **New**: Example app Vite config
-- `example/package.json` - Local development dependency
-- `lib/util/search-normal-form.js` - **New**: ES module wrapper
-
-## Building and Testing
-
-### Local Development Setup
-
-1. **Install dependencies**:
-   ```bash
-   npm install
-   cd example && npm install
-   ```
-
-2. **Build the example app**:
-   ```bash
-   cd example
-   make webpack  # Uses Vite despite target name
-   ```
-
-3. **Watch mode for development**:
-   ```bash
-   cd example
-   make watch    # Vite watch with hot reload
-   ```
-
-4. **Test the build**:
-   ```bash
-   cd example/dist
-   python3 -m http.server 8080
-   # Open http://localhost:8080
-   ```
-
-### Cordova Builds
-
-The Cordova build process remains the same:
-```bash
-cd example
-make build    # Full Cordova release build in ./output
-```
+### Filter Module Removed
+The `lib/filter/` module has been removed. Remove any filter-related routes from your app.
 
 ---
 
-## Migrating Apps That Use This Library
+## Migration Steps
 
-This section provides complete instructions for updating downstream apps that depend on `hesperian-mobile` to work with the Framework7 v8.3 upgrade.
+### Step 1: Set Up Local hesperian-mobile Link
 
-### Prerequisites
+```bash
+# Ensure hesperian-mobile is on the correct branch
+cd ../hesperian-mobile
+git checkout feat/updatef7
+npm install
+npm link
 
-- Node.js 18+ (Framework7 v8 requirement)
-- Modern browser targets (Safari/Chrome evergreen, Android 4.4+, iOS 9+)
+# Return to your app
+cd ../hesperian-mobile-APP-f7
 
-### Step 1: Update Dependencies
+# Create the symlink manually (more reliable than npm link)
+rm -rf node_modules/hesperian-mobile
+ln -s ../../hesperian-mobile node_modules/hesperian-mobile
+```
 
-Update your app's `package.json`:
+**Verify the link:**
+```bash
+ls -la node_modules/hesperian-mobile
+# Should show: hesperian-mobile -> ../../hesperian-mobile
+```
+
+**Important**: Re-create this symlink after every `npm install`.
+
+### Step 2: Update .node-version
+
+Update `.node-version` to Node 18+:
+
+```
+v24.1.0
+```
+
+### Step 3: Update package.json
+
+Update dependencies in `package.json`:
 
 ```json
 {
   "dependencies": {
-    "hesperian-mobile": "^4.0.0",
+    "hesperian-mobile": "github:Hesperian/hesperian-mobile#feat/updatef7",
     "framework7": "^8.3.4",
     "framework7-icons": "^5.0.5",
     "dom7": "^4.0.6",
@@ -277,12 +104,21 @@ Update your app's `package.json`:
 }
 ```
 
-Then run:
-```bash
-npm install
+**If your app uses MessageFormat directly**, also add:
+```json
+"@messageformat/core": "^3.0.0"
 ```
 
-### Step 2: Create Vite Configuration
+Then:
+```bash
+npm install
+
+# Re-create symlink after install
+rm -rf node_modules/hesperian-mobile
+ln -s ../../hesperian-mobile node_modules/hesperian-mobile
+```
+
+### Step 4: Create vite.config.js
 
 Create `vite.config.js` in your app root:
 
@@ -293,287 +129,638 @@ const appConfig = require("./app-config.json");
 module.exports = hesperianVite.createConfig({
   rootDir: __dirname,
   appConfig,
-  // Optional: additional static assets to copy
-  additionalAssets: [
-    // { from: "custom-assets", to: "." }
-  ]
+  // If you have additional static assets to copy:
+  // additionalAssets: [
+  //   { from: "customDir/assets", to: "customDir/assets" }
+  // ]
 });
 ```
 
-### Step 3: Update App Initialization Code
+Delete `webpack.config.js` if present.
 
-If your app has custom initialization code in `www/js/app.js`:
+### Step 5: Update www/js/app.js
 
-**Before:**
+**Import changes:**
 ```javascript
+// Before
 import Framework7, { Dom7, Template7 } from "framework7/framework7.esm.bundle.js";
 import "framework7-icons";
+import { appConfig, createApp } from "hesperian-mobile";
 
-const app = createApp({
-  configVersion: "1.0.0",
-  f7: {
-    root: "#app",
-    data: function() {
-      return { appData, localeData };
-    }
-  }
-});
-```
-
-**After:**
-```javascript
+// After
+import "core-js/stable";
 import "framework7/css/bundle";
 import "framework7-icons/css/framework7-icons.css";
-import Framework7, { Dom7 } from "framework7/bundle";
-import Template7 from "template7";
+import "../css/styles.scss";
 
-const store = Framework7.createStore({
-  state: {
-    appData: appData,
-    localeData: localeData
+import { Dom7 } from "framework7/bundle";
+import Template7 from "template7";
+import { appConfig, initApp, getApp } from "hesperian-mobile";
+```
+
+**App initialization:**
+```javascript
+// Before
+window.app = createApp({
+  f7: {
+    root: "#app",
+    // ...
   }
 });
 
-const app = createApp({
-  configVersion: "1.0.0",
+// After
+initApp({
   appData: appData,
   localeData: localeData,
   f7: {
     el: "#app",  // renamed from 'root'
-    store: store
   }
 });
+
+// To get app instance later:
+const app = getApp();
 ```
 
-### Step 4: Update Custom Routes
+**See**: `../hesperian-mobile-SA-f7/www/js/app.js` for complete example.
 
-If your app defines custom routes via `appRoutes` callback:
+### Step 6: Update All JavaScript Files with Framework7 Imports
 
-**Before:**
+**Search for all files** importing from the old path:
+```bash
+grep -r "framework7.esm.bundle" www/
+grep -r "from 'framework7'" www/
+```
+
+Update each file:
 ```javascript
-function appRoutes(appConfig) {
-  return [{
-    path: '/custom',
-    async: function(routeTo, routeFrom, resolve, reject) {
-      const locale = appConfig.locale();
-      resolve({
-        templateUrl: `./locales/${locale}/custom.html`
-      });
-    }
-  }];
+// Before
+import { Template7, Dom7 } from "framework7/framework7.esm.bundle.js";
+// or
+import { Template7, Dom7 } from "framework7";
+
+// After
+import { Dom7 } from "framework7/bundle";
+import Template7 from "template7";
+```
+
+### Step 7: Replace window.app with getApp()
+
+**Search for all uses:**
+```bash
+grep -r "window\.app" www/
+```
+
+Update each file:
+1. Add `getApp` to imports: `import { ..., getApp } from "hesperian-mobile";`
+2. Replace `window.app` with `getApp()`
+
+**Note**: If the code uses `app.t7.registerHelper`, change to:
+```javascript
+// Before
+app.t7.registerHelper('myHelper', function() { ... });
+
+// After
+Template7.registerHelper('myHelper', function() { ... });
+```
+
+### Step 8: Update Custom Routes
+
+If your app defines custom routes:
+
+```javascript
+// Before
+{
+  path: '/custom',
+  async: function(routeTo, routeFrom, resolve, reject) {
+    resolve({ templateUrl: `./locales/${locale}/custom.html` });
+  }
 }
-```
 
-**After:**
-```javascript
+// After
 import Template7 from "template7";
 
 async function loadLocalizedContent(app, url) {
   const result = await fetch(url);
-  if (!result.ok) {
-    throw new Error(`Failed to fetch ${url}: ${result.status}`);
-  }
+  if (!result.ok) throw new Error(`Failed to fetch ${url}: ${result.status}`);
   return result.text();
 }
 
-function appRoutes(appConfig) {
-  return [{
-    path: '/custom',
-    async(context) {
-      const { app, to, resolve, reject } = context;
-      const locale = appConfig.locale();
-      const url = `./locales/${locale}/custom.html`;
-      
-      try {
-        const html = await loadLocalizedContent(app, url);
-        const template = Template7.compile(html);
-        const content = template({});
-        resolve({ content });
-      } catch (error) {
-        console.error('Route error', { url, error });
-        reject(error);
-      }
-    }
-  }];
+async function resolveWithTemplate({ app, resolve, reject, url, logLabel }) {
+  try {
+    const html = await loadLocalizedContent(app, url);
+    const template = Template7.compile(html);
+    resolve({ content: template({}) });
+  } catch (error) {
+    console.error(`resolve:${logLabel} error`, { url, error });
+    if (reject) reject(error);
+  }
+}
+
+{
+  path: '/custom',
+  async(context) {
+    const { app, resolve, reject } = context;
+    const url = `./locales/${appConfig.locale()}/custom.html`;
+    return resolveWithTemplate({ app, resolve, reject, url, logLabel: 'custom' });
+  }
 }
 ```
 
-### Step 5: Update Sass Files
+**Remove any filter routes** like `/pages/somepage/filter/:filter`.
 
-Convert all `@import` statements to `@use`:
+### Step 9: Update Sass Files
 
-**Before:**
+**www/css/theme.scss:**
 ```scss
+// Before
+@import "hesperian-mobile/lib/css/theme.scss";
+
+// After
+@forward "hesperian-mobile/lib/css/theme.scss";
+```
+
+**www/css/styles.scss:**
+```scss
+// Before
+@import "../../../node_modules/framework7/css/framework7.css";
 @import "theme.scss";
-@import "../lib/css/buttons.scss";
 
-.my-component {
-  color: $primary-color;  // From theme.scss
-}
-```
-
-**After:**
-```scss
+// After
 @use "./theme.scss" as *;
-@use "../lib/css/buttons.scss";
-
-.my-component {
-  color: $primary-color;  // From theme.scss
-}
 ```
 
-**Important exceptions:**
-- Framework7 CSS must still use `@import "framework7/css/bundle";`
-- Use `as *` when you need variables/mixins from the imported module
-- Use plain `@use` for side-effect imports (just include the CSS)
+**All other Sass files** (including those in subdirectories like `js/settings/`, `methodChooser/css/`, etc.) - convert `@import` to `@use`:
+```scss
+// Before
+@import "../../css/theme.scss";
 
-### Step 6: Update Build Scripts
+// After
+@use "../../css/theme.scss" as *;
+```
 
-Update your `Makefile` or build scripts:
+### Step 10: Update Makefile
 
-**Before:**
+The `hesperian-makefile` include already provides Vite targets. Your Makefile should work if it includes:
+
 ```makefile
-webpack:
-	../node_modules/.bin/webpack --mode=production
+NODE_MODULES=./node_modules
+
+include ${NODE_MODULES}/hesperian-mobile/util/hesperian-makefile
 ```
 
-**After:**
-```makefile
-NODE_BIN := $(CURDIR)/node_modules/.bin
-VITE := $(NODE_BIN)/vite
-
-webpack:
-	rm -rf dist
-	$(VITE) build --mode=production
-	${MAKE_WEBINDEX} app ./app-config.json www-templates > dist/index.html
-
-watch:
-	$(VITE) build --mode=development --watch
+To build:
+```bash
+make bundle
 ```
-
-### Step 7: Fix CommonJS Requires in Browser Code
-
-If you have any `require()` calls in browser-side JavaScript:
-
-**Before:**
-```javascript
-const util = require("../util/util");
-util.someFunction();
-```
-
-**After:**
-```javascript
-import { someFunction } from "../util/util";
-someFunction();
-```
-
-If the module doesn't export ES modules, create a wrapper:
-
-**util/my-util.js** (ES module wrapper):
-```javascript
-export function myFunction(str) {
-  // implementation
-}
-```
-
-### Step 8: Update CSS Class Names (if applicable)
-
-Framework7 v8 may have deprecated some class names. Check your custom CSS/HTML for:
-
-- `.list-block` → `.list` (check Framework7 docs for current names)
-- `.content-block` → `.block`
-- Other deprecated selectors
-
-### Step 9: Test Your App
-
-1. **Build the app**:
-   ```bash
-   make webpack  # Now uses Vite
-   ```
-
-2. **Check for build errors**:
-   - Missing imports
-   - Sass compilation errors
-   - Asset loading issues
-
-3. **Test in browser**:
-   ```bash
-   cd dist
-   python3 -m http.server 8080
-   ```
-   
-   Open http://localhost:8080 and check:
-   - Navigation works
-   - Search works
-   - Language switching works
-   - Audio/video players work
-   - All pages load correctly
-   - Check browser console for errors
-
-4. **Test Cordova build** (if applicable):
-   ```bash
-   make build
-   ```
-   
-   Test on actual devices or emulators.
-
-### Common Migration Issues
-
-#### Issue: "Cannot find module 'framework7'"
-**Solution**: Run `npm install` to ensure Framework7 v8.3.4 is installed.
-
-#### Issue: "Template7 is not defined"
-**Solution**: Add explicit import:
-```javascript
-import Template7 from "template7";
-```
-
-#### Issue: Sass compilation error about @import
-**Solution**: Convert to `@use` (except for Framework7 CSS imports).
-
-#### Issue: CSS not loading or fonts missing
-**Solution**: Check that Vite config includes `base: "./"` for relative paths. The hesperian-mobile Vite config already handles this.
-
-#### Issue: Router not navigating
-**Solution**: Update route resolvers to use new async signature with context parameter.
-
-#### Issue: "app.data is not a function"
-**Solution**: Migrate to Framework7.createStore pattern (see Step 3).
-
-### Getting Help
-
-If you encounter issues not covered here:
-
-1. Check the [Framework7 v8 documentation](https://framework7.io/)
-2. Review the example app in `example/` directory of hesperian-mobile
-3. Compare your code against the working example
-4. Check browser console for specific error messages
-
-### Migration Checklist
-
-Use this checklist to track your migration progress:
-
-- [ ] Updated package.json dependencies
-- [ ] Created vite.config.js
-- [ ] Updated app initialization (root → el, data → store)
-- [ ] Converted custom routes to new async signature
-- [ ] Migrated Sass @import to @use
-- [ ] Updated build scripts to use Vite
-- [ ] Replaced require() with import in browser code
-- [ ] Updated deprecated CSS class names
-- [ ] Build succeeds without errors
-- [ ] App loads in browser
-- [ ] Navigation works
-- [ ] Search works
-- [ ] Language switching works
-- [ ] Audio/video works
-- [ ] Cordova build succeeds (if applicable)
-- [ ] Tested on target devices
 
 ---
 
-## Reference: Framework7 Documentation
+## Accessibility: Required String Resources
 
-For the Framework7 library documentation, see:
-- https://framework7.io/
-- https://framework7.io/release-notes/
+Add these keys to each locale's resource file (e.g., `www/locales/en/resources/resources.js`):
+
+```javascript
+const resources = {
+  // Landmark labels
+  landmarks: {
+    maincontent: "Main content",
+    mainmenu: "Main menu",
+    settings: "Settings menu",
+  },
+
+  // Toolbar
+  toolbar: {
+    ariaLabels: {
+      mainToolbar: "Main toolbar",
+      home: "Home",
+      help: "Help",
+      bookmarks: "Bookmarks",
+    },
+  },
+
+  // Navigation labels
+  upperLeftMenuAriaLabel: "Application Main Navigation",
+  upperRightMenuAriaLabel: "Application Settings",
+  backButtonAriaLabel: "Previous Page",
+  bookmarkAriaLabel: "Bookmark",
+
+  // Search - CRITICAL: format changed from string to object
+  // Old format: search: "Search"
+  // New format: search: { prompt: "Search", ariaLabels: {...} }
+  // If you see "undefined" in the search box, this is the cause!
+  search: {
+    prompt: "Search",
+    ariaLabels: {
+      clear: "Clear search",
+    },
+  },
+
+  // Favorites/Bookmarks - add checkboxLabel
+  favorites: {
+    title: "Bookmarks",
+    checkboxLabel: "Page Bookmark",  // NEW
+    intro: `Your bookmarks intro text...`,
+  },
+
+  // Audio controls - add ariaLabels section
+  audio: {
+    strings: {
+      clickhere: "click here",
+      pageend: "end of page",
+      playfromhere: "play from here",
+      rateofspeech: "rate of speech",
+      slowspeedcaption: "slow",
+      fastspeedcaption: "fast",
+    },
+    ariaLabels: {  // NEW section
+      openAudioControls: "Open audio controls",
+      audioToolbar: "Audio controls",
+      play: "Play",
+      pause: "Pause",
+      stop: "Stop",
+      previousBlock: "Previous section",
+      nextBlock: "Next section",
+      closeControls: "Close audio controls",
+      speechRate: "Speech rate",
+      close: "Close",
+      playFromHereDialog: "Play from here",
+      statusPlaying: "Playing",
+      statusPaused: "Paused",
+      statusStopped: "Stopped",
+      statusEndOfPage: "Reached end of page",
+    },
+    substitutions: {
+      // ... existing substitutions
+    },
+  },
+
+  // Settings (add next if missing)
+  settings: {
+    languages: {
+      title: "Choose Language",
+      next: "Next",  // May be missing
+    },
+    // ...other settings...
+  },
+
+  // Logo alt text
+  logoAltText: "Hesperian Home",
+
+  // Intro tour (if applicable)
+  intro: {
+    cancel: "Exit",
+    next: "Next",
+    back: "Back",
+    dontshowagain: "Don't show again",
+    steps: {
+      // ...tour step content...
+    },
+  },
+
+  // Calculator (if applicable)
+  calculator: {
+    // ...existing calculator strings...
+    previousMonth: "Previous Month",
+    nextMonth: "Next Month",
+    month: "Month",
+    day: "Day",
+    go: "Go",
+    dateSelectionLabel: "Select date of last menstrual period",
+    dateSelectedMessage: "Date selected",
+    selectDateFirstMessage: "Please select both month and day first",
+  },
+};
+```
+
+**Key format changes:**
+- `search: "Search"` → `search: { prompt: "Search", ariaLabels: {...} }`
+- `favorites` gains `checkboxLabel`
+- `audio` gains `ariaLabels` section
+
+**IMPORTANT: Check ALL locales!** Every locale's `resources.js` must include:
+1. The `search` object format (not string)
+2. `landmarks` object with `maincontent`, `mainmenu`, `settings`
+3. `toolbar.ariaLabels` object
+4. Navigation labels: `logoAltText`, `upperLeftMenuAriaLabel`, `upperRightMenuAriaLabel`, `backButtonAriaLabel`, `bookmarkAriaLabel`
+
+If any locale is missing these resources, that locale will have missing or broken aria labels for accessibility.
+
+To verify all locales have the correct format:
+```bash
+# Check for old search string format - should find NO matches
+grep -r 'search: "' www/locales/*/resources/
+
+# Check that all locales have landmarks - should find matches in ALL locales
+grep -r 'landmarks:' www/locales/*/resources/
+
+# Check for logoAltText - should find matches in ALL locales
+grep -r 'logoAltText:' www/locales/*/resources/
+
+# Check for toolbar ariaLabels - should find matches in ALL locales
+grep -r 'toolbar:' www/locales/*/resources/
+```
+
+**Reference**: See `../hesperian-mobile-SA-f7/www/locales/*/resources/resources.js` for complete examples in all supported languages.
+
+**For non-English locales**: Copy translations from SA-f7 when available, or use English strings as a starting point and translate.
+
+---
+
+## Accessibility: Header Aria Labels
+
+The header navbar elements (logo, left menu, right menu, back button) have their aria-labels set automatically by the `hesperian-mobile` library. No app-level code is required.
+
+The library handles setting these attributes on `page:init`:
+- Logo image alt text from `logoAltText` resource
+- Left menu aria-label from `upperLeftMenuAriaLabel` resource
+- Right menu aria-label from `upperRightMenuAriaLabel` resource
+- Back button aria-label from `backButtonAriaLabel` resource
+
+Ensure these resource strings are defined in each locale's `resources.js` (see "Required String Resources" section above).
+
+---
+
+## Accessibility: Techniques Reference
+
+### Dynamic ARIA Labels
+
+Use `data-aria-label` for labels that update with locale:
+
+```html
+<button data-aria-label="audio.ariaLabels.play">
+  <i class="material-icons" aria-hidden="true">play_arrow</i>
+</button>
+```
+
+### Bookmark Labels
+
+Bookmark checkboxes use `data-bookmark-for`:
+
+```html
+<input type="checkbox" data-bookmark-for="{{page.title}}"/>
+```
+
+### Images
+
+```html
+<!-- Decorative -->
+<img src="icon.png" alt="">
+
+<!-- Informative -->
+<img src="warning.png" alt="Warning">
+
+<!-- Icons in buttons -->
+<button aria-label="Play">
+  <i class="material-icons" aria-hidden="true">play_arrow</i>
+</button>
+```
+
+### Custom Keyboard Handlers
+
+```javascript
+import { isActivationKey } from "hesperian-mobile";
+
+$button.attr("role", "button");
+$button.attr("tabindex", "0");
+$button.on("keydown", function(e) {
+  if (isActivationKey(e)) {
+    e.preventDefault();
+    handleClick();
+  }
+});
+```
+
+### Focus Trap for Custom Modals
+
+```javascript
+import { createFocusTrapHandler } from "hesperian-mobile";
+
+$popup.on("keydown", createFocusTrapHandler());
+```
+
+### Smart Select Accessibility
+
+```javascript
+import { createSmartSelectAccessibilityHandlers } from "hesperian-mobile";
+
+app.smartSelect.create({
+  el: element,
+  openIn: "popup",
+  on: createSmartSelectAccessibilityHandlers()
+});
+```
+
+---
+
+## Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| `Template7 is not defined` | Add `import Template7 from "template7";` |
+| `createApp is not a function` | Use `initApp` instead of `createApp` |
+| `window.app` is undefined | Use `getApp()` from hesperian-mobile |
+| `app.t7.registerHelper` fails | Use `Template7.registerHelper()` directly |
+| Sass error about `@import` | Convert to `@use "..." as *;` |
+| Symlink overwritten after npm install | Re-create: `rm -rf node_modules/hesperian-mobile && ln -s ../../hesperian-mobile node_modules/hesperian-mobile` |
+| Router not navigating | Update route async signature to use `context` parameter |
+| Search shows "undefined" | Change `search: "string"` to `search: { prompt: "string", ariaLabels: {...} }` **in ALL locales** - check with `grep -r 'search: "' www/locales/` |
+| Missing aria labels on logo/menus | Add `landmarks`, `toolbar`, `logoAltText`, `upperLeftMenuAriaLabel`, `upperRightMenuAriaLabel`, `backButtonAriaLabel`, `bookmarkAriaLabel` to **ALL locales**. Header labels are set automatically by the library. |
+| Missing `@messageformat/core` | Add `"@messageformat/core": "^3.0.0"` to dependencies |
+| `Cannot read properties of undefined (reading 'extend')` | Replace `window.app` with `getApp()` |
+
+---
+
+## Migration Checklist
+
+### Setup
+- [ ] `../hesperian-mobile` on `feat/updatef7` branch
+- [ ] Ran `npm install` and `npm link` in hesperian-mobile
+- [ ] Created symlink: `ln -s ../../hesperian-mobile node_modules/hesperian-mobile`
+
+### Dependencies
+- [ ] Updated `.node-version` to v18+
+- [ ] Updated `package.json`
+- [ ] Ran `npm install`
+- [ ] Re-created hesperian-mobile symlink
+- [ ] Created `vite.config.js`
+- [ ] Deleted `webpack.config.js`
+
+### Code
+- [ ] Updated imports in `www/js/app.js`
+- [ ] Changed `createApp` to `initApp`
+- [ ] Updated `root` to `el` in config
+- [ ] Updated ALL files with `framework7.esm.bundle` or `from 'framework7'` imports
+- [ ] Replaced ALL `window.app` with `getApp()`
+- [ ] Updated `app.t7.registerHelper` to `Template7.registerHelper`
+- [ ] Converted custom routes to new async signature
+- [ ] Removed filter routes (if any)
+
+### Sass
+- [ ] Updated `theme.scss` to use `@forward`
+- [ ] Converted all `@import` to `@use "..." as *;`
+
+### Build
+- [ ] Build succeeds: `make bundle`
+
+### Accessibility Resources (must be added to ALL locales)
+- [ ] Added `landmarks` object (`maincontent`, `mainmenu`, `settings`) **to all locales**
+- [ ] Added `toolbar.ariaLabels` object **to all locales**
+- [ ] Added `logoAltText` **to all locales**
+- [ ] Added navigation labels (`upperLeftMenuAriaLabel`, `upperRightMenuAriaLabel`, `backButtonAriaLabel`, `bookmarkAriaLabel`) **to all locales**
+- [ ] Changed `search` from string to object with `prompt` and `ariaLabels` **in ALL locales**
+- [ ] Added `audio.ariaLabels`
+- [ ] Added `favorites.checkboxLabel`
+- [ ] Added calculator strings (if applicable)
+- [ ] Verified: `grep -r 'landmarks:' www/locales/*/resources/` finds ALL locales
+- [ ] Verified: `grep -r 'search: "' www/locales/*/resources/` finds NO matches
+
+### Testing
+- [ ] App loads in browser
+- [ ] No JavaScript errors in console
+- [ ] Navigation works
+- [ ] Search placeholder shows correctly (not "undefined")
+- [ ] Language switching works
+- [ ] Audio works (if applicable)
+- [ ] Keyboard navigation works
+- [ ] Compare behavior with reference: `../hesperian-mobile-APP/`
+- [ ] Compare with upgraded SA: `../hesperian-mobile-SA-f7/`
+
+---
+
+## GitHub Actions - testsite.yaml
+
+Update `.github/workflows/testsite.yaml` to use the new Vite build system:
+
+```yaml
+name: Build test site
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 22.3.0
+      - run: npm ci
+      - run: make bundle site
+      - run: ./node_modules/.bin/deploy-aws-s3-cloudfront --non-interactive --source ./dist-web --bucket hesperian-test-site --destination www/${GITHUB_REPOSITORY}/${BRANCH_NAME} --distribution E1IR6U5GON3FEZ --invalidation-path "/*"
+      - run: npx playwright install --with-deps
+      - run: make test-a11y-all
+      - run: ./node_modules/.bin/deploy-aws-s3-cloudfront --non-interactive --source ./build/reports/ --bucket hesperian-test-site --destination www/${GITHUB_REPOSITORY}/${BRANCH_NAME}/reports --distribution E1IR6U5GON3FEZ --invalidation-path "/www/${GITHUB_REPOSITORY}/${BRANCH_NAME}/reports"
+```
+
+**Key changes from old testsite.yaml:**
+- `node-version`: `15.14.0` → `22.3.0`
+- Removed Docker build steps (`make build` in docker container)
+- Changed build command: `make docker-webpack docker-site` → `make bundle site`
+- Added Playwright installation: `npx playwright install --with-deps`
+- Added accessibility testing: `make test-a11y-all`
+- Added reports deployment step
+
+---
+
+## Required Assets
+
+### HHG Logo
+
+Ensure `www/img/HHG-logo.png` exists. This logo is displayed in the app header. Copy from another working app (e.g., SA-f7) if missing.
+
+### Footer Partial in HTML Templates
+
+**Critical**: All HTML templates in `www/locales/*/` must include the `{{> footer}}` partial to render the bottom toolbar.
+
+Add `{{> footer}}` before the closing `</div>` of the page element:
+
+```html
+<div data-page="..." class="page ...">
+  {{> header}}
+  <div class="page-content">
+    <!-- page content -->
+  </div>
+{{> footer}}
+</div>
+```
+
+The footer partial (defined in `hesperian-mobile/lib/appTemplates.js`) renders:
+- Home button (links to `/`)
+- Help button (links to `/pages/J4-help`)
+- Audio controls button (expands to show playback controls)
+- Bookmarks button (opens favorites popup)
+
+**To add footer to all existing templates:**
+```bash
+cd www/locales
+for locale in */; do
+  for file in "$locale"*.html; do
+    if [ -f "$file" ] && ! grep -q "> footer" "$file"; then
+      awk '
+      {lines[NR] = $0}
+      END {
+        for (i = NR; i >= 1; i--) {
+          if (match(lines[i], /^<\/div>/)) {
+            for (j = 1; j < i; j++) print lines[j]
+            print "{{> footer}}"
+            print lines[i]
+            for (j = i+1; j <= NR; j++) print lines[j]
+            break
+          }
+        }
+      }' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
+    fi
+  done
+done
+```
+
+---
+
+## Accessibility Testing Dependencies
+
+To enable `make test-a11y` and `make test-a11y-all`, add these devDependencies:
+
+```json
+"devDependencies": {
+  "@axe-core/playwright": "^4.10.0",
+  "cheerio": "^1.0.0",
+  "handlebars": "^4.7.8",
+  "jsdom": "^27.4.0",
+  "playwright": "^1.49.0",
+  "deploy-aws-s3-cloudfront": "^3.8.0"
+}
+```
+
+After installing, run:
+```bash
+npx playwright install
+```
+
+Then test:
+```bash
+make test-a11y      # English locale only
+make test-a11y-all  # All locales
+```
+
+Reports are generated in `build/reports/accessibility/`.
+
+---
+
+## Reference Files
+
+When stuck, consult these working examples in `../hesperian-mobile-SA-f7/`:
+
+| Your File | Reference |
+|-----------|-----------|
+| `www/js/app.js` | `../hesperian-mobile-SA-f7/www/js/app.js` |
+| `www/css/styles.scss` | `../hesperian-mobile-SA-f7/www/css/styles.scss` |
+| `www/css/theme.scss` | `../hesperian-mobile-SA-f7/www/css/theme.scss` |
+| `vite.config.js` | `../hesperian-mobile-SA-f7/vite.config.js` |
+| `package.json` | `../hesperian-mobile-SA-f7/package.json` |
+| Locale resources | `../hesperian-mobile-SA-f7/www/locales/en/resources/resources.js` |
+
+For Framework7 API documentation: https://framework7.io/
