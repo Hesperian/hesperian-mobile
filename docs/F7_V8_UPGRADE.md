@@ -317,152 +317,161 @@ make bundle
 
 ## Accessibility: Required String Resources
 
-Add these keys to each locale's resource file (e.g., `www/locales/en/resources/resources.js`):
+Resources are split into two files per locale:
 
+1. **`resources-common.js`** - Common UI strings used by the hesperian-mobile library (accessibility labels, audio controls, etc.)
+2. **`resources.js`** - App-specific strings (sidelinks, settings, intro, etc.)
+
+### Step 1: Copy resources-common.js from SA-f7
+
+Copy the `resources-common.js` file for each locale from the SA-f7 reference implementation:
+
+```bash
+# For each locale your app supports, copy from SA-f7
+cp ../hesperian-mobile-SA-f7/www/locales/en/resources/resources-common.js www/locales/en/resources/
+cp ../hesperian-mobile-SA-f7/www/locales/es/resources/resources-common.js www/locales/es/resources/
+cp ../hesperian-mobile-SA-f7/www/locales/fr/resources/resources-common.js www/locales/fr/resources/
+# ... repeat for each locale
+```
+
+The `resources-common.js` files contain translated UI strings for:
+- `landmarks` - Screen reader navigation labels
+- `toolbar.ariaLabels` - Bottom toolbar button labels
+- `logoAltText`, `upperLeftMenuAriaLabel`, `upperRightMenuAriaLabel`, `backButtonAriaLabel`, `bookmarkAriaLabel` - Header navigation labels
+- `socialsharing` - Share image text
+- `favorites` - Bookmarks popup title, checkbox label, and intro text
+- `audio.strings` - Audio player UI text
+- `audio.ariaLabels` - Audio control accessibility labels
+- `search.ariaLabels` - Search input accessibility labels
+
+### Step 2: Update resources.js
+
+Update each locale's `resources.js` to import common resources and restructure app-specific content:
+
+1. Add the import at the top of the file:
+```javascript
+import { commonResources } from "./resources-common";
+```
+
+2. Add `common: commonResources` as the first property in the resources object:
 ```javascript
 const resources = {
-  // Landmark labels
-  landmarks: {
-    maincontent: "Main content",
-    mainmenu: "Main menu",
-    settings: "Settings menu",
-  },
+  common: commonResources,
 
-  // Toolbar
-  toolbar: {
-    ariaLabels: {
-      mainToolbar: "Main toolbar",
-      home: "Home",
-      help: "Help",
-      bookmarks: "Bookmarks",
-    },
-  },
+  // App-specific resources continue below...
+```
 
-  // Navigation labels
-  upperLeftMenuAriaLabel: "Application Main Navigation",
-  upperRightMenuAriaLabel: "Application Settings",
-  backButtonAriaLabel: "Previous Page",
-  bookmarkAriaLabel: "Bookmark",
+3. Remove these keys from `resources.js` (they're now in `resources-common.js`):
+   - `landmarks`
+   - `toolbar`
+   - `logoAltText`
+   - `upperLeftMenuAriaLabel`
+   - `upperRightMenuAriaLabel`
+   - `backButtonAriaLabel`
+   - `bookmarkAriaLabel`
+   - `socialsharing`
+   - `favorites`
+   - `audio.strings`
+   - `audio.ariaLabels`
+   - `search.ariaLabels`
 
-  // Search - CRITICAL: format changed from string to object
-  // Old format: search: "Search"
-  // New format: search: { prompt: "Search", ariaLabels: {...} }
-  // If you see "undefined" in the search box, this is the cause!
-  search: {
-    prompt: "Search",
-    ariaLabels: {
-      clear: "Clear search",
-    },
-  },
+4. Keep these app-specific resources in `resources.js`:
+   - `sidelinks` - App navigation menu
+   - `settings` - App settings menu
+   - `search.prompt` - Search placeholder text (just the prompt, not ariaLabels)
+   - `audio.substitutions` - App-specific text-to-speech substitutions
+   - `intro` - App-specific tour steps
+   - Any app-specific resources (calculator, methods, etc.)
 
-  // Favorites/Bookmarks - add checkboxLabel
-  favorites: {
-    title: "Bookmarks",
-    checkboxLabel: "Page Bookmark",  // NEW
-    intro: `Your bookmarks intro text...`,
-  },
+### Example resources.js Structure After Migration
 
-  // Audio controls - add ariaLabels section
-  audio: {
-    strings: {
-      clickhere: "click here",
-      pageend: "end of page",
-      playfromhere: "play from here",
-      rateofspeech: "rate of speech",
-      slowspeedcaption: "slow",
-      fastspeedcaption: "fast",
-    },
-    ariaLabels: {  // NEW section
-      openAudioControls: "Open audio controls",
-      audioToolbar: "Audio controls",
-      play: "Play",
-      pause: "Pause",
-      stop: "Stop",
-      previousBlock: "Previous section",
-      nextBlock: "Next section",
-      closeControls: "Close audio controls",
-      speechRate: "Speech rate",
-      close: "Close",
-      playFromHereDialog: "Play from here",
-      statusPlaying: "Playing",
-      statusPaused: "Paused",
-      statusStopped: "Stopped",
-      statusEndOfPage: "Reached end of page",
-    },
-    substitutions: {
-      // ... existing substitutions
-    },
-  },
+```javascript
+import { commonResources } from "./resources-common";
 
-  // Settings (add next if missing)
+const resources = {
+  common: commonResources,
+
+  sidelinks: [
+    { link: "/", title: "Home" },
+    // ... app-specific menu items
+  ],
+
   settings: {
-    languages: {
-      title: "Choose Language",
-      next: "Next",  // May be missing
-    },
-    // ...other settings...
+    languages: { title: "Choose Language", next: "Next" },
+    about: { title: "About us" },
+    // ... app-specific settings
   },
 
-  // Logo alt text
-  logoAltText: "Hesperian Home",
+  search: {
+    prompt: "Search",  // Only the prompt - ariaLabels are in common
+  },
 
-  // Intro tour (if applicable)
+  audio: {
+    substitutions: {  // Only substitutions - strings and ariaLabels are in common
+      mcg: "micrograms",
+      mg: "milligrams",
+    },
+  },
+
   intro: {
     cancel: "Exit",
     next: "Next",
     back: "Back",
     dontshowagain: "Don't show again",
-    steps: {
-      // ...tour step content...
-    },
+    steps: { /* app-specific tour steps */ },
   },
 
-  // Calculator (if applicable)
-  calculator: {
-    // ...existing calculator strings...
-    previousMonth: "Previous Month",
-    nextMonth: "Next Month",
-    month: "Month",
-    day: "Day",
-    go: "Go",
-    dateSelectionLabel: "Select date of last menstrual period",
-    dateSelectedMessage: "Date selected",
-    selectDateFirstMessage: "Please select both month and day first",
-  },
+  // App-specific resources...
+  calculator: { /* ... */ },  // SA only
+  methods: { /* ... */ },      // FP only
 };
+
+export { resources };
 ```
 
-**Key format changes:**
-- `search: "Search"` → `search: { prompt: "Search", ariaLabels: {...} }`
-- `favorites` gains `checkboxLabel`
-- `audio` gains `ariaLabels` section
+### What Goes Where
 
-**IMPORTANT: Check ALL locales!** Every locale's `resources.js` must include:
-1. The `search` object format (not string)
-2. `landmarks` object with `maincontent`, `mainmenu`, `settings`
-3. `toolbar.ariaLabels` object
-4. Navigation labels: `logoAltText`, `upperLeftMenuAriaLabel`, `upperRightMenuAriaLabel`, `backButtonAriaLabel`, `bookmarkAriaLabel`
+| Resource | File | Notes |
+|----------|------|-------|
+| `landmarks` | resources-common.js | Screen reader navigation |
+| `toolbar.ariaLabels` | resources-common.js | Bottom toolbar labels |
+| `logoAltText` | resources-common.js | Logo alt text |
+| `upperLeftMenuAriaLabel` | resources-common.js | Navigation labels |
+| `upperRightMenuAriaLabel` | resources-common.js | Navigation labels |
+| `backButtonAriaLabel` | resources-common.js | Navigation labels |
+| `bookmarkAriaLabel` | resources-common.js | Bookmark labels |
+| `socialsharing` | resources-common.js | Share image text |
+| `favorites` | resources-common.js | Bookmarks popup |
+| `audio.strings` | resources-common.js | Audio UI strings |
+| `audio.ariaLabels` | resources-common.js | Audio control labels |
+| `search.ariaLabels` | resources-common.js | Search input labels |
+| `sidelinks` | resources.js | App menu items |
+| `settings` | resources.js | App settings menu |
+| `search.prompt` | resources.js | App search placeholder |
+| `audio.substitutions` | resources.js | App-specific TTS substitutions |
+| `intro` | resources.js | App tour steps |
+| `calculator` | resources.js | SA only |
+| `methods` | resources.js | FP only |
 
-If any locale is missing these resources, that locale will have missing or broken aria labels for accessibility.
+### Available Locales in SA-f7
 
-To verify all locales have the correct format:
-```bash
-# Check for old search string format - should find NO matches
-grep -r 'search: "' www/locales/*/resources/
+The following locales have `resources-common.js` files available to copy:
 
-# Check that all locales have landmarks - should find matches in ALL locales
-grep -r 'landmarks:' www/locales/*/resources/
+| Locale | Language |
+|--------|----------|
+| en | English |
+| es | Spanish |
+| fr | French |
+| sw | Swahili |
+| am | Amharic |
+| om | Oromo |
+| rw | Kinyarwanda |
+| lg | Luganda |
+| pt | Portuguese |
+| ig | Igbo |
+| yo | Yoruba |
 
-# Check for logoAltText - should find matches in ALL locales
-grep -r 'logoAltText:' www/locales/*/resources/
-
-# Check for toolbar ariaLabels - should find matches in ALL locales
-grep -r 'toolbar:' www/locales/*/resources/
-```
-
-**Reference**: See `../hesperian-mobile-SA-f7/www/locales/*/resources/resources.js` for complete examples in all supported languages.
-
-**For non-English locales**: Copy translations from SA-f7 when available, or use English strings as a starting point and translate.
+**For locales not in SA-f7**: Copy the English `resources-common.js` and translate the strings.
 
 ---
 
@@ -471,12 +480,12 @@ grep -r 'toolbar:' www/locales/*/resources/
 The header navbar elements (logo, left menu, right menu, back button) have their aria-labels set automatically by the `hesperian-mobile` library. No app-level code is required.
 
 The library handles setting these attributes on `page:init`:
-- Logo image alt text from `logoAltText` resource
-- Left menu aria-label from `upperLeftMenuAriaLabel` resource
-- Right menu aria-label from `upperRightMenuAriaLabel` resource
-- Back button aria-label from `backButtonAriaLabel` resource
+- Logo image alt text from `common.logoAltText` resource
+- Left menu aria-label from `common.upperLeftMenuAriaLabel` resource
+- Right menu aria-label from `common.upperRightMenuAriaLabel` resource
+- Back button aria-label from `common.backButtonAriaLabel` resource
 
-Ensure these resource strings are defined in each locale's `resources.js` (see "Required String Resources" section above).
+These are defined in `resources-common.js` for each locale.
 
 ---
 
@@ -564,7 +573,7 @@ app.smartSelect.create({
 | Symlink overwritten after npm install | Re-create: `rm -rf node_modules/hesperian-mobile && ln -s ../../hesperian-mobile node_modules/hesperian-mobile` |
 | Router not navigating | Update route async signature to use `context` parameter |
 | Search shows "undefined" | Change `search: "string"` to `search: { prompt: "string", ariaLabels: {...} }` **in ALL locales** - check with `grep -r 'search: "' www/locales/` |
-| Missing aria labels on logo/menus | Add `landmarks`, `toolbar`, `logoAltText`, `upperLeftMenuAriaLabel`, `upperRightMenuAriaLabel`, `backButtonAriaLabel`, `bookmarkAriaLabel` to **ALL locales**. Header labels are set automatically by the library. |
+| Missing aria labels on logo/menus | Ensure `resources-common.js` exists for each locale with `landmarks`, `toolbar`, `logoAltText`, navigation labels. Import and add `common: commonResources` in `resources.js`. |
 | Missing `@messageformat/core` | Add `"@messageformat/core": "^3.0.0"` to dependencies |
 | `Cannot read properties of undefined (reading 'extend')` | Replace `window.app` with `getApp()` |
 
@@ -603,16 +612,11 @@ app.smartSelect.create({
 - [ ] Build succeeds: `make bundle`
 
 ### Accessibility Resources (must be added to ALL locales)
-- [ ] Added `landmarks` object (`maincontent`, `mainmenu`, `settings`) **to all locales**
-- [ ] Added `toolbar.ariaLabels` object **to all locales**
-- [ ] Added `logoAltText` **to all locales**
-- [ ] Added navigation labels (`upperLeftMenuAriaLabel`, `upperRightMenuAriaLabel`, `backButtonAriaLabel`, `bookmarkAriaLabel`) **to all locales**
-- [ ] Changed `search` from string to object with `prompt` and `ariaLabels` **in ALL locales**
-- [ ] Added `audio.ariaLabels`
-- [ ] Added `favorites.checkboxLabel`
-- [ ] Added calculator strings (if applicable)
-- [ ] Verified: `grep -r 'landmarks:' www/locales/*/resources/` finds ALL locales
-- [ ] Verified: `grep -r 'search: "' www/locales/*/resources/` finds NO matches
+- [ ] Created `resources-common.js` for each locale with common UI strings
+- [ ] Updated `resources.js` to import and use `common: commonResources`
+- [ ] Moved common resources to `resources-common.js`: landmarks, toolbar, logoAltText, navigation labels, favorites, audio.strings, audio.ariaLabels, search.ariaLabels, socialsharing
+- [ ] Kept app-specific resources in `resources.js`: sidelinks, settings, intro, search.prompt, audio.substitutions
+- [ ] Verified: `grep -r 'commonResources' www/locales/*/resources/resources.js` finds ALL locales
 
 ### Testing
 - [ ] App loads in browser
