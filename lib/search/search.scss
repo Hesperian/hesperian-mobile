@@ -27,12 +27,18 @@ md .searchbar .input-clear-button:after {
 // Global navbar searchbar - pill-shaped white input
 #app .navbar .subnavbar .searchbar {
   flex-grow: 1;
-  
+  // Constrain height to prevent overflow past subnavbar border and searchbar input border
+  // Total offset = subnavbar border (2px) + searchbar input border (2px) = 4px
+  max-height: calc(var(--f7-subnavbar-height) - var(--hm-subnavbar-border-width) - var(--hm-searchbar-input-border-width));
+
   .searchbar-inner {
     padding: var(--hm-searchbar-inset, 3px) 10%;
     display: flex;
     align-items: center;
     transition: padding 0.3s ease;
+    // Ensure inner content respects parent height
+    height: 100%;
+    box-sizing: border-box;
   }
 
   &.searchbar-focused .searchbar-inner {

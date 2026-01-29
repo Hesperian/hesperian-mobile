@@ -11,6 +11,9 @@
   --f7-subnavbar-height: 48px;
   --f7-toolbar-height: 48px;
   --f7-navbar-bg-color: #{$navbar-background};
+  // Border widths for subnavbar and searchbar input
+  --hm-subnavbar-border-width: 2px;
+  --hm-searchbar-input-border-width: 2px;
 }
 
 // Fix for toolbar at bottom of DOM (after page-content) for accessibility
@@ -45,7 +48,7 @@
 }
 
 #app .navbar .subnavbar {
-  border-bottom: 2px solid $subnavbar-background;
+  border-bottom: var(--hm-subnavbar-border-width) solid $subnavbar-background;
 
   a {
     color: $navbar-textcolor;
@@ -57,7 +60,7 @@
   background-color: white;
 
   .searchbar-input-wrap {
-    border: 2px solid $subnavbar-background;
+    border: var(--hm-searchbar-input-border-width) solid $subnavbar-background;
   }
 }
 
@@ -114,19 +117,24 @@
 
 // Symmetric spacing for navbar left/right icon containers
 $navbar-icon-edge-spacing: 8px;
+// Width for icon columns (ensures back button aligns with menu icon)
+$navbar-icon-column-width: 52px;
 
+// Primary navbar row - use fixed width for left/right to align with secondary navbar
 .navbar .left {
-  margin-left: $navbar-icon-edge-spacing;
+  width: $navbar-icon-column-width;
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .navbar .right {
-  margin-right: $navbar-icon-edge-spacing;
+  width: $navbar-icon-column-width;
   height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 // Override default link padding for icon-only buttons in navbar
@@ -136,6 +144,29 @@ $navbar-icon-edge-spacing: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+// Secondary navbar uses grid with same column width for alignment
+// Note: F7 adds 4px horizontal margin to .navbar .left/.right, so we add matching padding
+.navbar .secondary-navbar {
+  display: grid;
+  grid-template-columns: $navbar-icon-column-width 1fr $navbar-icon-column-width;
+  align-items: center;
+  // Match the 4px margin that F7 adds to .navbar .left
+  padding-left: 4px;
+  padding-right: 4px;
+
+  > .back-button {
+    grid-column: 1;
+    justify-self: center;
+    // Reset margins since grid handles positioning
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  > .subnavbar-inner {
+    grid-column: 2;
+  }
 }
 
 .navbar {
@@ -155,13 +186,15 @@ $navbar-icon-edge-spacing: 8px;
   padding-right: 0px;
 }
 
-// Add margin to back button in secondary navbar for focus indicator visibility
-.secondary-navbar>.back-button {
-  margin-left: $navbar-icon-edge-spacing;
-  margin-right: $navbar-icon-edge-spacing;
+// Back button styling in secondary navbar
+#app .navbar .secondary-navbar>.back-button {
+  // Remove default link padding to allow proper grid centering
+  padding: 0;
 
   &>i {
     color: $subnavbar-background;
+    font-size: 28px;
+    font-weight: bold;
   }
 }
 
