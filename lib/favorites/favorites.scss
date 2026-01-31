@@ -199,29 +199,3 @@ html.device-android.with-statusbar .favorites-sheet {
 }
 
 
-// toolbar
-#app {
-  .app-toolbar {
-    background-color: $subnavbar-background;
-
-    .material-icons {
-      font-size: 28px;
-    }
-
-    a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    &:not(.hm-audio-enabled) a.toolbar-audio-button-play {
-      display: none;
-    }
-  }
-
-  .favorites-sheet {
-    .toolbar {
-      background-color: $subnavbar-background;
-    }
-  }
-}
