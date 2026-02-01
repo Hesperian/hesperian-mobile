@@ -9,6 +9,7 @@ import {
   createSmartSelectAccessibilityHandlers,
   getVisibleFocusableElements,
   createFocusTrapHandler,
+  injectAriaIntoElement,
 } from './lib/accessibility/accessibility';
 
 export {
@@ -23,4 +24,5 @@ export {
   createSmartSelectAccessibilityHandlers,
   getVisibleFocusableElements,
   createFocusTrapHandler,
+  injectAriaIntoElement,
 };
