@@ -1,6 +1,6 @@
 # Private Files
 
-Not to be checked in to git.
+Not to be checked in to git. See [docs/CORDOVA_SIGNING_AND_FIREBASE.md](../../../docs/CORDOVA_SIGNING_AND_FIREBASE.md) for details.
 
 * `android.keystore` - keystore for signing the Android build
 * `google-services.json` - Google Firebase Analytics for Android

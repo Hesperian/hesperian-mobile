@@ -6,10 +6,16 @@
     Pass in the path to the appConfig.json file.
 */
 const fs = require("fs");
+const path = require("path");
 const handlebars = require("handlebars");
 const contextFile = process.argv[2];
 const contextData = fs.readFileSync(contextFile, "utf-8");
 const context = JSON.parse(contextData);
+
+// Load centralized versions
+const versionsPath = path.resolve(__dirname, "../cordova/versions.json");
+const versions = JSON.parse(fs.readFileSync(versionsPath, "utf-8"));
+const plugins = versions.plugins;
 const configData = `<?xml version='1.0' encoding='utf-8'?>
 <widget id="{{{id}}}"
         version="{{{version}}}"
@@ -28,14 +34,14 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     </author>
     <content src="index.html" />
 
-    <plugin name="cordova-plugin-inappbrowser" spec="6.0.0" />
-    <plugin name="cordova-plugin-statusbar" source="npm" spec="4.0.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="${plugins["cordova-plugin-inappbrowser"]}" />
+    <plugin name="cordova-plugin-statusbar" source="npm" spec="${plugins["cordova-plugin-statusbar"]}" />
     <!-- Social Sharing plugin support -->
-    <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="6.0.4" />
-    <plugin name="cordova-plugin-androidx" source="npm" spec="3.0.0" />
-    <plugin name="cordova-plugin-androidx-adapter" source="npm" spec="1.1.3" />
+    <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="${plugins["cordova-plugin-x-socialsharing"]}" />
+    <plugin name="cordova-plugin-androidx" source="npm" spec="${plugins["cordova-plugin-androidx"]}" />
+    <plugin name="cordova-plugin-androidx-adapter" source="npm" spec="${plugins["cordova-plugin-androidx-adapter"]}" />
 
-    <plugin name="cordova-plugin-firebase-analytics" spec="8.0.0" />
+    <plugin name="cordova-plugin-firebase-analytics" spec="${plugins["cordova-plugin-firebase-analytics"]}" />
     <platform name="android">
         <resource-file src="private/google-services.json" target="app/google-services.json" />
         <edit-config file="AndroidManifest.xml" target="/manifest" mode="merge">
@@ -53,7 +59,7 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
         <preference name="hostname" value="localhost" />
         <preference name="DisallowOverscroll" value="true"/>
     </platform>
-    <plugin name="cordova-plugin-tts-advanced" spec="git+https://github.com/Hesperian/cordova-plugin-tts-advanced.git/#hesperian" />
+    <plugin name="cordova-plugin-tts-advanced" spec="${plugins["cordova-plugin-tts-advanced"]}" />
 
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -74,9 +80,9 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     <preference name="EnableViewportScale" value="true" />
 
     <!-- Platform Version Support -->
-    <preference name="android-minSdkVersion" value="24" />  <!-- Android 7.0 Nougat (API 24) - Minimum supported version - Released August 2016 - https://developer.android.com/tools/releases/platforms -->
-    <preference name="android-targetSdkVersion" value="35"/>  <!-- Android 15 (API 35) - Target SDK version - Released October 2024 - https://developer.android.com/tools/releases/platforms -->
-    <preference name="deployment-target" value="15.6"/>  <!-- iOS 15.6 - Minimum supported version (IPHONEOS_DEPLOYMENT_TARGET) - https://cordova.apache.org/docs/en/latest/config_ref/index.html#preference -->
+    <preference name="android-minSdkVersion" value="${versions.android.minSdkVersion}" />
+    <preference name="android-targetSdkVersion" value="${versions.android.targetSdkVersion}"/>
+    <preference name="deployment-target" value="${versions.ios.deploymentTarget}"/>
 
     <!-- iOS App icons -->
     <icon src="resources/icons/ios/AppIcon-20.png" platform="ios" width="20" height="20" />

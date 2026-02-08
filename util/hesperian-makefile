@@ -13,6 +13,9 @@ MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
 MAKE_VALIDATE=$(NODE_BIN)/hesperian-validate
 MAKE_CHECK_RESOURCES=$(NODE_BIN)/hesperian-check-resources
 CORDOVA_CONFIG=$(BUILDDIR)/config.xml
+HESPERIAN_MOBILE_DIR=$(CURDIR)/node_modules/hesperian-mobile
+BUILD_ENV=$(HESPERIAN_MOBILE_DIR)/cordova/build.env
+OP_RUN=op run --env-file=$(BUILD_ENV) --
 VERSION := $(shell node -p "require('./app-config.json').version")
 APPNAME := $(shell node -p "require('./app-config.json').name")
 OUTPUT_DIR=output/${VERSION}
@@ -23,7 +26,7 @@ CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
 
 CURRENT_DIR=$(shell pwd)
 
-.PHONY: build clean bundle watch dist help site web
+.PHONY: build clean bundle watch dist help site web cordova-check cordova-clean
 
 help:
 	@echo "Common make targets:"
@@ -34,6 +37,9 @@ help:
 	@echo "\tmake test-a11y\t\t run accessibility tests (English locale, report in build/reports/accessibility/)"
 	@echo "\tmake test-a11y-all\t run accessibility tests (all locales)"
 	@echo "\tmake check-resources\t check for missing resource translations"
+	@echo "\tmake cordova-check\t verify build environment (Java, Android SDK, Xcode, etc.)"
+	@echo "\tmake cordova-clean\t remove all generated Cordova state for a fresh build"
+	@echo "\t\t\t\t  (use CORDOVA_CLEAN_ARGS=--dry-run to preview)"
 
 bundle:
 	rm -rf dist
@@ -59,10 +65,10 @@ dist: bundle $(CORDOVA_CONFIG)
 	cp -R dist ${BUILDDIR}/www
 
 cordova-build-android:
-	@(cd ${BUILDDIR}; cordova build android --device --release --verbose -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
+	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && cordova build android --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"'
 
 cordova-build: dist
-	@(cd ${BUILDDIR}; fnm use v22.3.0; cordova build --device --release --verbose -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
+	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && fnm use v22.3.0 && cordova build --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"'
 
 app: cordova-build
 	mkdir -p ${OUTPUT_DIR}
@@ -108,7 +114,7 @@ $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
 # Android Studio -> Tools -> AVD's
 .PHONY: emulate-android
 emulate-android: dist
-	@(cd ${BUILDDIR}; cordova emulate android --device --release -- --password="${CORDOVA_SIGNING_PASSPHRASE}" --storePassword="${CORDOVA_SIGNING_PASSPHRASE}")
+	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && cordova emulate android --device --release -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"'
 
 clean:
 	rm -rf ${BUILDDIR}/platforms/ios/build/
@@ -122,13 +128,25 @@ distclean:
 install:
 	npm install
 	
-cordova-install: $(CORDOVA_CONFIG) bundle
-	(${CD_BUILDDIR}; npm ci)
+cordova-check:
+	$(NODE_BIN)/hesperian-cordova-check
+
+cordova-clean:
+	$(NODE_BIN)/hesperian-cordova-clean $(CORDOVA_CLEAN_ARGS)
+
+cordova-install: cordova-check $(CORDOVA_CONFIG) bundle
+	@if [ -f ${BUILDDIR}/package-lock.json ]; then \
+		(${CD_BUILDDIR}; npm ci); \
+	else \
+		(${CD_BUILDDIR}; npm install); \
+	fi
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 	rm -rf ${BUILDDIR}/platforms
 	rm -rf ${BUILDDIR}/plugins
-	(${CD_BUILDDIR}; cordova prepare)
+	@(${CD_BUILDDIR}; cordova prepare) || \
+		(echo "cordova prepare failed, retrying (CocoaPods CDN cache may need a second attempt)..."; \
+		${CD_BUILDDIR}; cordova prepare)
 
 
 

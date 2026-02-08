@@ -12,6 +12,8 @@
     "format": "prettier --single-quote --write \"lib/**/*.js\""
   },
   "bin": {
+    "hesperian-cordova-check": "./bin/hesperian-cordova-check.js",
+    "hesperian-cordova-clean": "./bin/hesperian-cordova-clean.js",
     "hesperian-cordova-makeconfig": "./bin/hesperian-cordova-makeconfig.js",
     "hesperian-web-makeindex": "./bin/hesperian-web-makeindex.js",
     "hesperian-validate": "./bin/hesperian-validate.js",
