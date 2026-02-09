@@ -43,7 +43,7 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
 
     <plugin name="cordova-plugin-firebase-analytics" spec="${plugins["cordova-plugin-firebase-analytics"]}" />
     <platform name="android">
-        <resource-file src="private/google-services.json" target="app/google-services.json" />
+        <resource-file src="firebase/google-services.json" target="app/google-services.json" />
         <edit-config file="AndroidManifest.xml" target="/manifest" mode="merge">
             <manifest xmlns:tools="http://schemas.android.com/tools" />
         </edit-config>
@@ -54,7 +54,7 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     </platform>
 
     <platform name="ios">
-        <resource-file src="private/GoogleService-Info.plist" />
+        <resource-file src="firebase/GoogleService-Info.plist" />
         <preference name="scheme" value="app" />
         <preference name="hostname" value="localhost" />
         <preference name="DisallowOverscroll" value="true"/>

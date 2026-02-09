@@ -1,10 +1,12 @@
 # Cordova Signing and Firebase Configuration
 
-Each app's `cordova/private/` directory contains secrets required for building. These files are not checked in to git.
+Each app has two directories for build configuration:
 
-* `android.keystore` - keystore for signing the Android build (shared across apps)
-* `google-services.json` - Google Firebase Analytics for Android
-* `GoogleService-Info.plist` - Google Firebase Analytics for iOS
+* `cordova/private/` — secrets, **not** checked in to git
+  * `android.keystore` - keystore for signing the Android build (shared across apps)
+* `cordova/firebase/` — Firebase config, checked in to git (these contain only public project identifiers, not secrets)
+  * `google-services.json` - Google Firebase Analytics for Android
+  * `GoogleService-Info.plist` - Google Firebase Analytics for iOS
 
 ## Android Keystore
 
@@ -43,7 +45,7 @@ Each app requires its own Firebase config files with matching package/bundle ide
 3. Add platforms if not already registered:
    - **Android**: use the `android-packageName` from `app-config.json` (e.g. `org.hesperian.SafePregnancyAndBirth`)
    - **iOS**: use the `id` from `app-config.json` (e.g. `org.hesperian.Safe-Pregnancy-and-Birth`)
-4. Download the config files and place them in `cordova/private/`
+4. Download the config files and place them in `cordova/firebase/`
 
 ### Package name matching
 

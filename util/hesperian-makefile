@@ -63,6 +63,9 @@ site:
 dist: bundle $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
+	@# Remove stale Firebase config copies so cordova build re-copies from source
+	rm -f ${BUILDDIR}/platforms/android/app/google-services.json 2>/dev/null; true
+	find ${BUILDDIR}/platforms/ios -name GoogleService-Info.plist -path '*/Resources/*' -delete 2>/dev/null; true
 
 cordova-build-android:
 	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && cordova build android --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"'
