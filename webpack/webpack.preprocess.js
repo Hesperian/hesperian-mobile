@@ -49,8 +49,13 @@ function processPage(pagePath, pageId) {
   ret.keywords = keywordsStringToArray([titleKeyword, pageKeywords].join(','));
   ret.route = `/pages/${pageId}`;
 
+  const searchTitle = page.data('search-title') || '';
+
   if (pageHeader) {
     ret.title = pageHeader;
+    if (searchTitle) {
+      ret.searchTitle = searchTitle;
+    }
     if (hasImg) {
       ret.imgsrc = `img/${pageId}.png`;
     }
@@ -101,3 +106,5 @@ function getPageInfo(locales) {
 }
 
 module.exports = getPageInfo;
+module.exports.processPage = processPage;
+module.exports.keywordsStringToArray = keywordsStringToArray;

@@ -129,6 +129,7 @@ Global search is built from the top-level `.page` element of each HTML page:
 ```
 
 * `data-title`: Display text for the search result link, and also used as keywords (unless `data-no-title-keywords` is set)
+* `data-search-title`: Optional. A shorter title to display in search results instead of `data-title`. Does not affect keyword matching — the full `data-title` is still used for keywords. Useful when the page title is too long for the search results list.
 * `data-keywords`: Comma-separated keywords for matching
 
 Sections within a page can also appear in global search results by adding `data-section`, `data-title`, and `data-keywords` attributes:
