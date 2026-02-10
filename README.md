@@ -35,13 +35,9 @@ See [AUTHORING.md](docs/AUTHORING.md).
 
 ### Javascript Application
 
-* [Framework7](https://framework7.io/) - [v3](https://v3.framework7.io/)
-* [Webpack](https://webpack.js.org/)
-  * [Babel 7](https://babeljs.io/)
-    * [preset-env](https://babeljs.io/docs/en/babel-preset-env)
-      * [browserlist](https://github.com/browserslist/browserslist)
-      * `.bablerc`
-    * [Sass](https://sass-lang.com/)
+* [Framework7](https://framework7.io/) - [v8](https://framework7.io/)
+* [Vite](https://vite.dev/)
+  * [Sass](https://sass-lang.com/)
 
 
 ### Mobile Native Application

@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-const { processPage, keywordsStringToArray } = require("./webpack.preprocess");
+const { processPage, keywordsStringToArray } = require("./preprocess");
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const tmpDir = path.join(__dirname, "__test_fixtures__");

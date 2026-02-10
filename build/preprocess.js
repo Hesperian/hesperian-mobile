@@ -1,6 +1,6 @@
 /*
- *  webpack.preprocess.js
- *  Scan the HTML source, and extract JSON for injection into the app at compile time
+ *  preprocess.js
+ *  Scan the HTML source, and extract JSON for injection into the app at build time.
  *
  */
 const fs = require('fs');

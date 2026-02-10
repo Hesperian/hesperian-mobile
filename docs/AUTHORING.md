@@ -113,7 +113,7 @@ HTML for content displayed in new page:
 
 ## Search
 
-At build time (`webpack.preprocess.js`), HTML pages are scanned and a search index is built from `data-title`, `data-keywords`, and `data-section` attributes. Keywords are normalized to lowercase with diacritics removed (e.g. "café" becomes "cafe"), then split into individual words. At runtime, each query word must prefix-match at least one keyword for a result to appear (AND logic across query words, OR logic across keywords within a word).
+At build time (`build/preprocess.js`), HTML pages are scanned and a search index is built from `data-title`, `data-keywords`, and `data-section` attributes. Keywords are normalized to lowercase with diacritics removed (e.g. "café" becomes "cafe"), then split into individual words. At runtime, each query word must prefix-match at least one keyword for a result to appear (AND logic across query words, OR logic across keywords within a word).
 
 Attributes that influence the search index:
 * `data-keywords="keyword1, keyword2, multi word keyword"` - Comma-separated keywords. Each keyword is further split into individual words, so `"multi word keyword"` produces three separate searchable words: `multi`, `word`, `keyword`.

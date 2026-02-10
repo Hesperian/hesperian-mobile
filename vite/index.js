@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const { defineConfig } = require("vite");
 
-const getPageInfo = require("../webpack/webpack.preprocess");
+const getPageInfo = require("../build/preprocess");
 
 const CSS_EXTENSION = /.css$/i;
 
