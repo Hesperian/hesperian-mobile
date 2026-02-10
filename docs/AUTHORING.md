@@ -113,28 +113,45 @@ HTML for content displayed in new page:
 
 ## Search
 
-Search links to pages and sections with the data-keywords attribute. Attributes that influence the search:
-* `data-keywords="one two three"` - space and/or comma separated keywords for search
-* `data-title="page title"` will also be used as a (single) keyword, unless `data-no-title-keywords="true"` is present.
+At build time (`webpack.preprocess.js`), HTML pages are scanned and a search index is built from `data-title`, `data-keywords`, and `data-section` attributes. Keywords are normalized to lowercase with diacritics removed (e.g. "café" becomes "cafe"), then split into individual words. At runtime, each query word must prefix-match at least one keyword for a result to appear (AND logic across query words, OR logic across keywords within a word).
+
+Attributes that influence the search index:
+* `data-keywords="keyword1, keyword2, multi word keyword"` - Comma-separated keywords. Each keyword is further split into individual words, so `"multi word keyword"` produces three separate searchable words: `multi`, `word`, `keyword`.
+* `data-title="page title"` - Used as the display text for search results. The title words are also added as keywords unless `data-no-title-keywords="true"` is present on the `.page` element.
 
 ### Global Search
 
-Global search is keyed off of the top level div of the pages
+Global search is built from the top-level `.page` element of each HTML page:
 
-`<div data-page="content" class="page" data-id="FAQ" data-title="FAQs" data-keywords="common, dangerous, restriction, risk, safe, statistics, frequently, asked, questions">
+```html
+<div data-page="content" class="page" data-id="FAQ" data-title="FAQs"
+     data-keywords="common, dangerous, restriction, risk, safe, statistics, frequently, asked, questions">
+```
 
-* `data-title`: Text of search link to the page
-* `data-keywords`: Page keywords
+* `data-title`: Display text for the search result link, and also used as keywords (unless `data-no-title-keywords` is set)
+* `data-keywords`: Comma-separated keywords for matching
 
-Internal page links (`data-section="{{section id}}"`) can also have search title and keywords.
+Sections within a page can also appear in global search results by adding `data-section`, `data-title`, and `data-keywords` attributes:
+
+```html
+<div data-section="my-section" data-title="Section Title" data-keywords="relevant, terms">
+```
+
+The current page is excluded from its own global search results.
 
 ### Local Search
 
-You can instantiate a search form for a given page:
+Local search provides within-page search across sections. Add a search form to any page:
 
-`<div class="local-search" data-placeholder="Search for a FAQ"></div>`
+```html
+<div class="local-search" data-placeholder="Search for a FAQ"></div>
+```
 
-Use `class="searchbar-hide-on-local-search"` to hide content you don't want to show while search is active.
+* `data-placeholder` is optional; defaults to the localized search prompt.
+* Local search matches against section `data-title` (as a substring match) and `data-keywords` (prefix-match per word, same as global).
+* Section titles in local results have the page name prefix (before `:` or `፤`) stripped for brevity.
+
+Use `class="searchbar-hide-on-local-search"` on elements you want hidden while local search is active.
 
 ### Video
 
