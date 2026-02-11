@@ -10,7 +10,7 @@
   --f7-navbar-height: 64px;
   --f7-subnavbar-height: 48px;
   --f7-toolbar-height: 48px;
-  --f7-navbar-bg-color: #{$navbar-background};
+  --f7-navbar-bg-color: #{$navbar-bg};
   // Border widths for subnavbar and searchbar input
   --hm-subnavbar-border-width: 2px;
   --hm-searchbar-input-border-width: 2px;
@@ -36,7 +36,7 @@
 
 
 #app .navbar {
-  color: $navbar-textcolor;
+  color: $navbar-text;
   border: 0px;
 }
 
@@ -48,10 +48,10 @@
 }
 
 #app .navbar .subnavbar {
-  border-bottom: var(--hm-subnavbar-border-width) solid $subnavbar-background;
+  border-bottom: var(--hm-subnavbar-border-width) solid $subnavbar-bg;
 
   a {
-    color: $navbar-textcolor;
+    color: $navbar-text;
   }
 }
 
@@ -60,7 +60,7 @@
   background-color: white;
 
   .searchbar-input-wrap {
-    border: var(--hm-searchbar-input-border-width) solid $subnavbar-background;
+    border: var(--hm-searchbar-input-border-width) solid $subnavbar-bg;
   }
 }
 
@@ -192,7 +192,7 @@ $navbar-icon-column-width: 52px;
   padding: 0;
 
   &>i {
-    color: $subnavbar-background;
+    color: $subnavbar-bg;
     font-size: 28px;
     font-weight: bold;
   }
@@ -207,7 +207,7 @@ $navbar-icon-column-width: 52px;
 /* Navbar dropdown icons */
 .navbar .top-left-menu .icon,
 .navbar .top-right-menu .icon {
-  background-color: $navbar-background;
+  background-color: $navbar-bg;
   width: 36px;
   height: 36px;
   min-width: 36px;
@@ -244,7 +244,7 @@ $navbar-icon-column-width: 52px;
 // toolbar
 #app {
   .app-toolbar {
-    background-color: $subnavbar-background;
+    background-color: $subnavbar-bg;
 
     .material-icons {
       font-size: 28px;
@@ -263,7 +263,7 @@ $navbar-icon-column-width: 52px;
 
   .favorites-sheet {
     .toolbar {
-      background-color: $subnavbar-background;
+      background-color: $subnavbar-bg;
     }
   }
 }

@@ -11,7 +11,7 @@
 }
 
 .accordion-item.accordion-item-opened {
-  background-color: $accordion-active-background-color;
+  background-color: $accordion-active-bg;
 }
 
 .accordion-item.accordion-item-opened:after {
@@ -25,12 +25,12 @@
 
 #app .accordion-item {
   .item-content {
-    color: $accordion-item-content-color;
+    color: $accordion-link-text;
     font-weight: bold;
   }
 
   .item-title {
-    color: $accordion-item-content-color;
+    color: $accordion-link-text;
     font-weight: bold;
     font-size: 110%;
   }
@@ -120,10 +120,10 @@
 #app .pink-accordion {
   --f7-accordion-chevron-icon-down: 'arrowtriangle_down_fill';
   --f7-accordion-chevron-icon-up: 'arrowtriangle_up_fill';
-  --f7-list-chevron-icon-color: #{$navbar-background};
-  --step-card-heading-color: #{$theme-dark-header-background};
-  --step-card-note-background-color: #{$theme-content-background};
-  --step-card-important-background-color: #{$subnavbar-background};
+  --f7-list-chevron-icon-color: #{$navbar-bg};
+  --step-card-heading-color: #{$accordion-dark-header-bg};
+  --step-card-note-background-color: #{$accordion-surface};
+  --step-card-important-background-color: #{$subnavbar-bg};
   --f7-list-border-color: var(--f7-list-chevron-icon-color);
   
   .accordion-item {

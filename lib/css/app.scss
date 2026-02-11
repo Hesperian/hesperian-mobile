@@ -54,12 +54,12 @@ $breakpoint-small-large: 390px;
 
 #app .content-list {
   font-weight: bold;
-  color: $inline-link-text-color;
+  color: $link-text;
 }
 
 #app .subtitle {
   font-weight: bold;
-  color: $inline-link-text-color;
+  color: $link-text;
   text-align: center;
 }
 
@@ -110,7 +110,7 @@ body {
 
 .subheading {
   font-weight: bold;
-  background-color: $subheading-background-color;
+  background-color: $subheading-bg;
   margin: 0px (-$page-horizontal-margin) 0px (-$page-horizontal-margin);
   padding: 5px 5px 5px $page-horizontal-margin;
 }
@@ -151,7 +151,7 @@ body {
 
 .md a,
 .ios a {
-  color: $inline-link-text-color;
+  color: $link-text;
 }
 
 #app .links-list a {
@@ -167,7 +167,7 @@ body {
 }
 
 .panel {
-  background: $panel-background;
+  background: $panel-bg;
 }
 
 .panel .panel-icon {
@@ -190,7 +190,7 @@ body {
 /* Darker text for content-block */
 
 .content-block {
-  color: $content-block-text-color;
+  color: $content-text;
 }
 
 /* Current page sub-heading */
@@ -201,12 +201,12 @@ body {
 }
 
 .page-header {
-  border-color: $heading-border-color;
+  border-color: $heading-border;
   border-width: 1px 0px 1px 0px;
   border-style: solid;
   margin: 20px (-$page-horizontal-margin) 22px (-$page-horizontal-margin);
-  color: $heading-text-color;
-  background-color: $heading-background-color;
+  color: $heading-text;
+  background-color: $heading-bg;
   padding: 0px 0px 0px 12px;
   min-height: 60px;
   display: flex;
@@ -235,11 +235,11 @@ body {
 }
 
 #app .mc-toolbar {
-  background-color: $navbar-background;
+  background-color: $navbar-bg;
 }
 
 #app .page {
-  background-color: $page-background;
+  background-color: $page-bg;
 
   &[aria-hidden="true"] {
     display: none;
@@ -291,7 +291,7 @@ i.app-gear {
 
     .item-inner:after,
     ul:after {
-      background-color: $list-divider-color;
+      background-color: $divider-color;
     }
   }
 }
@@ -337,19 +337,19 @@ img.center {
 
 #app {
   .toggle-icon:after {
-    background-color: $toggle-no-primary;
+    background-color: $toggle-off-knob;
   }
 
   .toggle input[type="checkbox"]:checked+.toggle-icon:after {
-    background-color: $toggle-yes-primary;
+    background-color: $toggle-on-knob;
   }
 
   .toggle-icon {
-    background-color: $toggle-no-secondary;
+    background-color: $toggle-off-track;
   }
 
   .toggle input[type="checkbox"]:checked+.toggle-icon {
-    background-color: $toggle-yes-secondary;
+    background-color: $toggle-on-track;
   }
 }
 
@@ -424,7 +424,7 @@ $howto-padding: 8px;
   height: auto;
   width: inherit;
   height: fit-content;
-  color: $subnavbar-background;
+  color: $subnavbar-bg;
   background-color: transparent;
   border: 1px solid gainsboro;
   border-radius: 10px;
@@ -434,7 +434,7 @@ $howto-padding: 8px;
 }
 
 .choose-language:disabled {
-  background-color: $subnavbar-background;
+  background-color: $subnavbar-bg;
   color: white;
 
   pointer-events: none;

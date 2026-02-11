@@ -1,6 +1,12 @@
 /*
  *  theme.scss
  *  theme variables
+ *
+ *  Organized in two tiers:
+ *  1. Palette — the actual color values
+ *  2. Semantic — role-based names that reference the palette
+ *
+ *  To retheme an app, override palette values; semantic mappings will follow.
  */
 
 @use "sass:string";
@@ -10,42 +16,113 @@
   @return string.slice(#{$color}, 2);
 }
 
+// ============================================================================
 // Layout constants
+// ============================================================================
 
 $page-navigaton-height: 56px + 48px;
 $page-horizontal-margin: 11px;
 
-// Colors
+// ============================================================================
+// Palette — the actual color definitions
+// ============================================================================
 
-// Theme base colors
-$theme-content-background: #fdfdfd;
-$theme-active-content-background: #f5f5f5;
-$theme-dark-header-background: #a31e98;
+$palette-primary: #de1878;          // pink — navbar, headings, focus ring
+$palette-secondary: #d8400e;        // orange-red — subnavbar, toolbar, borders
+$palette-accent: #107d87;           // teal — links, buttons, captions
+$palette-dark-accent: #a31e98;      // purple — accordion dark headers
 
-// Specific colors
+$palette-surface: #fdfdfd;          // near-white — page/panel background
+$palette-surface-active: #f5f5f5;   // light gray — active/hover states
+$palette-surface-muted: lightgray;  // subheading background
 
-$navbar-background: #de1878;
-$navbar-background-hex: color-to-hex($navbar-background);
-$subnavbar-background: #d8400e;
-$subnavbar-background-hex: color-to-hex($subnavbar-background);
+$palette-text: #36363b;             // dark gray — body text
+$palette-text-on-color: white;      // text on primary/secondary/accent backgrounds
+$palette-text-heading: black;       // heading text
 
-$content-block-text-color: #36363b;
-$inline-link-text-color: #107d87;
-$list-divider-color: rgba(0, 0, 0, 0.25);
-$favorite-icon-color: #ffed10;
-$heading-text-color: black;
-$button-link-text-color: white;
-$favorite-list-background-color: white;
-$tile-background: white;
-$toggle-yes-primary: #00b202;
-$toggle-no-primary: #ececec;
-$toggle-yes-secondary: #d4f9d4;
-$toggle-no-secondary: #d3d3d3;
-$tool-internal-header-color: white;
-$tool-internal-header-contrast-color: black;
-$subheading-background-color: lightgray;
-$accordion-active-background-color: $theme-active-content-background;
+$palette-favorite: #ffed10;         // yellow — favorite star icon
+$palette-divider: rgba(0, 0, 0, 0.25);
 
+$palette-toggle-on: #00b202;        // toggle knob — on
+$palette-toggle-on-bg: #d4f9d4;     // toggle track — on
+$palette-toggle-off: #ececec;       // toggle knob — off
+$palette-toggle-off-bg: #d3d3d3;    // toggle track — off
+
+// Hex variants for SVG data URIs
+$palette-primary-hex: color-to-hex($palette-primary);
+$palette-secondary-hex: color-to-hex($palette-secondary);
+
+// ============================================================================
+// Semantic — role-based names referencing the palette
+// ============================================================================
+
+// Navigation
+$navbar-bg: $palette-primary;
+$navbar-bg-hex: $palette-primary-hex;
+$navbar-text: $palette-text-on-color;
+$subnavbar-bg: $palette-secondary;
+$subnavbar-bg-hex: $palette-secondary-hex;
+
+// Content surfaces
+$page-bg: $palette-surface;
+$panel-bg: $palette-surface;
+$heading-text: $palette-text-heading;
+$heading-bg: $palette-surface;
+$heading-border: $palette-primary;
+$subheading-bg: $palette-surface-muted;
+$content-text: $palette-text;
+
+// Links, buttons, captions
+$link-text: $palette-accent;
+$link-border: $palette-accent;
+$button-bg: $palette-accent;
+$button-text: $palette-text-on-color;
+$caption-text: $palette-accent;
+
+// Accordion
+$accordion-link-text: $palette-accent;
+$accordion-active-bg: $palette-surface-active;
+$accordion-dark-header-bg: $palette-dark-accent;
+$accordion-surface: $palette-surface;
+
+// Tiles (favorites grid)
+$tile-bg: white;
+$tile-text: $palette-accent;
+$tile-border: $palette-secondary;
+$tile-border-style: solid;
+$tile-border-width: thin;
+$tile-image-bg: transparent;
+
+// Favorites
+$favorite-icon: $palette-favorite;
+$favorite-icon-outline: $palette-primary;
+$favorite-list-bg: white;
+
+// Toggle
+$toggle-on-knob: $palette-toggle-on;
+$toggle-on-track: $palette-toggle-on-bg;
+$toggle-off-knob: $palette-toggle-off;
+$toggle-off-track: $palette-toggle-off-bg;
+
+// Tool internal (calendar results, etc.)
+$tool-header-bg: $palette-secondary;
+$tool-header-text: $palette-text-on-color;
+
+// Divider
+$divider-color: $palette-divider;
+
+// ============================================================================
+// Font sizes
+// ============================================================================
+
+$font-size-base: 16px;
+$font-size-normal: 100%;
+$font-size-medium: 121%;
+$font-size-large: 171%;
+
+// ============================================================================
+// CSS custom properties
+// ============================================================================
 
 :root {
   --hm-top-safe-area-color: black;
@@ -54,39 +131,17 @@ $accordion-active-background-color: $theme-active-content-background;
   --f7-calendar-prev-next-text-color: #2F4F4F;
 }
 
-// hm- variables
 :root {
-  --hm-focus-color: #{$navbar-background};
+  --hm-focus-color: #{$palette-primary};
   --hm-focus-color-secondary: white;
   --hm-searchbar-input-background: white;
   --hm-searchbar-input-text-color: black;
   --hm-searchbar-inset: 3px;
 }
 
-// Derived colors and other variables
-$page-background: $theme-content-background;
-$panel-background: $theme-content-background;
-$navbar-textcolor: white;
-$caption-color: $inline-link-text-color;
-$heading-background-color: $page-background;
-$heading-border-color: $navbar-background;
-$accordion-item-content-color: $inline-link-text-color;
-$link-border-color: $inline-link-text-color;
-$button-link-background-color: $link-border-color;
-$favorite-icon-outline-color: $heading-border-color;
-
-$tile-border-style: solid;
-$tile-border-color: $subnavbar-background;
-$tile-border-width: thin;
-$tile-image-background: transparent;
-$tile-text-color: $inline-link-text-color;
-
-$font-size-base: 16px;
-$font-size-normal: 100%;
-$font-size-medium: 121%;
-$font-size-large: 171%;
-
-$tool-internal-header-background-color: $subnavbar-background;
+// ============================================================================
+// Framework7 icon placeholder
+// ============================================================================
 
 %f7-icon {
   font-family: "Framework7 Icons";
@@ -109,3 +164,4 @@ $tool-internal-header-background-color: $subnavbar-background;
   font-feature-settings: "liga";
   text-align: center;
 }
+

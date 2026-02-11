@@ -52,13 +52,13 @@ body.shepherd-enabled #app>.sheet-backdrop {
   }
 
   button.shepherd-button {
-    background-color: $button-link-background-color;
+    background-color: $button-bg;
     border-radius: 10%;
-    color: $button-link-text-color;
+    color: $button-text;
 
     &.shepherd-button-secondary {
-      color: $inline-link-text-color;
-      border: 1px solid $inline-link-text-color;
+      color: $link-text;
+      border: 1px solid $link-text;
       background-color: white;
     }
   }
@@ -100,7 +100,7 @@ body.shepherd-enabled #app>.sheet-backdrop {
   }
 
   .dialog-title {
-    background-color: $navbar-background;
+    background-color: $navbar-bg;
     color: white;
     padding: 10px;
   }
@@ -112,7 +112,7 @@ body.shepherd-enabled #app>.sheet-backdrop {
     margin-bottom: 5px;
 
     .language-dialog-button  {
-      color: $inline-link-text-color
+      color: $link-text
     }
   }
 
@@ -129,7 +129,7 @@ body.shepherd-enabled #app>.sheet-backdrop {
         font-size: 120%;
         padding-top: 5px;
         padding-bottom: 5px;
-        color: $subnavbar-background;
+        color: $subnavbar-bg;
         // Remove list-style for clarity
         list-style: none;
         // Remove default padding for list

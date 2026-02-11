@@ -6,18 +6,18 @@
 
 
 #app .navbar {
-  background-color: $navbar-background;
-  color: $navbar-textcolor;
+  background-color: $navbar-bg;
+  color: $navbar-text;
   border: 0px;
 }
 
 #app .navbar .subnavbar, .navbar .searchbar {
-  background-color: $subnavbar-background;
-  border-color: $subnavbar-background;
+  background-color: $subnavbar-bg;
+  border-color: $subnavbar-bg;
 }
 
 #app .navbar .searchbar input::placeholder {
-  color: $navbar-textcolor;
+  color: $navbar-text;
 }
 
 .global-search {
