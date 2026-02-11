@@ -53,7 +53,15 @@ md .searchbar .input-clear-button:after {
     align-items: center;
     box-sizing: border-box;
     height: calc(100% - 2 * var(--hm-searchbar-inset, 3px));
-    
+
+    // Focus ring on the pill-shaped wrapper instead of the input,
+    // so it's visible against the white background and follows the pill shape
+    &:has(input:focus-visible) {
+      outline: 2px solid var(--hm-focus-color-secondary) !important;
+      outline-offset: 0 !important;
+      box-shadow: 0 0 0 4px var(--hm-focus-color) !important;
+    }
+
     input[type="search"] {
       color: var(--hm-searchbar-input-text-color, black);
       background: transparent;
@@ -70,6 +78,11 @@ md .searchbar .input-clear-button:after {
 
       &:focus {
         padding-inline-end: 0;
+      }
+
+      &:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
       }
 
       &::placeholder {
