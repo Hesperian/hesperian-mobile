@@ -58,12 +58,12 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
     align-items: center;
     justify-content: flex-start;
     row-gap: 12px;
-    column-gap: 24px;
+    column-gap: 12px;
     flex-wrap: wrap;
   }
 
   .calendar-button {
-    flex-grow: 1;
+    flex-grow: 0;
 
     // Focus styles for Month and Day selector buttons
     .select-month,
