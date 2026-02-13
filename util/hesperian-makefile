@@ -77,6 +77,7 @@ app: cordova-build
 	mkdir -p ${OUTPUT_DIR}
 	cp ${BUILDDIR}/platforms/ios/build/*/*.ipa ${OUTPUT_DIR}/${OUTPUT_NAME}.ipa
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*.aab ${OUTPUT_DIR}/${OUTPUT_NAME}.aab
+	$(MAKE) extract_apk
 
 # Extract universal APK from AAB bundle for emulator testing
 .PHONY: extract_apk
@@ -87,12 +88,13 @@ extract_apk:
 		exit 1; \
 	fi
 	@echo "Extracting universal APK from ${OUTPUT_NAME}.aab..."
-	bundletool build-apks --bundle=${OUTPUT_DIR}/${OUTPUT_NAME}.aab --output=${OUTPUT_DIR}/${OUTPUT_NAME}.apks --mode=universal
+	mkdir -p ${OUTPUT_DIR}/debug
+	bundletool build-apks --bundle=${OUTPUT_DIR}/${OUTPUT_NAME}.aab --output=${OUTPUT_DIR}/debug/${OUTPUT_NAME}.apks --mode=universal
 	@echo "Unzipping universal.apk..."
-	unzip -o ${OUTPUT_DIR}/${OUTPUT_NAME}.apks universal.apk -d ${OUTPUT_DIR}
-	mv ${OUTPUT_DIR}/universal.apk ${OUTPUT_DIR}/${OUTPUT_NAME}.apk
-	rm ${OUTPUT_DIR}/${OUTPUT_NAME}.apks
-	@echo "Universal APK created: ${OUTPUT_DIR}/${OUTPUT_NAME}.apk"
+	unzip -o ${OUTPUT_DIR}/debug/${OUTPUT_NAME}.apks universal.apk -d ${OUTPUT_DIR}/debug
+	mv ${OUTPUT_DIR}/debug/universal.apk ${OUTPUT_DIR}/debug/${OUTPUT_NAME}.apk
+	rm ${OUTPUT_DIR}/debug/${OUTPUT_NAME}.apks
+	@echo "Universal APK created: ${OUTPUT_DIR}/debug/${OUTPUT_NAME}.apk"
 
 .PHONY: build
 build: app site
