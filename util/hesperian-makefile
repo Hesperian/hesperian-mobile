@@ -32,6 +32,7 @@ help:
 	@echo "Common make targets:"
 	@echo "\tmake watch\t\t vite watch build in the dist directory"
 	@echo "\tmake build\t\t full cordova release build created in ./output"
+	@echo "\tmake app-android-debug\t build Android debug APK (no code signing required)"
 	@echo "\tmake ios-sync\t\t sync bundle to iOS for manual Xcode builds"
 	@echo "\tmake extract_apk\t extract universal APK from AAB for emulator testing"
 	@echo "\tmake test-a11y\t\t run accessibility tests (English locale, report in build/reports/accessibility/)"
@@ -70,6 +71,10 @@ dist: bundle $(CORDOVA_CONFIG)
 cordova-build-android:
 	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && cordova build android --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"'
 
+cordova-build-android-debug:
+	@echo "Building Android debug AAB (no code signing required)..."
+	cd ${BUILDDIR} && cordova build android --debug --verbose -- --packageType=bundle
+
 cordova-build: dist
 	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && fnm use v22.3.0 && cordova build --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"'
 
@@ -78,6 +83,16 @@ app: cordova-build
 	cp ${BUILDDIR}/platforms/ios/build/*/*.ipa ${OUTPUT_DIR}/${OUTPUT_NAME}.ipa
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*.aab ${OUTPUT_DIR}/${OUTPUT_NAME}.aab
 	$(MAKE) extract_apk
+
+app-android-debug: dist cordova-build-android-debug
+	mkdir -p ${OUTPUT_DIR}/debug
+	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/debug/*.aab ${OUTPUT_DIR}/debug/${OUTPUT_NAME}-debug.aab
+	@echo "Extracting universal APK from debug AAB..."
+	bundletool build-apks --bundle=${OUTPUT_DIR}/debug/${OUTPUT_NAME}-debug.aab --output=${OUTPUT_DIR}/debug/${OUTPUT_NAME}-debug.apks --mode=universal
+	unzip -o ${OUTPUT_DIR}/debug/${OUTPUT_NAME}-debug.apks universal.apk -d ${OUTPUT_DIR}/debug
+	mv ${OUTPUT_DIR}/debug/universal.apk ${OUTPUT_DIR}/debug/${OUTPUT_NAME}-debug.apk
+	rm ${OUTPUT_DIR}/debug/${OUTPUT_NAME}-debug.apks
+	@echo "Debug APK created: ${OUTPUT_DIR}/debug/${OUTPUT_NAME}-debug.apk"
 
 # Extract universal APK from AAB bundle for emulator testing
 .PHONY: extract_apk
@@ -92,9 +107,9 @@ extract_apk:
 	bundletool build-apks --bundle=${OUTPUT_DIR}/${OUTPUT_NAME}.aab --output=${OUTPUT_DIR}/debug/${OUTPUT_NAME}.apks --mode=universal
 	@echo "Unzipping universal.apk..."
 	unzip -o ${OUTPUT_DIR}/debug/${OUTPUT_NAME}.apks universal.apk -d ${OUTPUT_DIR}/debug
-	mv ${OUTPUT_DIR}/debug/universal.apk ${OUTPUT_DIR}/debug/${OUTPUT_NAME}.apk
+	mv ${OUTPUT_DIR}/debug/universal.apk ${OUTPUT_DIR}/debug/${OUTPUT_NAME}-release.apk
 	rm ${OUTPUT_DIR}/debug/${OUTPUT_NAME}.apks
-	@echo "Universal APK created: ${OUTPUT_DIR}/debug/${OUTPUT_NAME}.apk"
+	@echo "Release APK created: ${OUTPUT_DIR}/debug/${OUTPUT_NAME}-release.apk"
 
 .PHONY: build
 build: app site
