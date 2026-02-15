@@ -1,0 +1,28 @@
+name: Build and deploy test site
+
+on:
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 22.3.0
+      - run: npm ci
+      - run: make bundle site
+      - run: ./node_modules/.bin/deploy-aws-s3-cloudfront --non-interactive --source ./dist-web --bucket hesperian-test-site --destination www/${GITHUB_REPOSITORY}/${BRANCH_NAME} --distribution E1IR6U5GON3FEZ --invalidation-path "/*"
+      - run: npx playwright install --with-deps
+      - run: make test-a11y-all
+      - run: ./node_modules/.bin/deploy-aws-s3-cloudfront --non-interactive --source ./build/reports/ --bucket hesperian-test-site --destination www/${GITHUB_REPOSITORY}/${BRANCH_NAME}/reports --distribution E1IR6U5GON3FEZ --invalidation-path "/www/${GITHUB_REPOSITORY}/${BRANCH_NAME}/reports/*"
