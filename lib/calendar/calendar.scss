@@ -1,5 +1,7 @@
 @use "../css/theme.scss" as *;
 
+$selected-color: #c04c26;
+
 .smart-select-page li.disabled {
   display: none;
 }
@@ -283,7 +285,7 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
     }
 
     .calendar-day.calendar-day-today .calendar-day-number {
-      color: $tool-header-bg;
+      color: $selected-color;
     }
 
     // Keyboard focus styles for calendar days
