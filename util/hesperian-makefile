@@ -27,7 +27,7 @@ CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
 
 CURRENT_DIR=$(shell pwd)
 
-.PHONY: build clean bundle watch dist help site web cordova-check cordova-clean setup-keystore cleanup-keystore
+.PHONY: build clean bundle watch dist help site web cordova-check cordova-clean setup-keystore cleanup-keystore op-signin
 
 help:
 	@echo "Common make targets:"
@@ -103,7 +103,7 @@ cordova-build: dist setup-keystore
 	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && fnm use v22.3.0 && cordova build --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"' || ($(MAKE) cleanup-keystore && exit 1)
 	@$(MAKE) cleanup-keystore
 
-app: cordova-build
+app: op-signin cordova-build
 	mkdir -p ${OUTPUT_DIR}
 	cp ${BUILDDIR}/platforms/ios/build/*/*.ipa ${OUTPUT_DIR}/${OUTPUT_NAME}.ipa
 	cp ${BUILDDIR}/platforms/android/app/build/outputs/bundle/release/*.aab ${OUTPUT_DIR}/${OUTPUT_NAME}.aab
@@ -138,6 +138,11 @@ extract_apk:
 
 .PHONY: build
 build: app site
+
+.PHONY: op-signin
+op-signin:
+	@echo "Ensuring 1Password is unlocked..."
+	@op signin || true
 
 # Sync bundle to iOS platform for manual Xcode builds
 # Preserves cordova.js and plugin files in platforms/ios/www
