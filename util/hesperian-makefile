@@ -21,12 +21,13 @@ APPNAME := $(shell node -p "require('./app-config.json').name")
 OUTPUT_DIR=output/${VERSION}
 OUTPUT_NAME=${APPNAME}-${VERSION}
 WEBAPP_DIR=./dist-web
+TEMP_KEYSTORE=$(BUILDDIR)/private/temp_android.keystore
 
 CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
 
 CURRENT_DIR=$(shell pwd)
 
-.PHONY: build clean bundle watch dist help site web cordova-check cordova-clean
+.PHONY: build clean bundle watch dist help site web cordova-check cordova-clean setup-keystore cleanup-keystore
 
 help:
 	@echo "Common make targets:"
@@ -68,15 +69,39 @@ dist: bundle $(CORDOVA_CONFIG)
 	rm -f ${BUILDDIR}/platforms/android/app/google-services.json 2>/dev/null; true
 	find ${BUILDDIR}/platforms/ios -name GoogleService-Info.plist -path '*/Resources/*' -delete 2>/dev/null; true
 
-cordova-build-android:
-	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && cordova build android --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"'
+setup-keystore:
+	@echo "Setting up Android keystore..."
+	@$(OP_RUN) bash -c 'if [ -n "$$CORDOVA_KEYSTORE_BASE64" ]; then \
+		echo "Creating keystore from environment variable..."; \
+		mkdir -p $(BUILDDIR)/private; \
+		echo "$$CORDOVA_KEYSTORE_BASE64" | base64 -d > $(TEMP_KEYSTORE); \
+		chmod 600 $(TEMP_KEYSTORE); \
+		echo "Temporary keystore created"; \
+	elif [ -f "$(BUILDDIR)/private/android.keystore" ]; then \
+		echo "Using existing keystore file"; \
+	else \
+		echo "ERROR: No keystore found."; \
+		echo "Either set CORDOVA_KEYSTORE_BASE64 or place keystore at $(BUILDDIR)/private/android.keystore"; \
+		exit 1; \
+	fi'
+
+cleanup-keystore:
+	@if [ -f "$(TEMP_KEYSTORE)" ]; then \
+		rm -f $(TEMP_KEYSTORE); \
+		echo "Cleaned up temporary keystore"; \
+	fi
+
+cordova-build-android: dist setup-keystore
+	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && cordova build android --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"' || ($(MAKE) cleanup-keystore && exit 1)
+	@$(MAKE) cleanup-keystore
 
 cordova-build-android-debug:
 	@echo "Building Android debug AAB (no code signing required)..."
 	cd ${BUILDDIR} && cordova build android --debug --verbose -- --packageType=bundle
 
-cordova-build: dist
-	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && fnm use v22.3.0 && cordova build --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"'
+cordova-build: dist setup-keystore
+	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && fnm use v22.3.0 && cordova build --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"' || ($(MAKE) cleanup-keystore && exit 1)
+	@$(MAKE) cleanup-keystore
 
 app: cordova-build
 	mkdir -p ${OUTPUT_DIR}
