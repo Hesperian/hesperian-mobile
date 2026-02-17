@@ -5,7 +5,7 @@ name: "Release"
 on: # yamllint disable-line rule:truthy
   push:
     tags:
-      - "v*"
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   release:
@@ -16,6 +16,51 @@ jobs:
     steps:
       - name: "Determine tag"
         run: "echo \"RELEASE_TAG=${GITHUB_REF#refs/tags/}\" >> $GITHUB_ENV"
+
+      - name: "Create or move patch version tag"
+        uses: "actions/github-script@v6"
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          script: |
+            const tag = process.env.RELEASE_TAG;
+            const match = tag.match(/^v(\d+)\.(\d+)\.\d+$/);
+            
+            if (match) {
+              const patchTag = `v${match[1]}.${match[2]}.X`;
+              
+              try {
+                // Get the commit SHA for the current tag
+                const refResponse = await github.rest.git.getRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `tags/${tag}`
+                });
+                const sha = refResponse.data.object.sha;
+                
+                // Try to update existing tag
+                try {
+                  await github.rest.git.updateRef({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    ref: `tags/${patchTag}`,
+                    sha: sha,
+                    force: true
+                  });
+                  console.log(`Moved tag ${patchTag} to ${tag}`);
+                } catch (error) {
+                  // Tag doesn't exist, create it
+                  await github.rest.git.createRef({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    ref: `refs/tags/${patchTag}`,
+                    sha: sha
+                  });
+                  console.log(`Created tag ${patchTag} at ${tag}`);
+                }
+              } catch (error) {
+                core.setFailed(`Failed to create/update patch tag: ${error.message}`);
+              }
+            }
 
       - name: "Create release"
         uses: "actions/github-script@v6"
