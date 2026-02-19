@@ -27,7 +27,7 @@ CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
 
 CURRENT_DIR=$(shell pwd)
 
-.PHONY: build clean bundle watch dist help site web cordova-check cordova-clean setup-keystore cleanup-keystore op-signin
+.PHONY: build clean bundle watch dist help site web cordova-check cordova-clean setup-keystore cleanup-keystore op-signin version
 
 help:
 	@echo "Common make targets:"
@@ -39,6 +39,7 @@ help:
 	@echo "\tmake test-a11y\t\t run accessibility tests (English locale, report in build/reports/accessibility/)"
 	@echo "\tmake test-a11y-all\t run accessibility tests (all locales)"
 	@echo "\tmake check-resources\t check for missing resource translations"
+	@echo "\tmake version TYPE=<major|minor|patch>  bump version in app-config.json"
 	@echo "\tmake cordova-check\t verify build environment (Java, Android SDK, Xcode, etc.)"
 	@echo "\tmake cordova-clean\t remove all generated Cordova state for a fresh build"
 	@echo "\t\t\t\t  (use CORDOVA_CLEAN_ARGS=--dry-run to preview)"
@@ -214,6 +215,36 @@ example-libsync:
 .PHONY: validate
 validate:
 	${MAKE_VALIDATE}
+
+.PHONY: version
+version:
+	@if [ -z "$(TYPE)" ]; then \
+		echo "Usage: make version TYPE=<major|minor|patch>"; \
+		exit 1; \
+	fi; \
+	if [ "$(TYPE)" != "major" ] && [ "$(TYPE)" != "minor" ] && [ "$(TYPE)" != "patch" ]; then \
+		echo "Error: TYPE must be major, minor, or patch"; \
+		exit 1; \
+	fi; \
+	node -e ' \
+		const fs = require("fs"); \
+		const path = "./app-config.json"; \
+		const config = JSON.parse(fs.readFileSync(path, "utf8")); \
+		const current = config.version; \
+		const parts = current.split(".").map(Number); \
+		const type = process.argv[1]; \
+		if (type === "major") { \
+			parts[0]++; parts[1] = 0; parts[2] = 0; \
+		} else if (type === "minor") { \
+			parts[1]++; parts[2] = 0; \
+		} else if (type === "patch") { \
+			parts[2]++; \
+		} \
+		const newVersion = parts.join("."); \
+		config.version = newVersion; \
+		fs.writeFileSync(path, JSON.stringify(config, null, 2) + "\n"); \
+		console.log("Version bumped from " + current + " to " + newVersion); \
+	' $(TYPE)
 
 .PHONY: check-resources
 check-resources:

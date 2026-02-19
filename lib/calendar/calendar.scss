@@ -275,6 +275,16 @@ $triangle-down: url("data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2715px%2
       }
     }
 
+    .calendar-day-number {
+      font-weight: bold;
+    }
+
+    .calendar-day-next, .calendar-day-prev {
+      .calendar-day-number {
+        font-weight: normal;
+      }
+    }
+
     .calendar-day.calendar-day-selected,
     .calendar-day.calendar-day-was-selected {
       .calendar-day-number {
