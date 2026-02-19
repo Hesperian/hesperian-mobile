@@ -98,6 +98,8 @@ cordova-build-android: dist setup-keystore
 
 cordova-build-android-debug:
 	@echo "Building Android debug AAB (no code signing required)..."
+	@echo "Removing release signing properties to prevent keystore check..."
+	@rm -f ${BUILDDIR}/platforms/android/release-signing.properties
 	cd ${BUILDDIR} && cordova build android --debug --verbose -- --packageType=bundle
 
 cordova-build: dist setup-keystore
