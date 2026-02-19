@@ -47,6 +47,13 @@
   padding-right: 16px;
 }
 
+// Make some room for close link
+#app .popup .navbar .navbar-inner,
+#app .smart-select-popup .navbar .navbar-inner {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
 #app .navbar .subnavbar {
   border-bottom: var(--hm-subnavbar-border-width) solid $subnavbar-bg;
 
