@@ -96,7 +96,7 @@ cordova-build-android: dist setup-keystore
 	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && cordova build android --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"' || ($(MAKE) cleanup-keystore && exit 1)
 	@$(MAKE) cleanup-keystore
 
-cordova-build-android-debug:
+cordova-build-android-debug: dist
 	@echo "Building Android debug AAB (no code signing required)..."
 	@echo "Removing release signing properties to prevent keystore check..."
 	@rm -f ${BUILDDIR}/platforms/android/release-signing.properties
@@ -162,6 +162,12 @@ ios-sync: bundle
 
 $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG}
 	(cd ${BUILDDIR}; rm -rf resources-tmp; ${MAKE_CONFIG} ../app-config.json)
+	@# Sync config.xml changes to platform manifests (AndroidManifest.xml, Info.plist)
+	@if [ -d "${BUILDDIR}/platforms" ]; then \
+		echo "Syncing config.xml changes to platform manifests..."; \
+		(cd ${BUILDDIR} && cordova prepare --no-build 2>&1 | grep -v "DeprecationWarning" || true); \
+		echo "✅ Platform manifests updated"; \
+	fi
 
 # Make sure emulator is running to pick up correct device
 # Android Studio -> Tools -> AVD's
