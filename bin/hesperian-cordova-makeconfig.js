@@ -35,7 +35,6 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     <content src="index.html" />
 
     <plugin name="cordova-plugin-inappbrowser" spec="${plugins["cordova-plugin-inappbrowser"]}" />
-    <plugin name="cordova-plugin-statusbar" source="npm" spec="${plugins["cordova-plugin-statusbar"]}" />
     <!-- Social Sharing plugin support -->
     <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="${plugins["cordova-plugin-x-socialsharing"]}" />
     <plugin name="cordova-plugin-androidx" source="npm" spec="${plugins["cordova-plugin-androidx"]}" />
