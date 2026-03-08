@@ -28,7 +28,8 @@
     "framework7-icons": "^5.0.5",
     "material-icons": "^0.2.X",
     "shepherd.js": "^14.5.1",
-    "sortablejs": "^1.10.X"
+    "sortablejs": "^1.10.X",
+    "video.js": "^8.0.0"
   },
   "dependencies": {
     "dom7": "^4.0.6",

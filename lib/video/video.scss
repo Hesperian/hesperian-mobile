@@ -1,33 +1,75 @@
-// video.scss
+// Three-zone stacked video layout:
+//   [video zone] [caption zone] [controls zone]
 
-// Mobile first styles
-.hm-video-container {
-    width: 100%;
-    height: auto;
-    position: relative;
-    padding-bottom: 56.25%; // 16:9 aspect ratio
-    overflow: hidden;
+// Outer stack — flex column; max-width set by JS from video natural width
+.hm-video-stack {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+  background: #000;
 }
 
-.hm-video-container video {
+// Zone 1 — video (16:9, fills width)
+.hm-video-zone {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+
+  .video-js {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+
+  // Control bar hidden here; moved to controls zone by JS
+  .vjs-control-bar { display: none !important; }
+
+  // Suppress all in-player caption renderers — captions are shown in the
+  // caption zone below the video, never overlaid on the video image.
+  .vjs-text-track-display,
+  .vjs-text-track-settings { display: none !important; }
 }
 
-// Larger screens
-@media (min-width: 768px) {
-    .hm-video-container {
-        max-width: 750px;
-        margin: 0 auto;
-    }
+// Zone 2 — caption strip (fixed 2-line height; text anchored at bottom
+//           so overflow grows upward over the video)
+.hm-caption-zone {
+  position: relative;
+  flex-shrink: 0;
+  height: calc(2 * 1.4em + 2 * 0.35em); // 2 lines + top/bottom padding
+  background: #000;
+  overflow: visible; // long captions spill upward over the video
+  z-index: 1;
 }
 
-@media (min-width: 1024px) {
-    .hm-video-container {
-        max-width: 970px;
-    }
+.hm-caption-text {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  color: #fff;
+  font-size: 1em;
+  line-height: 1.4;
+  text-align: center;
+  padding: 0.35em 1em;
+  background: #000;
+  white-space: pre-line; // respect newlines in VTT cue text
+}
+
+// Zone 3 — controls (VideoJS control bar moved here by JS)
+// JS adds class="video-js" to this zone so VideoJS CSS selectors
+// (.video-js .vjs-control-bar, .video-js .vjs-button, etc.) keep matching.
+.hm-controls-zone.video-js {
+  width: 100%;
+  height: auto;
+  background: transparent;
+  padding: 0;
+
+  .vjs-control-bar {
+    position: relative !important;
+    bottom: auto !important;
+    width: 100% !important;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
 }
