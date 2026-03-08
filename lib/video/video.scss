@@ -85,6 +85,19 @@
   .vjs-big-play-button { display: none !important; }
   // Caption zone is only meaningful in fullscreen on mobile; hide it otherwise
   &:not(.hm-fullscreen) .hm-caption-zone { display: none; }
+
+  // In fullscreen the shared rule makes .hm-video-zone flex:1 + aspect-ratio:unset,
+  // which causes the video to letter-box inside a zone that fills the whole screen —
+  // placing captions far below the actual video image.
+  // Instead: keep 16:9 so the zone matches the image, and center the group vertically.
+  &.hm-fullscreen {
+    justify-content: center;
+
+    .hm-video-zone {
+      flex: unset;          // don't stretch to fill screen
+      aspect-ratio: 16 / 9; // restore — overrides .hm-fullscreen's unset
+    }
+  }
 }
 
 // ── Tap-to-fullscreen overlay (sits over the video zone) ──────────────────────
