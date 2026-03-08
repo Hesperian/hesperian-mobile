@@ -33,6 +33,9 @@
 
 // Zone 2 — caption strip (fixed 2-line height; text anchored at bottom
 //           so overflow grows upward over the video)
+// .hm-captions-off is toggled by the CC button modechange handler in video.js
+.hm-caption-zone.hm-captions-off { display: none; }
+
 .hm-caption-zone {
   position: relative;
   flex-shrink: 0;
