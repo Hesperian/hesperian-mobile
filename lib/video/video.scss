@@ -33,9 +33,6 @@
 
 // Zone 2 — caption strip (fixed 2-line height; text anchored at bottom
 //           so overflow grows upward over the video)
-// .hm-captions-off is toggled by the CC button modechange handler in video.js
-.hm-caption-zone.hm-captions-off { display: none; }
-
 .hm-caption-zone {
   position: relative;
   flex-shrink: 0;
@@ -43,6 +40,9 @@
   background: #000;
   overflow: visible; // long captions spill upward over the video
   z-index: 1;
+
+  // .hm-captions-off toggled by the CC button modechange handler in video.js
+  &.hm-captions-off { display: none; }
 }
 
 .hm-caption-text {
@@ -83,6 +83,8 @@
   .hm-controls-zone { display: none; }
   // Suppress VideoJS's built-in big play button — our .hm-tap-overlay replaces it
   .vjs-big-play-button { display: none !important; }
+  // Caption zone is only meaningful in fullscreen on mobile; hide it otherwise
+  &:not(.hm-fullscreen) .hm-caption-zone { display: none; }
 }
 
 // ── Tap-to-fullscreen overlay (sits over the video zone) ──────────────────────
@@ -120,8 +122,7 @@
     env(safe-area-inset-right, 0px)
     env(safe-area-inset-bottom, 0px)
     env(safe-area-inset-left, 0px);
-  // Remove max-width constraint set by JS in inline mode
-  max-width: none !important;
+  // max-width is cleared by enterCssFullscreen() in JS and restored on exit
 
   .hm-video-zone {
     flex: 1;           // fill remaining vertical space
@@ -139,7 +140,7 @@
   z-index: 2;
   // Explicit size prevents iOS WKWebView from stretching the button to full
   // stack width (flex child alignment quirk with position:absolute children).
-  width: 44px; height: 44px;
+  width: 56px; height: 56px;
   padding: 0;
   align-items: center;
   justify-content: center;
