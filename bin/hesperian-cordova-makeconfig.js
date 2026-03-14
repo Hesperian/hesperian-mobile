@@ -57,6 +57,9 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
         <preference name="scheme" value="app" />
         <preference name="hostname" value="localhost" />
         <preference name="DisallowOverscroll" value="true"/>
+        <!-- Required for playsinline to work in WKWebView; without this iOS
+             ignores the attribute and routes video through AVPlayer. -->
+        <preference name="AllowInlineMediaPlayback" value="true" />
     </platform>
     <plugin name="cordova-plugin-tts-advanced" spec="${plugins["cordova-plugin-tts-advanced"]}" />
 
