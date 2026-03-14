@@ -154,6 +154,9 @@ function createConfig(spec) {
     base: "./",
     publicDir: false,
     resolve: {
+      // Force video.js to resolve from the app's own node_modules, not the
+      // library's (they are sibling directories so normal traversal misses it).
+      dedupe: ["video.js"],
       alias: {
         "hesperian-mobile": libraryRoot,
         "theme.scss": path.resolve(root, "css/theme.scss"),

@@ -1,33 +1,252 @@
-// video.scss
+// Three-zone stacked video layout:
+//   [video zone] [caption zone] [controls zone]
 
-// Mobile first styles
-.hm-video-container {
-    width: 100%;
-    height: auto;
-    position: relative;
-    padding-bottom: 56.25%; // 16:9 aspect ratio
-    overflow: hidden;
+// Outer stack — flex column; max-width set by JS from video natural width
+.hm-video-stack {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+  background: #000;
 }
 
-.hm-video-container video {
+// Zone 1 — video (16:9, fills width)
+.hm-video-zone {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+
+  .video-js {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+
+  // Control bar hidden here; moved to controls zone by JS
+  .vjs-control-bar { display: none !important; }
+
+  // Suppress all in-player caption renderers — captions are shown in the
+  // caption zone below the video, never overlaid on the video image.
+  .vjs-text-track-display,
+  .vjs-text-track-settings { display: none !important; }
 }
 
-// Larger screens
-@media (min-width: 768px) {
-    .hm-video-container {
-        max-width: 750px;
-        margin: 0 auto;
-    }
+// Zone 2 — caption strip (fixed 2-line height; text anchored at bottom
+//           so overflow grows upward over the video)
+.hm-caption-zone {
+  position: relative;
+  flex-shrink: 0;
+  height: calc(2 * 1.4em + 2 * 0.35em); // 2 lines + top/bottom padding
+  background: #000;
+  overflow: visible; // long captions spill upward over the video
+  z-index: 1;
+
+  // .hm-captions-off toggled by the CC button modechange handler in video.js
+  &.hm-captions-off { display: none; }
 }
 
-@media (min-width: 1024px) {
-    .hm-video-container {
-        max-width: 970px;
+.hm-caption-text {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  color: #fff;
+  font-size: 1em;
+  line-height: 1.4;
+  text-align: center;
+  padding: 0.35em 1em;
+  background: #000;
+  white-space: pre-line; // respect newlines in VTT cue text
+}
+
+// Zone 3 — controls (VideoJS control bar moved here by JS)
+// JS adds class="video-js" to this zone so VideoJS CSS selectors
+// (.video-js .vjs-control-bar, .video-js .vjs-button, etc.) keep matching.
+.hm-controls-zone.video-js {
+  width: 100%;
+  height: auto;
+  background: transparent;
+  padding: 0;
+
+  .vjs-control-bar {
+    position: relative !important;
+    bottom: auto !important;
+    width: 100% !important;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
+
+// ── Mobile: hide VideoJS UI; our tap overlay + custom controls replace it ─────
+// JS sets .hm-mobile when getDevice().desktop === false
+.hm-video-stack.hm-mobile {
+  .hm-controls-zone { display: none; }
+  // Suppress VideoJS's built-in big play button — our .hm-tap-overlay replaces it
+  .vjs-big-play-button { display: none !important; }
+  // Caption zone is only meaningful in fullscreen on mobile; hide it otherwise
+  &:not(.hm-fullscreen) .hm-caption-zone { display: none; }
+
+  // In fullscreen the shared rule makes .hm-video-zone flex:1 + aspect-ratio:unset,
+  // which causes the video to letter-box inside a zone that fills the whole screen —
+  // placing captions far below the actual video image.
+  // Instead: keep 16:9 so the zone matches the image, and center the group vertically.
+  &.hm-fullscreen {
+    justify-content: center;
+
+    .hm-video-zone {
+      flex: unset;          // don't stretch to fill screen
+      aspect-ratio: 16 / 9; // restore — overrides .hm-fullscreen's unset
     }
+  }
+}
+
+// ── Tap-to-fullscreen overlay (sits over the video zone) ──────────────────────
+.hm-tap-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.hm-tap-icon {
+  width: 64px; height: 64px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+
+  .material-icons { font-size: 36px; }
+}
+
+// ── Full-screen stack ─────────────────────────────────────────────────────────
+.hm-video-stack.hm-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  // Respect notch, home indicator, and Android cutout
+  padding:
+    env(safe-area-inset-top, 0px)
+    env(safe-area-inset-right, 0px)
+    env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+  // max-width is cleared by enterCssFullscreen() in JS and restored on exit
+
+  .hm-video-zone {
+    flex: 1;           // fill remaining vertical space
+    aspect-ratio: unset; // override 16:9 — let it fill
+  }
+}
+
+// ── Close button (absolute in top-left of fixed stack) ───────────────────────
+// Always visible in fullscreen — never participates in auto-hide.
+.hm-close-btn {
+  display: none; // only shown in fullscreen
+  position: absolute;
+  top: env(safe-area-inset-top, 0px);
+  left: env(safe-area-inset-left, 0px);
+  z-index: 2;
+  // Explicit size prevents iOS WKWebView from stretching the button to full
+  // stack width (flex child alignment quirk with position:absolute children).
+  width: 56px; height: 56px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+
+  .material-icons { font-size: 24px; }
+}
+.hm-video-stack.hm-fullscreen .hm-close-btn { display: flex; }
+
+// ── Overlay controls bar ──────────────────────────────────────────────────────
+.hm-overlay-controls {
+  display: none; // only shown in fullscreen
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 0 16px 10px;
+  transition: opacity 0.3s;
+
+  &.hm-controls-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+.hm-video-stack.hm-fullscreen .hm-overlay-controls { display: block; }
+
+// ── Scrubber ──────────────────────────────────────────────────────────────────
+.hm-scrubber {
+  position: relative;
+  width: 100%;
+  // Vertical padding expands touch target to ~44px without changing visual size
+  padding: 20px 0;
+  cursor: pointer;
+}
+
+.hm-scrubber__track {
+  position: relative;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.hm-scrubber__fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 4px;
+  background: #fff;
+  border-radius: 2px;
+  width: 0;
+}
+
+.hm-scrubber__thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px; height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  left: 0;
+}
+
+// ── Control row ───────────────────────────────────────────────────────────────
+.hm-ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hm-ctrl-btn {
+  flex-shrink: 0;
+  min-width: 48px; min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+
+  .material-icons { font-size: 28px; }
+
+  &.hm-ctrl-play {
+    min-width: 56px; min-height: 56px;
+    .material-icons { font-size: 36px; }
+  }
+}
+
+.hm-ctrl-time {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
