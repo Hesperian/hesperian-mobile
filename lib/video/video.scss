@@ -36,6 +36,10 @@
 .hm-caption-zone {
   position: relative;
   flex-shrink: 0;
+  // Slightly larger than body text (1.1em) to compensate for the Helmholtz
+  // irradiation illusion: white-on-black text appears smaller at equal size.
+  // All em units in height/padding/text cascade from this value.
+  font-size: 1.1em;
   height: calc(2 * 1.4em + 2 * 0.35em); // 2 lines + top/bottom padding
   background: #000;
   overflow: visible; // long captions spill upward over the video
