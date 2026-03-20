@@ -234,7 +234,11 @@ version:
 		echo "Error: TYPE must be major, minor, or patch"; \
 		exit 1; \
 	fi; \
-	node -e ' \
+	if [ -n "$$(git status --porcelain)" ]; then \
+		echo "Error: working directory is not clean. Commit or stash changes first."; \
+		exit 1; \
+	fi; \
+	NEW_VERSION=$$(node -e ' \
 		const fs = require("fs"); \
 		const path = "./app-config.json"; \
 		const config = JSON.parse(fs.readFileSync(path, "utf8")); \
@@ -251,8 +255,13 @@ version:
 		const newVersion = parts.join("."); \
 		config.version = newVersion; \
 		fs.writeFileSync(path, JSON.stringify(config, null, 2) + "\n"); \
-		console.log("Version bumped from " + current + " to " + newVersion); \
-	' $(TYPE)
+		console.log(newVersion); \
+	' $(TYPE)); \
+	echo "Version bumped to $$NEW_VERSION"; \
+	git add app-config.json; \
+	git commit -m "Version $$NEW_VERSION"; \
+	git tag "Build$$NEW_VERSION"; \
+	echo "Tagged Build$$NEW_VERSION"
 
 .PHONY: check-resources
 check-resources:
