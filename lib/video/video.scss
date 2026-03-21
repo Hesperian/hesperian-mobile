@@ -65,7 +65,11 @@
 // Zone 3 — controls (VideoJS control bar moved here by JS)
 // JS adds class="video-js" to this zone so VideoJS CSS selectors
 // (.video-js .vjs-control-bar, .video-js .vjs-button, etc.) keep matching.
+// z-index: 2 ensures VideoJS popup menus (e.g. playback rate) render above
+// the caption zone (z-index: 1) when they extend upward.
 .hm-controls-zone.video-js {
+  position: relative;
+  z-index: 2;
   width: 100%;
   height: auto;
   background: transparent;
@@ -185,6 +189,32 @@
   }
 }
 .hm-video-stack.hm-fullscreen .hm-overlay-controls { display: block; }
+
+// ── Speed row ─────────────────────────────────────────────────────────────────
+.hm-speed-row {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 16px 8px;
+}
+
+.hm-speed-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  min-width: 44px;
+  min-height: 36px;
+  padding: 4px 8px;
+  cursor: pointer;
+
+  &.hm-speed-btn--active {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+  }
+}
 
 // ── Scrubber ──────────────────────────────────────────────────────────────────
 .hm-scrubber {
