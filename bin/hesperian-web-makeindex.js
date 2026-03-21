@@ -97,6 +97,15 @@ const appHtml = `
         <div class="searchbar-backdrop"></div>
     </div>
     </div>
+
+    <!-- Screen reader route announcer. Must be pre-mounted and persistent (never
+         conditionally rendered) so assistive technology registers it before any
+         updates. Updated on every page transition via announceNavigation(). -->
+    <div id="hm-route-announcer"
+         aria-live="assertive"
+         aria-atomic="true"
+         style="position:absolute;width:1px;height:1px;clip:rect(0 0 0 0);overflow:hidden;white-space:nowrap;"
+    ></div>
 </main>
 `;
 
