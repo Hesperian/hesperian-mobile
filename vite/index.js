@@ -116,6 +116,35 @@ function copyStaticAssetsPlugin(targets, outDir) {
   };
 }
 
+// When video.js is not installed in the consuming app, resolve all video.js
+// imports to empty stubs so the build succeeds. The lib's dynamic import
+// already has .catch(() => null), so video functionality is silently disabled.
+function videoJsOptionalPlugin(rootDir) {
+  let videoJsAvailable;
+  try {
+    require.resolve('video.js', { paths: [rootDir] });
+    videoJsAvailable = true;
+  } catch {
+    videoJsAvailable = false;
+  }
+
+  if (videoJsAvailable) return null;
+
+  return {
+    name: 'hesperian-videojs-optional',
+    resolveId(id) {
+      if (id === 'video.js' || id.startsWith('video.js/')) {
+        return '\0' + id; // virtual module id
+      }
+    },
+    load(id) {
+      if (id.startsWith('\0video.js')) {
+        return 'export default null;';
+      }
+    },
+  };
+}
+
 function debugBundlePlugin(enabled) {
   return {
     name: "hesperian-debug-bundle",
@@ -203,7 +232,7 @@ function createConfig(spec) {
         },
       },
     },
-    plugins: [copyStaticAssetsPlugin(targets, outDir), debugBundlePlugin(process.env.VITE_DEBUG_BUNDLE === "1")],
+    plugins: [videoJsOptionalPlugin(rootDir), copyStaticAssetsPlugin(targets, outDir), debugBundlePlugin(process.env.VITE_DEBUG_BUNDLE === "1")].filter(Boolean),
   }));
 }
 
