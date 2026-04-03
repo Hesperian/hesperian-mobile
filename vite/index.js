@@ -28,7 +28,7 @@ function stripGlobPattern(value) {
   return sliced.replace(/[/\\]*$/, "");
 }
 
-function buildStaticTargets(root, libraryRoot, additionalAssets = []) {
+function buildStaticTargets(root, libraryRoot, additionalAssets = [], rootDir) {
   const baseAssets = [
     { from: "img", to: "." },
     { from: "locales", to: "." },
@@ -74,6 +74,17 @@ function buildStaticTargets(root, libraryRoot, additionalAssets = []) {
       dest: "lib",
       rename: "bootstrap.js",
     });
+  }
+
+  // Copy F7 LTR and RTL CSS bundles so they can be loaded via direct <link>
+  // tags in index.html and swapped at runtime for RTL support.
+  if (rootDir) {
+    for (const file of ["framework7-bundle.css", "framework7-bundle-rtl.css"]) {
+      const src = path.resolve(rootDir, "node_modules/framework7", file);
+      if (fs.existsSync(src)) {
+        targets.push({ src, dest: "." });
+      }
+    }
   }
 
   return targets;
@@ -176,7 +187,7 @@ function createConfig(spec) {
   const additionalAssets =
     spec.addtionalAssets || spec.additionalAssets || [];
 
-  const targets = buildStaticTargets(root, libraryRoot, additionalAssets);
+  const targets = buildStaticTargets(root, libraryRoot, additionalAssets, rootDir);
 
   return defineConfig(({ mode }) => ({
     root,

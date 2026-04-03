@@ -29,3 +29,46 @@
     height: 1.5em;
   }
 }
+
+// RTL panel positioning overrides.
+// Framework7 uses physical left/right positioning for panels, which does not
+// automatically flip when dir="rtl" is set on <html>. These rules mirror
+// panel-left → right edge and panel-right → left edge, and reverse the
+// translate3d directions used by panel-reveal/push to slide the main view.
+html[dir="rtl"] {
+  .panel-left {
+    left: auto;
+    right: 0;
+  }
+
+  .panel-right {
+    right: auto;
+    left: 0;
+  }
+
+  // Reverse the view-slide direction for panel-reveal and panel-push
+  &.with-panel-left-reveal .framework7-root > .view,
+  &.with-panel-left-reveal .views,
+  &.with-panel-left-push .framework7-root > .view,
+  &.with-panel-left-push .views {
+    transform: translate3d(calc(-1 * var(--f7-panel-left-width, var(--f7-panel-width))), 0, 0);
+  }
+
+  &.with-panel-right-reveal .framework7-root > .view,
+  &.with-panel-right-reveal .views,
+  &.with-panel-right-push .framework7-root > .view,
+  &.with-panel-right-push .views {
+    transform: translate3d(var(--f7-panel-right-width, var(--f7-panel-width)), 0, 0);
+  }
+
+  // Reverse backdrop slide directions
+  &.with-panel-left-push .panel-backdrop-in,
+  &.with-panel-left-reveal .panel-backdrop-in {
+    transform: translate3d(calc(-1 * var(--f7-panel-left-width, var(--f7-panel-width))), 0, 0);
+  }
+
+  &.with-panel-right-push .panel-backdrop-in,
+  &.with-panel-right-reveal .panel-backdrop-in {
+    transform: translate3d(var(--f7-panel-right-width, var(--f7-panel-width)), 0, 0);
+  }
+}

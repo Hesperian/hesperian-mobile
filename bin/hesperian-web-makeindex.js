@@ -123,6 +123,8 @@ const index = `
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
   <title>{{{appContext.description}}}</title>
+  <link id="f7-css-ltr" href="framework7-bundle.css" rel="stylesheet">
+  <link id="f7-css-rtl" href="framework7-bundle-rtl.css" rel="stylesheet" media="not all">
   <link href="main.css" rel="stylesheet">
 {{#if webmode}}
   <link href="website-common/css/styles.css" rel="stylesheet">
