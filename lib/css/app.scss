@@ -313,12 +313,12 @@ i.app-gear {
   justify-content: space-around;
 }
 
-.float-right {
-  float: right;
+.float-end {
+  float: inline-end;
 }
 
-.float-left {
-  float: left;
+.float-start {
+  float: inline-start;
 }
 
 img.center {
