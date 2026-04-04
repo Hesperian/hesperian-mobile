@@ -110,12 +110,12 @@ md .searchbar .input-clear-button:after {
     }
 
     .searchbar-icon {
-      margin-right: 8px;
+      margin-inline-end: 8px;
       order: 1;
     }
 
     .input-clear-button {
-      margin-left: 8px;
+      margin-inline-start: 8px;
       order: 3;
     }
   }

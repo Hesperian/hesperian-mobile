@@ -12,7 +12,7 @@
 .star-holder img.unchecked {
   color: $favorite-icon-outline;
   position: absolute;
-  left: 0;
+  inset-inline-start: 0;
   top: 0;
 }
 
@@ -122,7 +122,7 @@ img.favorite-icon {
 }
 
 .linktiles .tile img {
-  margin-right: 15px;
+  margin-inline-end: 15px;
   background-color: $tile-image-bg;
   padding: 5px;
   border-radius: 6px;

@@ -69,7 +69,7 @@
   font-size: var(--f7-list-chevron-icon-font-size);
   color: var(--f7-list-chevron-icon-color);
   pointer-events: none;
-  right: calc(var(--f7-list-item-padding-horizontal) + var(--f7-safe-area-right));
+  inset-inline-end: calc(var(--f7-list-item-padding-horizontal) + var(--f7-safe-area-right));
   width: 14px;
   height: 8px;
   margin-top: -4px;
@@ -186,7 +186,7 @@
     }
 
     .step-card-image-wrapper {
-      float: right;
+      float: inline-end;
       padding: 16px;
     }
 
@@ -224,7 +224,8 @@
     }
 
     .step-card-list {
-      margin: 0 0 0 1.2em;
+      margin: 0;
+      margin-inline-start: 1.2em;
       padding: 0;
       list-style-position: outside;
     }
@@ -256,7 +257,8 @@
     }
 
     .step-list {
-      margin: 0 0 0 1.2em;
+      margin: 0;
+      margin-inline-start: 1.2em;
       padding: 0;
       list-style: decimal;
       list-style-position: outside;
