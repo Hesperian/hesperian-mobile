@@ -23,7 +23,7 @@ OUTPUT_NAME=${APPNAME}-${VERSION}
 WEBAPP_DIR=./dist-web
 TEMP_KEYSTORE=$(BUILDDIR)/private/temp_android.keystore
 
-CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.3.0
+CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.17.0
 
 CURRENT_DIR=$(shell pwd)
 
@@ -103,7 +103,7 @@ cordova-build-android-debug: dist
 	cd ${BUILDDIR} && cordova build android --debug --verbose -- --packageType=bundle
 
 cordova-build: dist setup-keystore
-	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && fnm use v22.3.0 && cordova build --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"' || ($(MAKE) cleanup-keystore && exit 1)
+	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && fnm use v22.17.0 && cordova build --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"' || ($(MAKE) cleanup-keystore && exit 1)
 	@$(MAKE) cleanup-keystore
 
 app: op-signin cordova-build
