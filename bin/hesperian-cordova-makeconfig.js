@@ -37,7 +37,6 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     <plugin name="cordova-plugin-inappbrowser" spec="${plugins["cordova-plugin-inappbrowser"]}" />
     <!-- Social Sharing plugin support -->
     <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="${plugins["cordova-plugin-x-socialsharing"]}" />
-    <plugin name="cordova-plugin-androidx-adapter" source="npm" spec="${plugins["cordova-plugin-androidx-adapter"]}" />
 
     <plugin name="cordova-plugin-firebase-analytics" spec="${plugins["cordova-plugin-firebase-analytics"]}" />
     <platform name="android">
