@@ -10,6 +10,7 @@ VITE_MODE:=development
 CORDOVA=$(NODE_BIN)/cordova
 MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
 MAKE_CONFIG_SRC=$(HESPERIAN_MOBILE_DIR)/bin/hesperian-cordova-makeconfig.js
+PATCH_CORDOVA_IOS_SRC=$(HESPERIAN_MOBILE_DIR)/bin/hesperian-cordova-patch-ios.js
 MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
 MAKE_VALIDATE=$(NODE_BIN)/hesperian-validate
 MAKE_CHECK_RESOURCES=$(NODE_BIN)/hesperian-check-resources
@@ -29,7 +30,7 @@ CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.17.0
 
 CURRENT_DIR=$(shell pwd)
 
-.PHONY: build clean bundle watch dist help site web config cordova-check cordova-clean setup-keystore cleanup-keystore op-signin version
+.PHONY: build clean bundle watch dist help site web config cordova-check cordova-clean cordova-patch-ios setup-keystore cleanup-keystore op-signin version
 
 help:
 	@echo "Common make targets:"
@@ -46,6 +47,9 @@ help:
 	@echo "\tmake cordova-check\t verify build environment (Java, Android SDK, Xcode, etc.)"
 	@echo "\tmake cordova-clean\t remove all generated Cordova state for a fresh build"
 	@echo "\t\t\t\t  (use CORDOVA_CLEAN_ARGS=--dry-run to preview)"
+
+cordova-patch-ios:
+	@node ${PATCH_CORDOVA_IOS_SRC} ${BUILDDIR}
 
 bundle:
 	rm -rf dist
@@ -105,7 +109,7 @@ cordova-build-android-debug: dist
 	@rm -f ${BUILDDIR}/platforms/android/release-signing.properties
 	cd ${BUILDDIR} && cordova build android --debug --verbose -- --packageType=bundle
 
-cordova-build: dist setup-keystore
+cordova-build: dist setup-keystore cordova-patch-ios
 	@$(OP_RUN) bash -c 'cd ${BUILDDIR} && fnm use v22.17.0 && cordova build --device --release --verbose -- --password="$$CORDOVA_SIGNING_PASSPHRASE" --storePassword="$$CORDOVA_SIGNING_PASSPHRASE"' || ($(MAKE) cleanup-keystore && exit 1)
 	@$(MAKE) cleanup-keystore
 
@@ -153,7 +157,7 @@ op-signin:
 # Sync bundle to iOS platform for manual Xcode builds
 # Preserves cordova.js and plugin files in platforms/ios/www
 .PHONY: ios-sync
-ios-sync: bundle
+ios-sync: bundle cordova-patch-ios
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 	rsync -av --delete \
@@ -211,6 +215,7 @@ cordova-install: cordova-check $(CORDOVA_CONFIG) bundle
 	else \
 		(${CD_BUILDDIR}; npm install); \
 	fi
+	@$(MAKE) cordova-patch-ios
 	rm -rf ${BUILDDIR}/www
 	cp -R dist ${BUILDDIR}/www
 	rm -rf ${BUILDDIR}/platforms
@@ -218,6 +223,7 @@ cordova-install: cordova-check $(CORDOVA_CONFIG) bundle
 	@(${CD_BUILDDIR}; cordova prepare) || \
 		(echo "cordova prepare failed, retrying (CocoaPods CDN cache may need a second attempt)..."; \
 		${CD_BUILDDIR}; cordova prepare)
+	@$(MAKE) cordova-patch-ios
 
 
 
@@ -311,4 +317,3 @@ test-a11y-all: bundle
 		echo "Running accessibility tests (all locales, all pages)..."; \
 		$(NODE_BIN)/hesperian-test-accessibility --locale=all; \
 	)
-
