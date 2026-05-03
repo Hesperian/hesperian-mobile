@@ -68,7 +68,8 @@ site:
 	cp -R ./node_modules/hesperian-mobile/website-common ${WEBAPP_DIR}/
 	cp -R www-templates/web-img ${WEBAPP_DIR}/
 	mkdir -p ${OUTPUT_DIR}
-	(cd ${WEBAPP_DIR}; zip -r ../${OUTPUT_DIR}/app-${VERSION}.zip .)
+	rm -f ${OUTPUT_DIR}/app-${VERSION}.zip ${OUTPUT_DIR}/${OUTPUT_NAME}.zip
+	(cd ${WEBAPP_DIR}; zip -qr ../${OUTPUT_DIR}/${OUTPUT_NAME}.zip .)
 
 dist: bundle $(CORDOVA_CONFIG)
 	rm -rf ${BUILDDIR}/www
