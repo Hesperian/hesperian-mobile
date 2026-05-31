@@ -19,7 +19,8 @@
     "hesperian-web-makeindex": "./bin/hesperian-web-makeindex.js",
     "hesperian-validate": "./bin/hesperian-validate.js",
     "hesperian-test-accessibility": "./bin/hesperian-test-accessibility.js",
-    "hesperian-check-resources": "./bin/hesperian-check-resources.js"
+    "hesperian-check-resources": "./bin/hesperian-check-resources.js",
+    "hesperian-make-translation-doc": "./bin/hesperian-make-translation-doc.js"
   },
   "author": "",
   "license": "SEE LICENSE IN LICENSE.md",
@@ -32,6 +33,7 @@
     "video.js": "^8.0.0"
   },
   "dependencies": {
+    "docx": "^9.7.1",
     "dom7": "^4.0.6",
     "focus-trap": "^7.8.0",
     "messageformat": "^2.0.5",

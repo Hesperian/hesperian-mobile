@@ -14,6 +14,7 @@ PATCH_CORDOVA_IOS_SRC=$(HESPERIAN_MOBILE_DIR)/bin/hesperian-cordova-patch-ios.js
 MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
 MAKE_VALIDATE=$(NODE_BIN)/hesperian-validate
 MAKE_CHECK_RESOURCES=$(NODE_BIN)/hesperian-check-resources
+MAKE_TRANSLATION_DOC=$(NODE_BIN)/hesperian-make-translation-doc
 CORDOVA_CONFIG=$(BUILDDIR)/config.xml
 VERSIONS_JSON=$(HESPERIAN_MOBILE_DIR)/cordova/versions.json
 HESPERIAN_MOBILE_DIR=$(CURDIR)/node_modules/hesperian-mobile
@@ -47,6 +48,7 @@ help:
 	@echo "\tmake cordova-check\t verify build environment (Java, Android SDK, Xcode, etc.)"
 	@echo "\tmake cordova-clean\t remove all generated Cordova state for a fresh build"
 	@echo "\t\t\t\t  (use CORDOVA_CLEAN_ARGS=--dry-run to preview)"
+	@echo "\tmake translation-doc\t generate translator Word document from en/ locale"
 
 cordova-patch-ios:
 	@node ${PATCH_CORDOVA_IOS_SRC} ${BUILDDIR}
@@ -242,6 +244,10 @@ example-libsync:
 .PHONY: validate
 validate:
 	${MAKE_VALIDATE}
+
+.PHONY: translation-doc
+translation-doc:
+	${MAKE_TRANSLATION_DOC}
 
 .PHONY: version
 version:
