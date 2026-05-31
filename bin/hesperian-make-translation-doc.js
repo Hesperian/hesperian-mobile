@@ -1,12 +1,18 @@
 #!/usr/bin/env node
 /*
-    Generate a Word document for translators from the English locale HTML files.
+    Generate a Word document for translators from a locale's HTML files.
 
     Run from an app directory (e.g. hesperian-mobile-SafeBirth/).
     Reads:  app-config.json
-            www/locales/en/*.html
+            www/locales/{lang}/*.html  (default: en)
             www/img/
-    Writes: en_{NAME}-v{VERSION}.docx in the current directory.
+    Writes: {lang}_{NAME}-v{VERSION}.docx in the current directory.
+
+    Usage:
+      hesperian-make-translation-doc [--lang <code>]
+
+    Options:
+      --lang <code>   Locale code to process (default: en)
 */
 
 'use strict';
@@ -39,6 +45,25 @@ const PAGE_ID_RE = /^\/pages\/([A-Z]\d+)(?:-[^/]+)?(?:\/(.+))?$/;
 
 // Tags treated as block-level in the walker
 const BLOCK_TAGS = new Set(['p', 'div', 'ul', 'ol', 'img', 'table', 'h1', 'h2', 'h3', 'h4', 'h5', 'blockquote', 'section', 'article', 'figure', 'figcaption']);
+
+// ── CLI args ─────────────────────────────────────────────────────────────────
+
+function parseArgs(argv) {
+    const args = { lang: 'en' };
+    for (let i = 2; i < argv.length; i++) {
+        if (argv[i] === '--lang') {
+            args.lang = argv[++i];
+        } else if (!argv[i].startsWith('-')) {
+            args.lang = argv[i];
+        } else {
+            console.error(`Unknown argument: ${argv[i]}`);
+            process.exit(1);
+        }
+    }
+    return args;
+}
+
+const cliArgs = parseArgs(process.argv);
 
 // ── App config ───────────────────────────────────────────────────────────────
 
@@ -485,8 +510,8 @@ function emitPage(pageMeta, out) {
 
 // ── Entry point ───────────────────────────────────────────────────────────────
 
-function loadPages() {
-    const dir = path.join('www', 'locales', 'en');
+function loadPages(lang) {
+    const dir = path.join('www', 'locales', lang);
     if (!fs.existsSync(dir)) {
         console.error(`Error: ${dir} not found. Run this script from an app directory.`);
         process.exit(1);
@@ -502,8 +527,9 @@ function loadPages() {
 }
 
 async function main() {
-    const pages = loadPages();
-    console.log(`Generating translation document for: ${appConfig.description} v${appConfig.version}`);
+    const lang = cliArgs.lang;
+    const pages = loadPages(lang);
+    console.log(`Generating translation document for: ${appConfig.description} v${appConfig.version} [${lang}]`);
     console.log(`Resizing images...`);
     await preloadImages(pages);
     console.log(`Processing ${pages.length} pages...`);
@@ -530,7 +556,7 @@ async function main() {
         sections: [{ properties: {}, children: out }],
     });
 
-    const outName = `en_${appConfig.name}-v${appConfig.version}.docx`;
+    const outName = `${lang}_${appConfig.name}-v${appConfig.version}.docx`;
     const buf = await Packer.toBuffer(doc);
     fs.writeFileSync(outName, buf);
     console.log(`\nWrote ${outName} (${out.length} content elements)`);

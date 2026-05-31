@@ -48,7 +48,7 @@ help:
 	@echo "\tmake cordova-check\t verify build environment (Java, Android SDK, Xcode, etc.)"
 	@echo "\tmake cordova-clean\t remove all generated Cordova state for a fresh build"
 	@echo "\t\t\t\t  (use CORDOVA_CLEAN_ARGS=--dry-run to preview)"
-	@echo "\tmake translation-doc\t generate translator Word document from en/ locale"
+	@echo "\tmake translation-doc\t generate translator Word document (LANG=en default, e.g. LANG=es)"
 
 cordova-patch-ios:
 	@node ${PATCH_CORDOVA_IOS_SRC} ${BUILDDIR}
@@ -245,9 +245,11 @@ example-libsync:
 validate:
 	${MAKE_VALIDATE}
 
+LANG ?= en
+
 .PHONY: translation-doc
 translation-doc:
-	${MAKE_TRANSLATION_DOC}
+	${MAKE_TRANSLATION_DOC} --lang $(LANG)
 
 .PHONY: version
 version:
