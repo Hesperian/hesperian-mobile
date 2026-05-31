@@ -53,6 +53,7 @@
     "framework7-icons": "^5.0.5",
     "handlebars": "^4.7.8",
     "html-webpack-plugin": "^5.5.3",
+    "jimp": "^0.22.12",
     "mini-css-extract-plugin": "^2.9.0",
     "playwright": "^1.48.0",
     "sass": "^1.93.3",

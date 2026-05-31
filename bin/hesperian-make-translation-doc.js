@@ -14,6 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 const cheerio = require('cheerio');
+const Jimp = require('jimp');
 const { Document, Packer, Paragraph, TextRun, ImageRun, HeadingLevel } = require('docx');
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -23,6 +24,11 @@ const { Document, Packer, Paragraph, TextRun, ImageRun, HeadingLevel } = require
 // document, where images appear at ~0.5–1″.
 const CONTENT_IMG_PX = 96;    // 1 inch at 96 DPI — page content images
 const ACCORDION_ICON_PX = 64; // ~0.67 inch — accordion menu icons
+
+// Embedded image data is downscaled to this longer-dim before being placed in
+// the docx. 2× display size gives some retina/zoom headroom while keeping the
+// file small (vs the source PNGs at 500–2000px, which bloated the doc ~7×).
+const EMBED_MAX_PX = 192;
 
 // Hex color matching Word's default Hyperlink character style. Used to flag
 // button-array caption text as a navigation link for translators.
@@ -54,59 +60,74 @@ function convertLink(href) {
     return seg ? `[link to ${seg}]` : null;
 }
 
-// ── Image dimension reading (PNG + JPEG, no extra dependencies) ──────────────
+// ── Image cache (resized buffers) ────────────────────────────────────────────
+//
+// Source PNGs are 500–2000px wide. We embed them as ~96px thumbnails, so
+// shipping full resolution bloats the docx ~7×. preloadImages() walks all HTML
+// files once, finds every referenced <img src>, and runs jimp to downscale to
+// EMBED_MAX_PX (longer-dim). The resized PNG buffer is cached and reused by
+// every makeImageRun() call — synchronous lookup keeps the walker simple.
 
-function readImageDims(buf) {
-    // PNG: 8-byte signature, then IHDR with width at byte 16, height at byte 20
-    if (buf.length >= 24 &&
-        buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) {
-        return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
+const imageCache = new Map(); // src (e.g. "img/pic_10.png") → { buffer, width, height }
+
+async function preloadImages(pages) {
+    const srcs = new Set();
+    for (const page of pages) {
+        const html = fs.readFileSync(page.path, 'utf8');
+        const $ = cheerio.load(html);
+        $('img[src]').each((_, el) => {
+            const s = $(el).attr('src');
+            if (s) srcs.add(s);
+        });
     }
-    // JPEG: scan markers for SOF (C0-CF except C4, C8, CC)
-    if (buf.length >= 4 && buf[0] === 0xff && buf[1] === 0xd8) {
-        let i = 2;
-        while (i + 3 < buf.length) {
-            while (i < buf.length && buf[i] === 0xff) i++;
-            const marker = buf[i++];
-            if (marker === 0xd9 || marker === 0xda) break;
-            const segLen = buf.readUInt16BE(i);
-            if (marker >= 0xc0 && marker <= 0xcf &&
-                marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
-                if (i + 6 < buf.length) {
-                    return { height: buf.readUInt16BE(i + 3), width: buf.readUInt16BE(i + 5) };
-                }
+
+    let resized = 0, skipped = 0, failed = 0;
+    await Promise.all([...srcs].map(async (src) => {
+        const fullPath = path.join('www', src);
+        if (!fs.existsSync(fullPath)) { skipped++; return; }
+        try {
+            const img = await Jimp.read(fullPath);
+            const { width: w0, height: h0 } = img.bitmap;
+            const longer = Math.max(w0, h0);
+            if (longer > EMBED_MAX_PX) {
+                img.scale(EMBED_MAX_PX / longer);
             }
-            i += segLen;
+            const buffer = await img.getBufferAsync(Jimp.MIME_PNG);
+            imageCache.set(src, {
+                buffer,
+                width: img.bitmap.width,
+                height: img.bitmap.height,
+            });
+            resized++;
+        } catch (e) {
+            process.stderr.write(`  [warn] failed to resize ${fullPath}: ${e.message}\n`);
+            failed++;
         }
-    }
-    return null;
+    }));
+    console.log(`Preloaded ${resized} images (${skipped} missing, ${failed} failed)`);
 }
 
 // ── Image helpers ────────────────────────────────────────────────────────────
 
 function makeImageRun(src, isIcon) {
     if (!src) return null;
-    const fullPath = path.join('www', src);
-    if (!fs.existsSync(fullPath)) {
-        process.stderr.write(`  [warn] image not found: ${fullPath}\n`);
+    const cached = imageCache.get(src);
+    if (!cached) {
+        // Cache miss = image not preloaded (file missing or load failed).
+        // preloadImages already warned to stderr; just return null here so the
+        // caller emits its [IMAGE NOT FOUND: …] placeholder.
         return null;
     }
-    try {
-        const data = fs.readFileSync(fullPath);
-        const dims = readImageDims(data);
-        const maxPx = isIcon ? ACCORDION_ICON_PX : CONTENT_IMG_PX;
-        // Constrain by the longer side so tall images aren't oversized vertically.
-        const longerDim = dims ? Math.max(dims.width, dims.height) : maxPx;
-        const scale = dims ? Math.min(1, maxPx / longerDim) : 1;
-        const width = dims ? Math.round(dims.width * scale) : maxPx;
-        const height = dims ? Math.round(dims.height * scale) : maxPx;
-        const ext = path.extname(fullPath).toLowerCase().slice(1);
-        const type = (ext === 'jpg' || ext === 'jpeg') ? 'jpg' : 'png';
-        return new ImageRun({ data, transformation: { width, height }, type });
-    } catch (e) {
-        process.stderr.write(`  [warn] failed to load image ${fullPath}: ${e.message}\n`);
-        return null;
-    }
+    const maxPx = isIcon ? ACCORDION_ICON_PX : CONTENT_IMG_PX;
+    const longerDim = Math.max(cached.width, cached.height);
+    const scale = Math.min(1, maxPx / longerDim);
+    const width = Math.round(cached.width * scale);
+    const height = Math.round(cached.height * scale);
+    return new ImageRun({
+        data: cached.buffer,
+        transformation: { width, height },
+        type: 'png', // jimp always outputs PNG via MIME_PNG
+    });
 }
 
 // Returns a Paragraph containing the image, or a placeholder text paragraph.
@@ -483,6 +504,8 @@ function loadPages() {
 async function main() {
     const pages = loadPages();
     console.log(`Generating translation document for: ${appConfig.description} v${appConfig.version}`);
+    console.log(`Resizing images...`);
+    await preloadImages(pages);
     console.log(`Processing ${pages.length} pages...`);
 
     const out = [
