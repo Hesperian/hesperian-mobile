@@ -7,11 +7,14 @@ const fs = require('fs');
 const cheerio = require('cheerio');
 const util = require('../lib/util/util');
 
-// One keyword will have stuff like "foo (bar)"
+// One keyword will have stuff like "foo (bar)". Split on anything that is
+// not a Unicode letter, digit, or underscore. Note: `\w` is ASCII-only in
+// JavaScript regex, so we use the Unicode property escapes `\p{L}` and `\p{N}`
+// (requires the /u flag) so non-Latin scripts like Arabic tokenize correctly.
 function keywordStringToArray(keywordString) {
   const newStr = util.searchNormalForm(keywordString);
-  
-  return newStr.split(/[^\w]+/).filter(k => !!k);
+
+  return newStr.split(/[^\p{L}\p{N}_]+/u).filter(k => !!k);
 
 }
 

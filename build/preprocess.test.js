@@ -49,6 +49,26 @@ describe("keywordsStringToArray", () => {
     expect(keywordsStringToArray(null)).toEqual([]);
     expect(keywordsStringToArray(undefined)).toEqual([]);
   });
+
+  it("indexes Arabic keywords instead of dropping them", () => {
+    // Regression: `\w` is ASCII-only, so the previous tokenizer turned every
+    // Arabic data-title/data-keywords value into [], leaving Arabic pages
+    // unsearchable.
+    expect(keywordsStringToArray("الحمل")).toEqual(["الحمل"]);
+    // ASCII comma is the only top-level separator — data-keywords is authored
+    // HTML we control, so we don't need to accept Arabic punctuation here.
+    expect(keywordsStringToArray("الحمل, الولادة")).toEqual([
+      "الحمل",
+      "الولاده", // ta-marbuta folded to ha
+    ]);
+  });
+
+  it("normalizes Arabic letter variants in indexed keywords", () => {
+    // أم and ام should produce the same indexed token.
+    expect(keywordsStringToArray("أم")).toEqual(keywordsStringToArray("ام"));
+    // كرة and كره should produce the same token (ta-marbuta fold).
+    expect(keywordsStringToArray("كرة")).toEqual(keywordsStringToArray("كره"));
+  });
 });
 
 // ─── processPage ─────────────────────────────────────────────────────────
