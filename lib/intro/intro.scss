@@ -18,6 +18,18 @@ body.shepherd-enabled #app>.sheet-backdrop {
   animation-name: fadeIn;
   animation-duration: 1s;
 
+  // Shepherd renders each step as a <dialog>. The browser's UA stylesheet for
+  // <dialog> sets `left: 0; right: 0; margin: auto` to center it. Combined
+  // with Shepherd's `width: 100%; max-width: 400px` and the inline `left: <x>px`
+  // it computes from floating-ui, the box becomes over-constrained
+  // (width + left + right all specified). Per CSS spec, when an absolutely
+  // positioned box is over-constrained the engine ignores `left` if
+  // `direction: rtl` and ignores `right` if `direction: ltr`. So in RTL, the
+  // UA `right: 0` wins and the popover sticks to the right edge regardless of
+  // the floating-ui computation. Forcing `right: auto` removes the
+  // over-constraint and lets `left` take effect in both directions.
+  right: auto;
+
   .shepherd-header {
     .shepherd-cancel-icon {
       font-size: 1.5em;
