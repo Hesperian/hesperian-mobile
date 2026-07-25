@@ -36,7 +36,12 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
 
     <plugin name="cordova-plugin-inappbrowser" spec="${plugins["cordova-plugin-inappbrowser"]}" />
     <!-- Social Sharing plugin support -->
-    <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="${plugins["cordova-plugin-x-socialsharing"]}" />
+    <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="${plugins["cordova-plugin-x-socialsharing"]}">
+        <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION"
+                  value="This app can save health information images to your photo library when you share content from the app." />
+        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION"
+                  value="This app can attach health information images from your photo library when sharing content via messaging or social media." />
+    </plugin>
 
     <plugin name="cordova-plugin-firebase-analytics" spec="${plugins["cordova-plugin-firebase-analytics"]}" />
     <platform name="android">
