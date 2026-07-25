@@ -133,6 +133,12 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
         <config-file parent="ITSAppUsesNonExemptEncryption" target="*-Info.plist">
             <false />
         </config-file>
+        <config-file target="*-Info.plist" parent="NSPhotoLibraryAddUsageDescription">
+            <string>This app can save health information images to your photo library when you share content from the app.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+            <string>This app can attach health information images from your photo library when sharing content via messaging or social media.</string>
+        </config-file>
         <config-file platform="ios" target="*-Info.plist" parent="CFBundleLocalizations">
             <array>
             {{#each localizations}}
