@@ -11,6 +11,7 @@ CORDOVA=$(NODE_BIN)/cordova
 MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
 MAKE_CONFIG_SRC=$(HESPERIAN_MOBILE_DIR)/bin/hesperian-cordova-makeconfig.js
 PATCH_CORDOVA_IOS_SRC=$(HESPERIAN_MOBILE_DIR)/bin/hesperian-cordova-patch-ios.js
+VALIDATE_PLIST_SRC=$(HESPERIAN_MOBILE_DIR)/bin/hesperian-cordova-validate-plist.js
 MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
 MAKE_VALIDATE=$(NODE_BIN)/hesperian-validate
 MAKE_CHECK_RESOURCES=$(NODE_BIN)/hesperian-check-resources
@@ -177,6 +178,7 @@ $(CORDOVA_CONFIG): app-config.json ${MAKE_CONFIG_SRC} ${VERSIONS_JSON}
 		echo "Syncing config.xml changes to platform manifests..."; \
 		(cd ${BUILDDIR} && cordova prepare --no-build 2>&1 | grep -v "DeprecationWarning" || true); \
 		echo "✅ Platform manifests updated"; \
+		node ${VALIDATE_PLIST_SRC} ${BUILDDIR}/platforms/ios/App/App-Info.plist; \
 	fi
 
 # Force-regenerate config.xml unconditionally (bypass mtime checks)
@@ -186,6 +188,7 @@ config:
 		echo "Syncing config.xml changes to platform manifests..."; \
 		(cd ${BUILDDIR} && cordova prepare --no-build 2>&1 | grep -v "DeprecationWarning" || true); \
 		echo "✅ Platform manifests updated"; \
+		node ${VALIDATE_PLIST_SRC} ${BUILDDIR}/platforms/ios/App/App-Info.plist; \
 	fi
 
 # Make sure emulator is running to pick up correct device
@@ -227,6 +230,7 @@ cordova-install: cordova-check $(CORDOVA_CONFIG) bundle
 		(echo "cordova prepare failed, retrying (CocoaPods CDN cache may need a second attempt)..."; \
 		${CD_BUILDDIR}; cordova prepare)
 	@$(MAKE) cordova-patch-ios
+	@node ${VALIDATE_PLIST_SRC} ${BUILDDIR}/platforms/ios/App/App-Info.plist
 
 
 

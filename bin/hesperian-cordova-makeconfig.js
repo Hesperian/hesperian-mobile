@@ -4,6 +4,21 @@
 
     Run from the top level of the cordova folder.
     Pass in the path to the appConfig.json file.
+
+    CONVENTION — iOS plist values controlled by the build system:
+    Use explicit <config-file> entries in the <platform name="ios"> section,
+    NOT plugin <variable> substitution. Plugin variables are resolved from
+    cordova/plugins/ios.json at prepare time, which is a gitignored file that
+    is NOT updated by config.xml changes alone. A <config-file> override in
+    config.xml is applied on every `cordova prepare` and always wins over the
+    plugin-injected value. This avoids stale values surviving across incremental
+    builds without a full plugin reinstall.
+
+    When adding a new iOS plist value here:
+      1. Define its string as a constant below.
+      2. Reference it in the <plugin> <variable> element (fresh installs).
+      3. Reference it in the <config-file> override (every prepare).
+      4. It will also be written to cordova/package.json (npm-based installs).
 */
 const fs = require("fs");
 const path = require("path");
@@ -16,6 +31,12 @@ const context = JSON.parse(contextData);
 const versionsPath = path.resolve(__dirname, "../cordova/versions.json");
 const versions = JSON.parse(fs.readFileSync(versionsPath, "utf-8"));
 const plugins = versions.plugins;
+
+// iOS permission strings — single source of truth for all three places they appear.
+const PHOTO_ADD_DESC =
+  "This app can save health information images to your photo library when you share content from the app.";
+const PHOTO_USAGE_DESC =
+  "This app can attach health information images from your photo library when sharing content via messaging or social media.";
 const configData = `<?xml version='1.0' encoding='utf-8'?>
 <widget id="{{{id}}}"
         version="{{{version}}}"
@@ -37,10 +58,8 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
     <plugin name="cordova-plugin-inappbrowser" spec="${plugins["cordova-plugin-inappbrowser"]}" />
     <!-- Social Sharing plugin support -->
     <plugin name="cordova-plugin-x-socialsharing" source="npm" spec="${plugins["cordova-plugin-x-socialsharing"]}">
-        <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION"
-                  value="This app can save health information images to your photo library when you share content from the app." />
-        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION"
-                  value="This app can attach health information images from your photo library when sharing content via messaging or social media." />
+        <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION" value="${PHOTO_ADD_DESC}" />
+        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="${PHOTO_USAGE_DESC}" />
     </plugin>
 
     <plugin name="cordova-plugin-firebase-analytics" spec="${plugins["cordova-plugin-firebase-analytics"]}" />
@@ -134,10 +153,10 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
             <false />
         </config-file>
         <config-file target="*-Info.plist" parent="NSPhotoLibraryAddUsageDescription">
-            <string>This app can save health information images to your photo library when you share content from the app.</string>
+            <string>${PHOTO_ADD_DESC}</string>
         </config-file>
         <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
-            <string>This app can attach health information images from your photo library when sharing content via messaging or social media.</string>
+            <string>${PHOTO_USAGE_DESC}</string>
         </config-file>
         <config-file platform="ios" target="*-Info.plist" parent="CFBundleLocalizations">
             <array>
@@ -165,6 +184,21 @@ const configData = `<?xml version='1.0' encoding='utf-8'?>
 
 const configTemplate = handlebars.compile(configData);
 fs.writeFileSync("config.xml", configTemplate(context));
+
+// P1: Keep cordova/package.json plugin variables in sync with the constants above.
+// cordova reads package.json during `cordova plugin add` (fresh installs via cordova-install),
+// so stale defaults here would survive a full clean + reinstall if left unpatched.
+const pkgPath = "package.json";
+if (fs.existsSync(pkgPath)) {
+  const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+  const socialSharing = pkg?.cordova?.plugins?.["cordova-plugin-x-socialsharing"];
+  if (socialSharing) {
+    socialSharing["PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION"] = PHOTO_ADD_DESC;
+    socialSharing["PHOTO_LIBRARY_USAGE_DESCRIPTION"] = PHOTO_USAGE_DESC;
+    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+    console.log("Updated cordova/package.json plugin variables");
+  }
+}
 
 // Write out locale specific string files for cordova builds for ios and android
 // Sets the app title under the icon
