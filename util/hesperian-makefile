@@ -15,6 +15,7 @@ VALIDATE_PLIST_SRC=$(HESPERIAN_MOBILE_DIR)/bin/hesperian-cordova-validate-plist.
 MAKE_WEBINDEX=$(NODE_BIN)/hesperian-web-makeindex
 MAKE_VALIDATE=$(NODE_BIN)/hesperian-validate
 MAKE_CHECK_RESOURCES=$(NODE_BIN)/hesperian-check-resources
+MAKE_CHECK_LINKS=$(NODE_BIN)/hesperian-check-links
 MAKE_TRANSLATION_DOC=$(NODE_BIN)/hesperian-make-translation-doc
 CORDOVA_CONFIG=$(BUILDDIR)/config.xml
 VERSIONS_JSON=$(HESPERIAN_MOBILE_DIR)/cordova/versions.json
@@ -32,7 +33,7 @@ CD_BUILDDIR= cd ${BUILDDIR}; fnm use v22.17.0
 
 CURRENT_DIR=$(shell pwd)
 
-.PHONY: build clean bundle watch dist help site web config cordova-check cordova-clean cordova-patch-ios setup-keystore cleanup-keystore op-signin version
+.PHONY: build clean bundle watch dist help site web config cordova-check cordova-clean cordova-patch-ios setup-keystore cleanup-keystore op-signin version check-links
 
 help:
 	@echo "Common make targets:"
@@ -44,6 +45,7 @@ help:
 	@echo "\tmake test-a11y\t\t run accessibility tests (English locale, report in build/reports/accessibility/)"
 	@echo "\tmake test-a11y-all\t run accessibility tests (all locales)"
 	@echo "\tmake check-resources\t check for missing resource translations"
+	@echo "\tmake check-links\t check external http(s) links in app content for broken links"
 	@echo "\tmake config\t\t regenerate cordova/config.xml from app-config.json and versions.json"
 	@echo "\tmake version TYPE=<major|minor|patch>  bump version in app-config.json"
 	@echo "\tmake cordova-check\t verify build environment (Java, Android SDK, Xcode, etc.)"
@@ -297,6 +299,10 @@ version:
 .PHONY: check-resources
 check-resources:
 	${MAKE_CHECK_RESOURCES}
+
+.PHONY: check-links
+check-links:
+	${MAKE_CHECK_LINKS} $(CHECK_LINKS_ARGS)
 
 # Accessibility Testing
 .PHONY: test-a11y

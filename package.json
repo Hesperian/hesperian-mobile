@@ -20,6 +20,7 @@
     "hesperian-validate": "./bin/hesperian-validate.js",
     "hesperian-test-accessibility": "./bin/hesperian-test-accessibility.js",
     "hesperian-check-resources": "./bin/hesperian-check-resources.js",
+    "hesperian-check-links": "./bin/hesperian-check-links.js",
     "hesperian-make-translation-doc": "./bin/hesperian-make-translation-doc.js",
     "hesperian-cordova-validate-plist": "./bin/hesperian-cordova-validate-plist.js"
   },
