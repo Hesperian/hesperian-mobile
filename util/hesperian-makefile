@@ -5,8 +5,8 @@ NODE_BIN := $(CURDIR)/node_modules/.bin
 BUILDDIR=cordova
 
 VITE=$(NODE_BIN)/vite
-#VITE_MODE:=production
-VITE_MODE:=development
+# production = minified, no sourcemap. Override for debugging: make bundle VITE_MODE=development
+VITE_MODE?=production
 CORDOVA=$(NODE_BIN)/cordova
 MAKE_CONFIG=$(NODE_BIN)/hesperian-cordova-makeconfig
 MAKE_CONFIG_SRC=$(HESPERIAN_MOBILE_DIR)/bin/hesperian-cordova-makeconfig.js
